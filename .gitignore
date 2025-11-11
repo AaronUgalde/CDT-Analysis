@@ -1,0 +1,68 @@
+# Archivos auxiliares de compilación
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.brf
+*.idx
+*.ilg
+*.ind
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.fdb_latexmk
+*.fls
+*.xdv
+*.nav
+*.snm
+*.vrb
+*.upa
+*.upb
+
+# Archivos de bibliografía temporales
+*.blx.bib
+*.run.xml
+
+# Archivos generados por editores LaTeX
+*.synctex*
+*.pdfsync
+
+# Archivos de salida (PDF, DVI, PS, etc.)
+*.pdf
+*.dvi
+*.ps
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de respaldo o swap
+*~
+*.bak
+*.swp
+*.swo
+*.tmp
+
+# Archivos específicos de herramientas o editores
+*.log
+*.auxlock
+*.gz
+*.toc
+*.synctex(busy)
+
+# Archivos del compilador latexmk
+latex.out
+latexmk.out
+
+# Carpetas temporales o de compilación
+build/
+out/
+_output/
+temp/
+tmp/
+
+# Archivos
