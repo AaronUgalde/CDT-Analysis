@@ -1,0 +1,773 @@
+%--------------------------------------
+\section{IU-01 Página de Inicio / Landing}
+
+\subsection{Objetivo}
+    Servir como punto de entrada y presentación del servicio de Hotel para Perros, informando a los usuarios sobre las funcionalidades principales y guiándolos hacia el registro, inicio de sesión o creación de reservaciones.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-01}{Página de Inicio / Landing} (ver figura~\ref{IU-01}) aparece al iniciar la aplicación o al navegar a la ruta raíz `/`. Está diseñada de forma informativa, compuesta por varias secciones visuales como una principal (Hero) con un mensaje de bienvenida y llamada a la acción, una sección de preguntas frecuentes, una de contacto y otra de llamado a la acción. Incluye un encabezado superior (`Header`) persistente con opciones de navegación global.
+
+\IUfig[.5]{IU01}{IU-01}{Página de Inicio / Landing.}
+
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+    Ninguna.
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Reservar}: Inicia el flujo para crear una nueva reservación. Si el usuario no está autenticado, lo redirige a la \IUref{IU-02}{Pantalla de Login}. Si ya está autenticado, lo lleva al formulario de reservación \IUref{IU-14}{Formulario de Reservación}.
+    \item \IUbutton{Más}: Proporciona información adicional sobre el servicio o funcionalidades, posiblemente redirigiendo a una página interna o sección de la misma.
+    \item \IUbutton{Contacto}: Redirige al usuario a la sección de contacto dentro de la página o a una pantalla dedicada para resolver dudas.
+    \item \IUbutton{Iniciar sesión}: Redirige a la \IUref{IU-02}{Pantalla de Login} para que el usuario acceda a su cuenta. (Disponible en el Header).
+    \item \IUbutton{Unirse}: Redirige a la \IUref{IU-03}{Pantalla de Registro Simplificado} para que nuevos usuarios creen una cuenta. (Disponible en el Header).
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Ninguno. Esta pantalla es principalmente informativa y de navegación, sin validaciones o procesos que generen mensajes de usuario directamente desde este componente principal.
+\end{itemize}
+
+
+%--------------------------------------
+\section{IU-02 Pantalla de Login}
+
+\subsection{Objetivo}
+    Permitir a los usuarios registrados acceder al sistema mediante la introducción de sus credenciales (correo electrónico y contraseña) para iniciar una sesión autenticada.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-02}{Pantalla de Login} (ver figura~\ref{IU-02}) aparece al acceder directamente a la ruta `/login` o al intentar acceder a rutas protegidas sin estar previamente autenticado. Presenta un formulario centrado con campos para el correo electrónico y la contraseña, acompañado de un botón principal para iniciar sesión. Incluye un icono que permite alternar la visibilidad de la contraseña y una imagen decorativa de un perro para realzar la estética.
+
+\IUfig[.5]{IU02}{IU-02}{Pantalla de Login.}
+
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Correo electrónico (campo de texto, tipo email)
+    \item Contraseña (campo de texto, tipo password)
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Iniciar Sesión}: Valida las credenciales ingresadas. Si son correctas, el sistema inicia la sesión del usuario, establece una cookie de autenticación y redirige al usuario a la página de inicio (`/`) o a la última página protegida a la que intentó acceder. Si hay un error, muestra un mensaje relevante.
+    \item \IUbutton{Ojo/Ojo Tachado}: Alterna la visibilidad del texto ingresado en el campo de contraseña, permitiendo al usuario verificar lo que escribe.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Credenciales inválidas: Se muestra si el correo electrónico o la contraseña no coinciden con un usuario registrado.
+    \item Error al iniciar sesión: Mensaje genérico en caso de un fallo inesperado durante el proceso de login.
+\end{itemize}
+
+%--------------------------------------
+\section{IU-03 Pantalla de Registro de Usuario}
+
+\subsection{Objetivo}
+    Permitir a nuevos usuarios crear una cuenta de propietario básica en el sistema, proporcionando su información personal esencial y credenciales de acceso (correo y contraseña).
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-03}{Pantalla de Registro de Usuario} (ver figura~\ref{IU-03}) aparece cuando un usuario no registrado accede a la ruta `/register`, normalmente a través de un enlace en la página de inicio o de login. Presenta un formulario de registro que solicita datos personales (nombre, apellidos), correo electrónico y una contraseña, la cual debe ser confirmada. Incluye enlaces para navegar hacia la pantalla de inicio de sesión o al formulario de registro completo.
+
+\IUfig[.5]{UI03}{IU-03}{Pantalla de Registro de Usuario.}
+\IUfig[.5]{UI03-2}{IU-03}{Pantalla de Registro de Usuario.}
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Correo Electrónico
+    \item Nombre
+    \item Primer Apellido
+    \item Segundo Apellido (opcional)
+    \item Contraseña
+    \item Confirmar Contraseña
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Crear Cuenta}: Valida que los datos ingresados sean correctos (contraseñas coinciden, campos requeridos llenos). Si la validación es exitosa, envía la información al servidor para crear una nueva cuenta de propietario, inicia la sesión del nuevo usuario y lo redirige a la página de inicio (`/`).
+    \item \IUbutton{Iniciar Sesión}: Redirige al usuario a la \IUref{IU-02}{Pantalla de Login}.
+    \item \IUbutton{Ir a Registro Completo}: Redirige al usuario al \IUref{IU-04}{Formulario de Registro Completo} para un registro con más detalles.
+    \item \IUbutton{Ojo/Ojo Tachado}: Alterna la visibilidad del texto en los campos de contraseña y confirmación de contraseña.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Las contraseñas no coinciden: Se muestra si el contenido de los campos "Contraseña" y "Confirmar Contraseña" no es idéntico.
+    \item La contraseña debe tener al menos 6 caracteres: Se muestra si la contraseña no cumple con la longitud mínima requerida.
+    \item Nombre y primer apellido son requeridos: Se muestra si los campos de nombre o primer apellido están vacíos.
+    \item Correo electrónico ya registrado: Se muestra si el servidor rechaza el registro porque el correo ya existe en la base de datos.
+    \item Error al registrar usuario: Mensaje genérico en caso de un fallo inesperado del servidor durante el proceso de registro.
+\end{itemize}
+
+%--------------------------------------
+\section{IU-04 Pantalla de Perfil de Propietario}
+
+    3 \subsection{Objetivo}
+    4     Permitir a un nuevo usuario realizar un registro completo y detallado, incluyendo su información personal, múltiples contactos telefónicos y
+      direcciones de estancia, para crear un perfil de propietario exhaustivo en una sola operación.
+
+    6 \subsection{Diseño}
+    7     Esta pantalla \IUref{IU-04}{Pantalla de Perfil de Propietario} (ver figura~\ref{IU-04}) aparece cuando un usuario navega a la ruta
+      `/register-complete`. Aunque el nombre del caso de uso es "perfil de propietario", esta interfaz funciona como un formulario de "Registro Completo".
+      Está organizada en tres secciones principales: "Información Personal" para los datos de la cuenta y credenciales, "Teléfonos de Contacto" donde se
+      pueden agregar dinámicamente varios números, y "Direcciones Durante el Hospedaje" para registrar las ubicaciones del propietario durante la estancia d
+      su mascota.
+
+    9 \IUfig[.5]{IU04}{IU-04}{Pantalla de Perfil de Propietario (Registro Completo).}
+
+   11 \subsection{Salidas}
+   12     Ninguna.
+
+   14 \subsection{Entradas}
+   15 \begin{itemize}
+   16     \item \textbf{Información Personal:} Correo Electrónico, Contraseña, Confirmar Contraseña, Nombre, Apellidos.
+   17     \item \textbf{Teléfonos (por cada uno):} Número, Tipo de Teléfono, Nombre de Contacto, Relación, si es Principal, Notas.
+   18     \item \textbf{Direcciones (por cada una):} Tipo de Domicilio, Código Postal, Estado, Municipio, Colonia, Calle, Números, Fechas de Estancia, si es
+      Predeterminada, Notas.
+   19 \end{itemize}
+
+   21 \subsection{Comandos}
+   22 \begin{itemize}
+   23     \item \IUbutton{Registrarse}: Valida la completitud y corrección de todos los datos ingresados en las tres secciones. Si la validación es exitosa,
+      envía toda la información al servidor para crear la cuenta de propietario. En caso de éxito, muestra una alerta y redirige a la pantalla de login.
+   24     \item \IUbutton{Cancelar}: Descarta todos los datos ingresados y redirige al usuario a la pantalla de login.
+   25     \item \IUbutton{+ Agregar} (en Teléfonos/Direcciones): Añade un nuevo bloque de campos para que el usuario pueda registrar un teléfono o una direc
+      ón adicional.
+   26     \item \IUbutton{Eliminar} (Icono de bote de basura): Elimina el bloque de teléfono o dirección correspondiente.
+   27 \end{itemize}
+
+   29 \subsection{Mensajes}
+   30 \begin{itemize}
+   31     \item Por favor completa todos los campos obligatorios.
+   32     \item Las contraseñas no coinciden.
+   33     \item La contraseña debe tener al menos 6 caracteres.
+   34     \item Debe agregar al menos un teléfono.
+   35     \item ¡Registro exitoso! Ahora puedes iniciar sesión.
+   36     \item Error al registrar. Por favor intenta de nuevo.
+   37     \item No se encontró información para el código postal ingresado.
+   38 \end{itemize}
+
+%--------------------------------------
+\section{IU-05 Pantalla de Consulta de Mascotas}
+
+\subsection{Objetivo}
+    Proporcionar al Propietario una vista general de todas sus mascotas registradas, y servir como punto de partida para realizar acciones de gestión como agregar, editar, eliminar o consultar el detalle de cada una.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-05}{Pantalla de Consulta de Mascotas} (ver figura~\ref{IU-05}) aparece cuando el usuario autenticado navega a la ruta `/pets`. Presenta una cabecera con el título "Mis Mascotas" y un botón principal para agregar un nuevo animal. El contenido principal es una cuadrícula de tarjetas, donde cada tarjeta representa una mascota y muestra su información básica (nombre, especie, etc.). Si no hay mascotas registradas, la pantalla muestra un mensaje indicándolo.
+
+\IUfig[.5]{IU05}{IU-05}{Pantalla de Consulta de Mascotas.}
+
+\subsection{Salidas}
+\begin{itemize}
+    \item Lista de tarjetas, cada una representando una mascota con su información clave: Nombre, ID, Especie, Sexo, Fecha de Nacimiento y Peso.
+    \item Para usuarios administradores, se muestra adicionalmente el Nombre y Correo del Propietario en cada tarjeta.
+\end{itemize}
+
+\subsection{Entradas}
+    Ninguna.
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Agregar Mascota}: Redirige al usuario al \IUref{IU-06}{Formulario de Mascota} para registrar un nuevo animal.
+    \item \IUbutton{Tarjeta de Mascota} (al hacer clic en el área principal de la tarjeta): Redirige al usuario a la \IUref{IU-07}{Pantalla de Detalle de Mascota} para ver la información completa del animal seleccionado.
+    \item \IUbutton{Editar} (botón en cada tarjeta): Redirige al usuario al \IUref{IU-06}{Formulario de Mascota} en modo de edición, precargando los datos de la mascota seleccionada.
+    \item \IUbutton{Eliminar} (icono de bote de basura en cada tarjeta): Solicita confirmación al usuario y, si es aceptada, envía una petición al servidor para eliminar permanentemente el registro de la mascota y actualiza la lista.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item ¿Estás seguro de eliminar esta mascota?: Mensaje de confirmación del navegador antes de ejecutar la eliminación.
+    \item Error al cargar las mascotas: Se muestra si ocurre un fallo al intentar obtener los datos del servidor.
+    \item Error al eliminar la mascota: Se muestra (vía alerta) si el servidor no puede completar la operación de borrado.
+    \item No tienes mascotas registradas: Se muestra en el centro de la pantalla si el usuario no tiene ninguna mascota asociada a su cuenta.
+\end{itemize}
+%--------------------------------------
+\section{IU-06 Pantalla de Gestión de Mascota}
+
+\subsection{Objetivo}
+    Proporcionar un formulario unificado para que el Propietario pueda registrar los datos de una nueva mascota o actualizar la información de una mascota existente, cubriendo desde datos básicos hasta características físicas y de identificación.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-06}{Pantalla de Gestión de Mascota} (ver figura~\ref{IU-06}) aparece cuando el usuario oprime el botón "Agregar Mascota" o "Editar" en la \IUref{IU-05}{Pantalla de Consulta de Mascotas}. Presenta un formulario detallado dividido en secciones lógicas: "Información Básica", "Características Físicas", "Identificación" y "Señas Particulares". El título de la pantalla y el texto del botón principal cambian dinámicamente a "Agregar" o "Editar" según el contexto.
+
+\IUfig[.5]{IU06}{IU-06}{Pantalla de Gestión de Mascota.}
+\IUfig[.5]{IU06-2}{IU-06}{Pantalla de Gestión de Mascota.}
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Nombre de la mascota (requerido).
+    \item Especie (requerido, selector).
+    \item Sexo (requerido, selector).
+    \item Fecha de Nacimiento (requerido, selector de fecha).
+    \item Raza (selector, dependiente de la especie).
+    \item Características físicas: Peso (kg), Altura (cm), Largo (cm), Color de pelo y ojos.
+    \item Identificación: Número de Chip, RUAC.
+    \item Señas Particulares (área de texto).
+    \item Opciones de casilla: Mestizo, Esterilizado.
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Crear Mascota / Actualizar Mascota}: Realiza una validación inicial para asegurar que los campos requeridos estén completos. Si la validación es exitosa, envía los datos al servidor para crear o actualizar el registro. Finalmente, redirige al usuario a la \IUref{IU-05}{Pantalla de Consulta de Mascotas}.
+    \item \IUbutton{Cancelar}: Descarta todos los cambios o datos ingresados y redirige al usuario de vuelta a la \IUref{IU-05}{Pantalla de Consulta de Mascotas}.
+    \item \IUbutton{Volver a...}: Proporciona una vía de navegación para regresar a la pantalla anterior sin guardar cambios, funcionando de manera similar a "Cancelar".
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Por favor completa todos los campos requeridos: Se muestra si el usuario intenta guardar sin llenar los campos obligatorios.
+    \item Error al guardar la mascota: Mensaje genérico si el servidor responde con un error inesperado durante la operación de guardado.
+    \item Error al cargar la mascota: Se muestra en modo edición si el sistema no puede obtener los datos de la mascota para llenar el formulario.
+    \item Errores de validación: [mensaje detallado]: Mensaje específico proveniente del servidor si un campo no cumple con las reglas de negocio (ej. formato incorrecto, valor duplicado).
+\end{itemize}
+
+%--------------------------------------
+\section{IU-07 Pantalla de Expediente de Mascota}
+
+\subsection{Objetivo}
+    Centralizar y presentar de manera organizada toda la información relevante de una mascota, incluyendo sus datos de perfil, historial médico completo, alergias, desparasitaciones y documentos, sirviendo como un expediente clínico y de gestión.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-07}{Pantalla de Expediente de Mascota} (ver figura~\ref{IU-07}) aparece cuando el usuario selecciona una mascota específica desde la \IUref{IU-05}{Pantalla de Consulta de Mascotas}. La interfaz muestra el nombre de la mascota en la cabecera y divide la información en secciones modulares como "Información Básica", "Vacunas", "Historial Médico", "Alergias", "Desparasitaciones" y "Documentos". Cada sección lista los registros correspondientes y provee botones de acción contextuales.
+
+\IUfig[.5]{IU07}{IU-07}{Pantalla de Expediente de Mascota.}
+\IUfig[.5]{IU07-2}{IU-07}{Pantalla de Expediente de Mascota.}
+\subsection{Salidas}
+\begin{itemize}
+    \item \textbf{Información Básica:} Sexo, Fecha de Nacimiento, Peso, Número de Chip y estado de esterilización.
+    \item \textbf{Lista de Vacunas:} Nombre de la vacuna, fecha de aplicación, vigencia y veterinario.
+    \item \textbf{Historial Médico:} Enfermedades diagnosticadas con fecha, observaciones y tratamiento.
+    \item \textbf{Lista de Alergias:} Nombre, tipo y severidad de cada alergia.
+    \item \textbf{Lista de Desparasitaciones:} Tipo, producto y fechas de aplicación.
+    \item \textbf{Lista de Documentos:} Nombre de cada archivo con un enlace para su descarga/visualización.
+\end{itemize}
+
+\subsection{Entradas}
+    Ninguna.
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Volver}: Redirige al usuario a la \IUref{IU-05}{Pantalla de Consulta de Mascotas}.
+    \item \IUbutton{Editar información básica}: Redirige al usuario a la \IUref{IU-06}{Pantalla de Gestión de Mascota} en modo edición.
+    \item \IUbutton{Agregar Vacuna}: Redirige al usuario a la \IUref{IU-08}{Formulario para Agregar Vacuna}.
+    \item \IUbutton{Agregar Diagnóstico}: Redirige al usuario a la \IUref{IU-09}{Formulario para Agregar Enfermedad}.
+    \item \IUbutton{Agregar Alergia}: Redirige al usuario a la \IUref{IU-10}{Formulario para Agregar Alergia}.
+    \item \IUbutton{Eliminar} (en Alergias/Desparasitaciones/Documentos): Pide confirmación y, si se acepta, elimina el registro correspondiente y actualiza la lista.
+    \item \IUbutton{Ver} (en Documentos): Abre el documento seleccionado en una nueva pestaña para su visualización o descarga.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Cargando...: Se muestra mientras el sistema obtiene toda la información de la mascota del servidor.
+    \item Mascota no encontrada: Se muestra si el ID de la mascota en la URL no corresponde a un registro válido o accesible para el usuario.
+    \item ¿Eliminar esta alergia?: Mensaje de confirmación del navegador antes de borrar un registro de alergia.
+    \item ¿Eliminar este registro?: Mensaje de confirmación del navegador antes de borrar un registro de desparasitación.
+    \item ¿Eliminar este documento?: Mensaje de confirmación del navegador antes de borrar un documento.
+\end{itemize}
+
+
+%--------------------------------------
+\section{IU-08 Pantalla de Registro de Vacunación}
+
+\subsection{Objetivo}
+    Permitir al Propietario registrar una nueva vacuna en el historial médico de una mascota, especificando el tipo de vacuna, fechas de aplicación y vigencia, y el profesional que la administró, para mantener un control de salud preciso y actualizado.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-08}{Pantalla de Registro de Vacunación} (ver figura~\ref{IU-08}) aparece cuando el usuario oprime el botón "Agregar Vacuna" desde la \IUref{IU-07}{Pantalla de Expediente de Mascota}. Presenta un formulario dedicado para el registro de una vacuna. Ofrece la flexibilidad de seleccionar una vacuna de un catálogo precargado o, alternativamente, ingresar un nombre de vacuna personalizado si no se encuentra en la lista. Además incluye campos para la fecha de aplicación, fecha de vigencia, el veterinario y notas adicionales.
+
+\IUfig[.5]{IU08}{IU-08}{Pantalla de Registro de Vacunación.}
+\IUfig[.5]{IU08-2}{IU-08}{Pantalla de Registro de Vacunación.}
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Selección de Vacuna del Catálogo (selector).
+    \item Nombre de Vacuna Personalizado (campo de texto).
+    \item Fecha de Aplicación (selector de fecha).
+    \item Vigente Hasta (selector de fecha).
+    \item Veterinario (campo de texto).
+    \item Notas (área de texto).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Guardar Vacuna}: Recopila los datos del formulario, los envía al servidor para crear el nuevo registro de vacunación y, en caso de éxito, redirige al usuario de vuelta a la \IUref{IU-07}{Pantalla de Expediente de Mascota}, donde se visualizará la nueva vacuna.
+    \item \IUbutton{Cancelar}: Descarta cualquier dato ingresado en el formulario y redirige al usuario de vuelta a la \IUref{IU-07}{Pantalla de Expediente de Mascota}.
+    \item \IUbutton{Volver a [Nombre Mascota]}: Funciona como el botón "Cancelar", permitiendo al usuario regresar a la pantalla anterior sin guardar cambios.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Error al agregar la vacuna: Se muestra si ocurre un fallo en el servidor al intentar guardar el registro.
+    \item Cargando...: Se muestra brevemente mientras la pantalla obtiene la información inicial de la mascota y el catálogo de vacunas.
+\end{itemize}
+
+%--------------------------------------
+\section{IU-09 Pantalla de Registro de Padecimientos}
+
+\subsection{Objetivo}
+    Permitir al Propietario registrar un padecimiento o enfermedad diagnosticada en el historial médico de una mascota, detallando la fecha del diagnóstico, las observaciones clínicas y el tratamiento prescrito.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-09}{Pantalla de Registro de Padecimientos} (ver figura~\ref{IU-09}) aparece cuando el usuario oprime el botón "Agregar Diagnóstico" desde la \IUref{IU-07}{Pantalla de Expediente de Mascota}. Presenta un formulario titulado "Agregar Diagnóstico", donde el usuario debe seleccionar una enfermedad de un catálogo filtrado por la especie de la mascota. Adicionalmente, puede especificar la fecha del diagnóstico y añadir texto libre en los campos de "Observaciones" y "Tratamiento".
+
+\IUfig[.5]{IU09}{IU-09}{Pantalla de Registro de Padecimientos.}
+\IUfig[.5]{IU09-2}{IU-09}{Pantalla de Registro de Padecimientos.}
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Enfermedad/Condición (selector, requerido).
+    \item Fecha de Diagnóstico (selector de fecha, opcional).
+    \item Observaciones (área de texto, opcional).
+    \item Tratamiento (área de texto, opcional).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Guardar Diagnóstico}: Valida que se haya seleccionado una enfermedad del catálogo. Si es válido, envía los datos al servidor para crear el nuevo registro en el historial médico. Al completarse exitosamente, redirige al usuario a la \IUref{IU-07}{Pantalla de Expediente de Mascota}.
+    \item \IUbutton{Cancelar}: Descarta todos los datos ingresados y redirige al usuario de vuelta a la \IUref{IU-07}{Pantalla de Expediente de Mascota}.
+    \item \IUbutton{Volver a [Nombre Mascota]}: Funciona como el botón "Cancelar", permitiendo al usuario regresar a la pantalla anterior sin guardar cambios.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Por favor selecciona una enfermedad: Se muestra si el usuario intenta guardar sin haber seleccionado una enfermedad del catálogo.
+    \item Error al agregar el diagnóstico: Se muestra si ocurre un fallo en el servidor al intentar guardar el registro.
+    \item Cargando...: Se muestra brevemente mientras la pantalla carga la información inicial de la mascota y el catálogo de enfermedades.
+\end{itemize}
+%--------------------------------------
+\section{IU-10 Pantalla de Registro de Alergias}
+
+\subsection{Objetivo}
+    Permitir al Propietario registrar una alergia específica para una mascota, seleccionándola de un catálogo y especificando su nivel de severidad, para asegurar que se tomen las precauciones necesarias durante su cuidado.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-10}{Pantalla de Registro de Alergias} (ver figura~\ref{IU-10}) aparece cuando el usuario oprime el botón "Agregar Alergia" desde la \IUref{IU-07}{Pantalla de Expediente de Mascota}. Presenta un formulario enfocado, cuyo elemento principal es un selector que agrupa las alergias por tipo (ej. Alimentaria, Ambiental) para facilitar la selección. Incluye también un selector para definir la severidad de la reacción y un cuadro informativo sobre la importancia de reportar las alergias.
+
+\IUfig[.5]{IU10}{IU-10}{Pantalla de Registro de Alergias.}
+
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Alergia (selector agrupado, requerido).
+    \item Severidad (selector con opciones: Leve, Moderada, Alta, Severa).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Guardar Alergia}: Valida que se haya seleccionado una alergia del catálogo. Si es válido, envía la información al servidor para crear la asociación entre la mascota y la alergia. Tras una respuesta exitosa, redirige al usuario a la \IUref{IU-07}{Pantalla de Expediente de Mascota}.
+    \item \IUbutton{Cancelar}: Descarta cualquier selección realizada y redirige al usuario de vuelta a la \IUref{IU-07}{Pantalla de Expediente de Mascota}.
+    \item \IUbutton{Volver a [Nombre Mascota]}: Proporciona una vía de navegación para regresar a la pantalla anterior sin guardar cambios.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Por favor selecciona una alergia: Se muestra si el usuario intenta guardar sin haber seleccionado una alergia del catálogo.
+    \item Error al agregar la alergia: Se muestra si ocurre un fallo en el servidor al intentar guardar el registro.
+    \item Cargando...: Se muestra brevemente mientras la pantalla carga la información inicial de la mascota y el catálogo de alergias.
+\end{itemize}
+%--------------------------------------
+\section{IU-11 Pantalla de Registro de Desparasitación}
+
+\subsection{Objetivo}
+    Permitir al Propietario registrar la aplicación de un tratamiento de desparasitación para una mascota, especificando el tipo, producto utilizado y las fechas relevantes para mantener un control preventivo de salud.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-11}{Pantalla de Registro de Desparasitación} (ver figura~\ref{IU-11}) aparece cuando el usuario oprime el botón "Agregar Desparasitación" desde la \IUref{IU-07}{Pantalla de Expediente de Mascota}. Presenta un formulario claro para registrar el tratamiento, permitiendo seleccionar el tipo (Interna, Externa o Mixta), especificar el producto y dosis, y establecer la fecha de aplicación y la fecha de la próxima dosis. Se incluye un cuadro con recomendaciones generales para informar al usuario.
+
+\IUfig[.5]{IU11}{IU-11}{Pantalla de Registro de Desparasitación.}
+
+\subsection{Salidas}	
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Tipo de Desparasitación (selector).
+    \item Producto Utilizado (campo de texto).
+    \item Fecha de Aplicación (selector de fecha).
+    \item Próxima Aplicación (selector de fecha).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Guardar Desparasitación}: Recopila los datos ingresados en el formulario y los envía al servidor para crear un nuevo registro de desparasitación. Tras una respuesta exitosa, redirige al usuario de vuelta a la \IUref{IU-07}{Pantalla de Expediente de Mascota}.
+    \item \IUbutton{Cancelar}: Descarta todos los datos ingresados y regresa a la \IUref{IU-07}{Pantalla de Expediente de Mascota} sin guardar cambios.
+    \item \IUbutton{Volver a [Nombre Mascota]}: Funciona como el botón "Cancelar", proporcionando una vía de navegación para regresar a la pantalla anterior.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Error al agregar la desparasitación: Se muestra si ocurre un fallo en el servidor al intentar guardar el registro.
+    \item Cargando...: Se muestra brevemente mientras la pantalla carga la información inicial de la mascota.
+\end{itemize}
+
+%--------------------------------------
+\section{IU-12 Pantalla de Carga de Documentos}
+
+\subsection{Objetivo}
+    Permitir al Propietario subir y asociar archivos digitales (como certificados veterinarios, cartillas de vacunación, resultados de laboratorio o fotografías) al expediente de una mascota para mantener un registro documental completo.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-12}{Pantalla de Carga de Documentos} (ver figura~\ref{IU-12}) aparece cuando el usuario oprime el botón "Subir Documento" desde la \IUref{IU-07}{Pantalla de Expediente de Mascota}. Presenta un formulario centrado en la subida de archivos que incluye un selector opcional para categorizar el documento y un área interactiva para arrastrar y soltar o seleccionar un archivo del dispositivo del usuario. Una vez seleccionado se muestra una vista previa del nombre y tamaño del archivo.
+
+\IUfig[.5]{IU12}{IU-12}{Pantalla de Carga de Documentos.}
+
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Tipo de Documento (selector, opcional).
+    \item Archivo (selector de archivo / zona de arrastre, requerido).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Subir Documento}: Valida que se haya seleccionado un archivo. Si es válido, envía el archivo y su tipo (si fue seleccionado) al servidor para almacenarlo. Tras una respuesta exitosa, redirige al usuario a la \IUref{IU-07}{Pantalla de Expediente de Mascota}.
+    \item \IUbutton{Cancelar}: Descarta la selección de archivo y redirige al usuario de vuelta a la \IUref{IU-07}{Pantalla de Expediente de Mascota}.
+    \item \IUbutton{Seleccionar archivo}: Abre el explorador de archivos nativo del sistema operativo para que el usuario elija un documento.
+    \item \IUbutton{Remover archivo}: Permite al usuario deseleccionar el archivo cargado en el formulario antes de enviarlo.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Por favor selecciona un archivo: Se muestra si el usuario intenta guardar sin haber seleccionado un archivo.
+    \item Error al subir el documento: Se muestra si ocurre un fallo en el servidor durante la carga del archivo.
+    \item Cargando...: Se muestra brevemente mientras la pantalla carga la información inicial de la mascota y los tipos de documento.
+\end{itemize}
+
+%--------------------------------------
+\section{IU-13 Pantalla de Historial de Reservaciones}
+
+\subsection{Objetivo}
+    Proporcionar al usuario una vista general y organizada de sus reservaciones pasadas, presentes y futuras, permitiéndole buscar, filtrar y acceder los detalles de cada una para su gestión.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-13}{Pantalla de Historial de Reservaciones} (ver figura~\ref{IU-13}) aparece cuando un usuario autenticado navega a la ruta `/reservations`. La interfaz muestra un título ("Mis Reservaciones" o "Todas las Reservaciones" para administradores) y un conjunto de botones de acción para crear una nueva reservación, filtrar la lista o cambiar a una vista de calendario. El contenido principal es una cuadrícula de tarjetas, donde cada tarjeta resume la información clave de una reservación (mascota, fechas, estado, habitación y costo).
+
+\IUfig[.5]{IU13}{IU-13}{Pantalla de Historial de Reservaciones.}
+
+\subsection{Salidas}
+\begin{itemize}
+    \item Lista de tarjetas, cada una representando una reservación con su información clave: Nombre de la mascota, ID de reservación, Estado, Fechas, Habitación y Monto del hospedaje.
+    \item Para administradores, se muestra adicionalmente el nombre y correo del propietario.
+\end{itemize}
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Campo de búsqueda por texto (filtro opcional).
+    \item Selector de estado (filtro opcional, ej: "Pendiente", "Confirmada").
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Nueva}: Redirige al \IUref{IU-14}{Formulario de Reservación} para iniciar el proceso de creación de una nueva reservación (disponible para Propietarios).
+    \item \IUbutton{Filtros}: Muestra u oculta los campos de entrada para buscar por texto y filtrar por estado, permitiendo al usuario acotar la lista de resultados.
+    \item \IUbutton{Vista Calendario}: Redirige a la \IUref{IU-16}{Calendario de Reservaciones}, mostrando los mismos datos en un formato visual de calendario.
+    \item \IUbutton{Ver Detalles} (o clic en la tarjeta): Redirige a la \IUref{IU-15}{Pantalla de Detalle de Reservación} para la reservación seleccionada.
+    \item \IUbutton{Eliminar}: Solicita confirmación al usuario y, si se acepta, envía una petición al servidor para eliminar la reservación.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item No tienes reservaciones: Se muestra si el usuario no tiene ninguna reservación registrada y no ha aplicado filtros.
+    \item No se encontraron reservaciones: Se muestra si la combinación de filtros aplicados no arroja ningún resultado.
+    \item Error al cargar las reservaciones: Mensaje genérico si ocurre un fallo al obtener los datos del servidor.
+    \item ¿Eliminar reservación...?: Mensaje de confirmación del navegador antes de ejecutar la eliminación.
+\end{itemize}
+%--------------------------------------
+\section{IU-14 Pantalla de Gestión de Reservación}
+
+\subsection{Objetivo}
+    Guiar al usuario a través de un proceso estructurado por pasos para crear una nueva reservación para una de sus mascotas, o para modificar una reservación existente, permitiendo seleccionar la mascota, habitación, fechas y servicios adicionales.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-14}{Pantalla de Gestión de Reservación} (ver figura~\ref{IU-14}) aparece cuando el usuario oprime el botón "Nueva Reservación" o "Editar". La interfaz es un asistente (wizard) de 4 pasos con un indicador de progreso visual: 1. Mascota y Habitación, 2. Fechas, 3. Servicios, 4. Confirmar. El usuario avanza o retrocede entre los pasos, y cada uno presenta los campos de entrada relevantes para esa etapa del proceso.
+
+\IUfig[.5]{IU14}{IU-14}{Pantalla de Gestión de Reservación.}
+\IUfig[.5]{IU14-2}{IU-14}{Pantalla de Gestión de Reservación.}
+\subsection{Salidas}
+    En el paso final (Confirmación), se presenta un resumen completo de la reservación antes de ser guardada, incluyendo:
+    \begin{itemize}
+        \item Datos de la mascota y habitación seleccionada.
+        \item Rango de fechas y número de noches.
+        \item Desglose de servicios adicionales con sus costos.
+        \item Costo total de la reservación.
+    \end{itemize}
+
+\subsection{Entradas}
+\begin{itemize}
+    \item \textbf{Paso 1:} Mascota (selector), Habitación (selección de una lista filtrada).
+    \item \textbf{Paso 2:} Rango de fechas (selector de calendario), Notas Especiales (área de texto).
+    \item \textbf{Paso 3:} Servicios Adicionales (selección de una lista de servicios disponibles y ajuste de cantidad).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Siguiente}: Valida que los campos del paso actual estén completos y, si es correcto, avanza al siguiente paso del asistente.
+    \item \IUbutton{Anterior}: Regresa al paso previo del asistente para permitir correcciones.
+    \item \IUbutton{Crear/Actualizar Reservación}: En el último paso, envía todos los datos recopilados al servidor para crear o actualizar el registro. Al finalizar, redirige al usuario a la \IUref{IU-15}{Pantalla de Detalle de Reservación}.
+    \item \IUbutton{Volver a Reservaciones}: Permite al usuario abandonar el proceso y regresar a la \IUref{IU-13}{Pantalla de Historial de Reservaciones}.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Por favor completa todos los campos requeridos: Mensaje genérico si falla la validación de un paso.
+    \item Selecciona una mascota / Selecciona una habitación: Mensaje específico si no se ha completado un campo en el Paso 1.
+    \item La fecha de fin debe ser posterior a la de inicio: Se muestra si el rango de fechas seleccionado en el Paso 2 es inválido.
+    \item Error al cargar los datos: Se muestra si falla la carga inicial de mascotas, habitaciones o servicios.
+    \item Error al guardar la reservación: Se muestra si el servidor rechaza la creación/actualización por algún motivo (ej. habitación ocupada).
+\end{itemize}
+%--------------------------------------
+\section{IU-15 Pantalla de Detalle de Reservación}
+
+\subsection{Objetivo}
+    Proporcionar al usuario una vista consolidada y detallada de una reservación específica, mostrando su estado, información logística, desglose financiero, historial de pagos y servicios asociados, permitiendo además la gestión de dichos pagos.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-15}{Pantalla de Detalle de Reservación} (ver figura~\ref{IU-15}) aparece cuando el usuario selecciona una reservación desde la \IUref{IU-13}{Pantalla de Historial de Reservaciones}. La interfaz se divide en dos columnas principales. La columna izquierda muestra los "Detalles de la Reservación" (habitación, fechas), la lista de "Servicios Adicionales" contratados y el "Historial de Pagos". La columna derecha presenta un "Resumen de Costos" con el desglose financiero (total, pagado, saldo) y un formulario para "Agregar Pago".
+
+\IUfig[.5]{IU15}{IU-15}{Pantalla de Detalle de Reservación.}
+
+\subsection{Salidas}
+\begin{itemize}
+    \item Detalles de la reservación: ID, nombre de la mascota, habitación, fechas, notas especiales y estado (ej. Confirmada).
+    \item Resumen financiero: Costo de hospedaje, costo de servicios, total, monto pagado y saldo pendiente.
+    \item Lista de servicios adicionales contratados, con su cantidad y costo.
+    \item Historial de pagos realizados, mostrando monto, método y fecha de cada pago.
+\end{itemize}
+
+\subsection{Entradas}
+    \textbf{Formulario de Agregar Pago:}
+\begin{itemize}
+    \item Monto (campo numérico).
+    \item Método de Pago (selector: Efectivo, Tarjeta, etc.).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Volver a Reservaciones}: Regresa al usuario a la \IUref{IU-13}{Pantalla de Historial de Reservaciones}.
+    \item \IUbutton{Registrar Pago}: Muestra el formulario para agregar un nuevo pago a la reservación.
+    \item \IUbutton{Confirmar Pago}: Valida el monto ingresado y lo envía al servidor para ser registrado. Si tiene éxito, muestra una notificación y actualiza el resumen financiero.
+    \item \IUbutton{Cancelar} (en formulario de pago): Oculta el formulario de pago sin registrar nada.
+    \item \IUbutton{Crear Cita} (visible para Administradores): Redirige a la \IUref{IU-21}{Pantalla de Gestión de Citas} para agendar el servicio seleccionado.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Cargando detalles...: Se muestra mientras se obtiene la información de la reservación y los pagos.
+    \item Reservación no encontrada: Mensaje de error principal si la reservación no existe.
+    \item Ingresa un monto válido: Se muestra si el usuario intenta registrar un pago con un monto de cero o negativo.
+    \item El monto no puede ser mayor al saldo pendiente: Se muestra si el monto del pago excede la deuda actual.
+    \item Pago de \$[monto] registrado exitosamente: Notificación de éxito tras registrar un pago.
+    \item Error al procesar el pago: Notificación de error si el servidor rechaza el registro del pago.
+\end{itemize}
+
+%--------------------------------------
+\section{IU-17 Pantalla de Consulta de Personal}
+
+\subsection{Objetivo}
+    Proporcionar al administrador una interfaz para visualizar, buscar y gestionar a todo el personal del hotel, sirviendo como punto de acceso para consultar sus agendas, editar sus perfiles o eliminar sus registros del sistema.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-17}{Pantalla de Consulta de Personal} (ver figura~\ref{IU-17}) aparece cuando un usuario con rol de Administrador navega a la ruta `/admin/empleados`. La interfaz presenta una lista de todos los empleados registrados en el sistema. Incluye una barra de búsqueda para filtrar la lista por nombre o especialidad. Cada empleado se muestra en una tarjeta individual con su nombre, especialidad y botones de acción para "Ver Agenda", "Editar" y "Eliminar".
+
+\IUfig[.5]{IU17}{IU-17}{Pantalla de Consulta de Personal.}
+
+\subsection{Salidas}
+\begin{itemize}
+    \item Lista de tarjetas, donde cada una muestra el Nombre y la Especialidad del empleado.
+\end{itemize}
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Campo de búsqueda por texto para filtrar por nombre o especialidad.
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Nuevo Empleado}: Redirige al administrador al \IUref{IU-18}{Formulario de Gestión de Empleado} para registrar un nuevo miembro del personal.
+    \item \IUbutton{Ver Agenda}: Redirige al administrador a la \IUref{IU-19}{Pantalla de Agenda de Empleado} para visualizar las citas asignadas al empleado seleccionado.
+    \item \IUbutton{Editar}: Redirige al \IUref{IU-18}{Formulario de Gestión de Empleado} en modo de edición, precargando los datos del empleado seleccionado.
+    \item \IUbutton{Eliminar}: Solicita confirmación al usuario y, si es aceptada, envía una petición al servidor para eliminar permanentemente el registro del empleado.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Cargando empleados...: Se muestra mientras se obtiene la lista de empleados del servidor.
+    \item Error al cargar empleados: Se muestra si ocurre un fallo de red o del servidor al intentar obtener los datos.
+    \item No hay empleados registrados: Se muestra si la base de datos no contiene ningún registro de empleado.
+    \item No se encontraron empleados: Se muestra si el término de búsqueda no arroja ningún resultado.
+    \item ¿Eliminar al empleado "[nombre]"?: Mensaje de confirmación del navegador antes de ejecutar la eliminación.
+\end{itemize}
+%--------------------------------------
+\section{IU-18 Pantalla de Gestión de Empleado}
+
+\subsection{Objetivo}
+    Proporcionar al administrador una interfaz para registrar un nuevo empleado o para modificar la información de uno existente, gestionando su nombre y especialidad dentro del sistema.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-18}{Pantalla de Gestión de Empleado} (ver figura~\ref{IU-18}) aparece cuando el administrador oprime el botón "Nuevo Empleado" o "Editar" en la \IUref{IU-17}{Pantalla de Consulta de Personal}. Presenta un formulario simple con campos para el nombre del empleado (requerido) y su especialidad (opcional). El título de la pantalla y el texto del botón de acción principal se adaptan dinámicamente para reflejar si se está creando ("Nuevo Empleado") o editando ("Editar Empleado") un registro.
+
+\IUfig[.5]{IU18}{IU-18}{Pantalla de Gestión de Empleado.}
+
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Nombre (campo de texto, requerido).
+    \item Especialidad (campo de texto, opcional).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Crear Empleado / Actualizar Empleado}: Valida que el nombre no esté vacío. Si es válido, envía los datos al servidor para crear o actualizar el registro. Al finalizar con éxito, redirige al administrador a la \IUref{IU-17}{Pantalla de Consulta de Personal}.
+    \item \IUbutton{Cancelar}: Descarta cualquier cambio o dato ingresado y redirige al administrador de vuelta a la \IUref{IU-17}{Pantalla de Consulta de Personal}.
+    \item \IUbutton{Volver a empleados}: Funciona como el botón "Cancelar", permitiendo al usuario regresar a la pantalla anterior sin guardar cambios.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Error al cargar empleado: Se muestra en modo edición si el sistema no puede obtener los datos del empleado para llenar el formulario.
+    \item Error al guardar empleado: Se muestra si ocurre un fallo en el servidor al intentar guardar el registro del empleado.
+\end{itemize}
+%--------------------------------------
+\section{IU-19 Pantalla de Agenda Individual}
+
+\subsection{Objetivo}
+    Proporcionar al administrador una vista detallada de todas las citas de servicio (pasadas, presentes y futuras) asignadas a un empleado específico para facilitar la gestión de su carga de trabajo y la consulta de su historial.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-19}{Pantalla de Agenda Individual} (ver figura~\ref{IU-19}) aparece cuando un administrador oprime el botón "Ver Agenda" para un empleado en la \IUref{IU-17}{Pantalla de Consulta de Personal}. La interfaz muestra como título principal el nombre del empleado cuya agenda se está consultando. El contenido es una lista de tarjetas, donde cada una representa una cita de servicio con detalles como el nombre del servicio, la mascota involucrada y las fechas. Si el empleado no tiene citas, se muestra un mensaje indicándolo.
+
+\IUfig[.5]{IU19}{IU-19}{Pantalla de Agenda Individual.}
+
+\subsection{Salidas}
+\begin{itemize}
+    \item Nombre y especialidad del empleado en la cabecera.
+    \item Lista de citas asignadas al empleado, donde cada una detalla:
+    \begin{itemize}
+        \item Nombre del servicio.
+        \item Nombre de la mascota.
+        \item Fecha y hora de inicio.
+        \item Fecha y hora de fin.
+        \item Notas (si existen).
+    \end{itemize}
+\end{itemize}
+
+\subsection{Entradas}
+    Ninguna.
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Volver a empleados}: Regresa al administrador a la \IUref{IU-17}{Pantalla de Consulta de Personal}.
+    \item \IUbutton{Ver Detalle}: Redirige al administrador a la \IUref{IU-21}{Pantalla de Gestión de Cita} para ver o editar los detalles de la cita seleccionada.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Cargando agenda...: Se muestra mientras se obtiene la información del empleado y sus citas.
+    \item Empleado no encontrado: Se muestra si el ID del empleado en la URL es inválido.
+    \item Error al cargar datos: Se muestra si ocurre un fallo de red o del servidor al intentar obtener la información.
+    \item No hay citas asignadas a este empleado: Se muestra si el empleado no tiene ninguna cita en su historial.
+\end{itemize}
+
+%--------------------------------------
+\section{IU-20 Pantalla de Consulta de Citas de Servicio}
+
+\subsection{Objetivo}
+    Proporcionar al personal administrativo una interfaz centralizada para visualizar, filtrar y gestionar todas las citas de servicios programadas en el sistema, permitiendo un control operativo eficiente.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-20}{Pantalla de Consulta de Citas de Servicio} (ver figura~\ref{IU-20}) aparece cuando un usuario administrador navega a la ruta `/admin/citas`. La interfaz presenta una cabecera con el título "Gestión de Citas" y botones para cambiar a una vista de calendario o para crear una nueva cita. Debajo, se encuentran campos de texto que permiten filtrar la lista por nombre del servicio o del empleado. El contenido principal es un listado de tarjetas, donde cada una resume los detalles de una cita.
+
+\IUfig[.5]{IU20}{IU-20}{Pantalla de Consulta de Citas de Servicio.}
+
+\subsection{Salidas}
+\begin{itemize}
+    \item Lista de tarjetas, donde cada una detalla:
+    \begin{itemize}
+        \item Nombre del servicio.
+        \item Nombre de la mascota.
+        \item Nombre del empleado asignado (o "Sin asignar").
+        \item Fecha y hora de inicio y fin.
+        \item Notas adicionales.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Texto para filtrar por servicio (campo de texto).
+    \item Texto para filtrar por empleado (campo de texto).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Vista Calendario}: Redirige al administrador a la \IUref{IU-22}{Pantalla de Calendario de Citas}, que muestra la misma información en un formato visual cronológico.
+    \item \IUbutton{Nueva Cita}: Redirige al administrador al \IUref{IU-21}{Formulario de Gestión de Cita} para programar un nuevo servicio.
+    \item \IUbutton{Editar}: Redirige al administrador al \IUref{IU-21}{Formulario de Gestión de Cita} en modo de edición, precargando los datos de la cita seleccionada.
+    \item \IUbutton{Eliminar}: Solicita confirmación al usuario y, si es aceptada, envía una petición al servidor para eliminar el registro de la cita de forma permanente.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item Cargando citas...: Se muestra mientras se obtiene la lista de citas del servidor.
+    \item No hay citas programadas: Se muestra si no existen registros de citas en el sistema.
+    \item No se encontraron citas: Se muestra si los filtros de búsqueda no arrojan ningún resultado.
+    \item Error al cargar citas: Mensaje de error genérico si falla la comunicación con el servidor.
+    \item ¿Eliminar esta cita?: Mensaje de confirmación del navegador antes de ejecutar la eliminación.
+    \item Error al eliminar cita: Se muestra (vía alerta) si el servidor no puede completar la operación de borrado.
+\end{itemize}
+%--------------------------------------
+\section{IU-21 Pantalla de Gestión de Cita}
+
+\subsection{Objetivo}
+    Permitir al administrador crear o modificar una cita de servicio, asociándola a una reservación, un servicio específico, y opcionalmente a un empleado, dentro de un rango de fechas y horas determinado.
+
+\subsection{Diseño}
+    Esta pantalla \IUref{IU-21}{Pantalla de Gestión de Cita} (ver figura~\ref{IU-21}) aparece cuando el administrador presiona "Nueva Cita" o "Editar" en la \IUref{IU-20}{Pantalla de Consulta de Citas}. La interfaz presenta un formulario cuyo título se adapta dinámicamente ("Nueva Cita" o "Editar Cita"). Incluye selectores para "Reservación", "Servicio" y "Empleado". Notablemente, el selector de "Servicio" se filtra dinámicamente, mostrando únicamente los servicios contratados en la reservación seleccionada. Se completa con campos para fecha/hora de inicio y fin, y un área para notas.
+
+\IUfig[.5]{IU21}{IU-21}{Pantalla de Gestión de Cita.}
+
+\subsection{Salidas}
+    Ninguna.
+
+\subsection{Entradas}
+\begin{itemize}
+    \item Reservación (selector, requerido).
+    \item Servicio (selector filtrado, requerido).
+    \item Empleado (selector, opcional).
+    \item Fecha y Hora de Inicio (selector de fecha y hora, requerido).
+    \item Fecha y Hora de Fin (selector de fecha y hora, requerido).
+    \item Notas (área de texto, opcional).
+\end{itemize}
+
+\subsection{Comandos}
+\begin{itemize}
+    \item \IUbutton{Crear Cita / Actualizar}: Valida que la fecha de fin sea posterior a la de inicio. Si los datos son correctos, los envía al servidor para crear o actualizar el registro de la cita. Tras el éxito, redirige al administrador a la \IUref{IU-20}{Pantalla de Consulta de Citas de Servicio}.
+    \item \IUbutton{Cancelar}: Descarta cualquier cambio y redirige al administrador a la \IUref{IU-20}{Pantalla de Consulta de Citas de Servicio}.
+    \item \IUbutton{Volver a citas}: Funciona como el botón "Cancelar", permitiendo al usuario regresar a la pantalla anterior.
+\end{itemize}
+
+\subsection{Mensajes}
+\begin{itemize}
+    \item La fecha de fin debe ser posterior a la fecha de inicio: Error de validación si el rango de fechas es incorrecto.
+    \item Error al guardar cita: Mensaje genérico si el servidor rechaza la operación por cualquier motivo (ej. empleado no disponible).
+    \item Primero selecciona una reservación: Mensaje informativo en el selector de "Servicio" si aún no se ha elegido una reservación.
+    \item Esta reservación no tiene servicios contratados: Mensaje informativo si la reservación seleccionada no tiene servicios que se puedan agendar.
+    \item Error al cargar catálogos/cita: Se muestra si hay un problema al obtener los datos iniciales para el formulario.
+\end{itemize}
+%--------------------------------------
