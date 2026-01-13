@@ -1,6 +1,6 @@
 %-------------------------------------- COMIENZA descripción del caso de uso.
 
-  \begin{UseCase}{CU-01}{Crear Mascota}{
+  \begin{UseCase}{CU01}{Crear Mascota}{
       Permite al Propietario registrar una nueva mascota en el sistema, asociándola a su perfil para la gestión de su información y futuras reservaciones.
   }
       \UCitem{Versión}{\color{Gray}1.0}
@@ -40,7 +40,7 @@
   %--------------------------------------
   % Trayectoria Principal
   %--------------------------------------
-  \begin{UCtrayectoria}{Principal}
+  \begin{UCtrayectoria}
       \UCpaso[\UCactor] Accede a la \IUref{IU-PetList}{Lista de Mascotas} y oprime el botón \IUbutton{Agregar Mascota}.
       \UCpaso Despliega la \IUref{IU-PetForm}{Formulario de Mascota}.
       \UCpaso[\UCactor] Introduce los datos de la mascota en los campos correspondientes. \label{CU-CreatePet-FillForm}

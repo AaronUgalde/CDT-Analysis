@@ -1,0 +1,314 @@
+\chapter{Plan de trabajo}	
+\label{cap:plantrabajo}
+
+	En este capitulo se especifica el plan de trabajo empelado para el proyecto
+
+
+\section{Metodología de Trabajo}
+
+\subsection{Marco Metodológico: Scrum Adaptado}
+El proyecto se desarrolla bajo un enfoque ágil basado en Scrum, adaptado a las necesidades del equipo y las características del proyecto académico.
+
+\subsubsection{Sprints}
+\begin{itemize}
+    \item \textbf{Duración:} 2 semanas por sprint
+    \item \textbf{Total de sprints:} 6 sprints
+    \item \textbf{Duración total:} 12 semanas
+\end{itemize}
+
+\subsubsection{Ceremonias Scrum}
+\begin{longtable}{|p{3cm}|p{3cm}|p{7cm}|}
+\hline
+\textbf{Ceremonia} & \textbf{Frecuencia} & \textbf{Descripción} \\
+\hline
+\endfirsthead
+
+\multicolumn{3}{c}%
+{\tablename\ \thetable\ -- \textit{Continuación de la página anterior}} \\
+\hline
+\textbf{Ceremonia} & \textbf{Frecuencia} & \textbf{Descripción} \\
+\hline
+\endhead
+
+\hline \multicolumn{3}{r}{\textit{Continúa en la siguiente página}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+Sprint Planning & Inicio de cada sprint & Planificación de tareas, definición de objetivos y asignación de historias de usuario \\
+\hline
+Daily Standup & Lunes, Miércoles, Viernes & Sincronización rápida (15 min) sobre progreso, obstáculos y planes \\
+\hline
+Sprint Review & Final de cada sprint & Demostración de funcionalidades completadas a stakeholders \\
+\hline
+Sprint Retrospective & Final de cada sprint & Análisis de mejoras y lecciones aprendidas \\
+\hline
+\end{longtable}
+
+\subsection{Control de Versiones}
+\begin{itemize}
+    \item \textbf{Sistema:} Git con GitHub
+    \item \textbf{Estrategia de branching:} Git Flow
+    \item \textbf{Ramas principales:}
+    \begin{itemize}
+        \item \texttt{main}: Código en producción
+        \item \texttt{develop}: Código en desarrollo
+        \item \texttt{feature/*}: Nuevas funcionalidades
+        \item \texttt{hotfix/*}: Correcciones urgentes
+    \end{itemize}
+    \item \textbf{Code Review:} Pull Requests obligatorios con al menos 1 aprobación
+\end{itemize}
+
+\subsection{Estándares de Desarrollo}
+\begin{itemize}
+    \item Código en inglés (variables, funciones, comentarios)
+    \item Documentación en español
+    \item TypeScript strict mode habilitado
+    \item Convenciones de nombres: camelCase para variables, PascalCase para componentes
+    \item Commits siguiendo Conventional Commits
+\end{itemize}
+
+\section{Organización del Equipo}
+
+\subsection{Roles y Responsabilidades}
+
+\begin{longtable}{|p{3cm}|p{4cm}|p{6cm}|}
+\hline
+\textbf{Rol} & \textbf{Miembro(s)} & \textbf{Responsabilidades} \\
+\hline
+\endfirsthead
+
+\multicolumn{3}{c}%
+{\tablename\ \thetable\ -- \textit{Continuación de la página anterior}} \\
+\hline
+\textbf{Rol} & \textbf{Miembro(s)} & \textbf{Responsabilidades} \\
+\hline
+\endhead
+
+\hline \multicolumn{3}{r}{\textit{Continúa en la siguiente página}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+Product Owner & [Aaron Ugalde Téllez] & Definir requisitos, priorizar backlog, validar entregables, comunicación con stakeholders \\
+\hline
+Scrum Master & [Beltran Saucedo Axel Alejandro] & Facilitar ceremonias, resolver impedimentos, asegurar seguimiento de Scrum \\
+\hline
+Backend Lead & [Castillo Aldaba Jared] & Diseño de API, arquitectura del servidor, base de datos, seguridad \\
+\hline
+Frontend Lead & [Vazquez Villagran Jorge] & Arquitectura del cliente, diseño de componentes, UX/UI, integración con API \\
+\hline
+Desarrollador Full-Stack & [Ugalde Tellez Aaron] & Implementación de features, testing, documentación técnica \\
+\hline
+QA/Tester & [Beltran Saucedo Axel Alejandro] & Pruebas funcionales, pruebas de integración, documentación de bugs \\
+\hline
+DevOps & [Castillo Aldaba Jared] & Configuración de entornos, CI/CD, deployment, monitoreo \\
+\hline
+\end{longtable}
+
+\subsection{Comunicación del Equipo}
+\begin{itemize}
+    \item \textbf{Herramienta principal:} Discord/Slack
+    \item \textbf{Reuniones presenciales:} 2 veces por semana
+    \item \textbf{Documentación:} Notion/Confluence
+    \item \textbf{Gestión de tareas:} Jira/Trello
+    \item \textbf{Repositorio:} GitHub
+\end{itemize}
+
+% ============================================
+% CRONOGRAMA DE ACTIVIDADES
+% ============================================
+\section{Cronograma de Actividades}
+
+\subsection{Sprint 0: Planificación e Infraestructura (Semanas 1-2)}
+
+\begin{longtable}{|p{1.5cm}|p{5cm}|p{6.5cm}|}
+\hline
+\textbf{Día} & \textbf{Actividad} & \textbf{Entregables} \\
+\hline
+\endfirsthead
+
+\multicolumn{3}{c}%
+{\tablename\ \thetable\ -- \textit{Continuación de la página anterior}} \\
+\hline
+\textbf{Día} & \textbf{Actividad} & \textbf{Entregables} \\
+\hline
+\endhead
+
+\hline \multicolumn{3}{r}{\textit{Continúa en la siguiente página}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+1-2 & Reunión de kick-off & Documento de objetivos y alcance \\
+\hline
+3-4 & Análisis de requisitos & Documento de requisitos funcionales y no funcionales \\
+\hline
+5-7 & Diseño de arquitectura & Diagrama de arquitectura, modelo de datos \\
+\hline
+8-9 & Configuración de repositorio & Repo configurado con estructura de monorepo \\
+\hline
+10-12 & Setup de entornos & Entorno de desarrollo local configurado \\
+\hline
+13-14 & Configuración de base de datos & Schema inicial de PostgreSQL \\
+\hline
+\end{longtable}
+
+\subsection{Sprint 1: Autenticación y Propietarios (Semanas 3-4)}
+
+\textbf{Objetivo:} Implementar el sistema de autenticación y gestión básica de propietarios.
+
+\begin{itemize}
+    \item Sistema de registro de propietarios
+    \item Login con JWT
+    \item Middleware de autenticación
+    \item Panel de propietario básico
+    \item Gestión de perfil
+\end{itemize}
+
+\textbf{Historias de Usuario:}
+\begin{itemize}
+    \item Como propietario, quiero registrarme en el sistema
+    \item Como propietario, quiero iniciar sesión de forma segura
+    \item Como propietario, quiero ver y editar mi perfil
+\end{itemize}
+
+\subsection{Sprint 2: Gestión de Mascotas (Semanas 5-6)}
+
+\textbf{Objetivo:} Desarrollar el módulo completo de gestión de mascotas.
+
+\begin{itemize}
+    \item CRUD de mascotas
+    \item Formulario de registro con catálogos (razas, colores, especies)
+    \item Listado de mascotas del propietario
+    \item Vista detallada de mascota
+    \item Validaciones frontend y backend
+\end{itemize}
+
+\textbf{Historias de Usuario:}
+\begin{itemize}
+    \item Como propietario, quiero registrar una mascota
+    \item Como propietario, quiero ver todas mis mascotas
+    \item Como propietario, quiero editar los datos de mi mascota
+\end{itemize}
+
+\subsection{Sprint 3: Historial Médico (Semanas 7-8)}
+
+\textbf{Objetivo:} Implementar el sistema de historial médico completo.
+
+\begin{itemize}
+    \item Módulo de vacunas
+    \item Módulo de enfermedades
+    \item Módulo de alergias
+    \item Módulo de desparasitaciones
+    \item Subida y gestión de documentos médicos
+    \item Vista consolidada de historial
+\end{itemize}
+
+\textbf{Historias de Usuario:}
+\begin{itemize}
+    \item Como propietario, quiero registrar las vacunas de mi mascota
+    \item Como propietario, quiero llevar un registro de enfermedades
+    \item Como propietario, quiero subir documentos médicos
+\end{itemize}
+
+\subsection{Sprint 4: Sistema de Reservaciones (Semanas 9-10)}
+
+\textbf{Objetivo:} Desarrollar el sistema completo de reservaciones.
+
+\begin{itemize}
+    \item Catálogo de habitaciones
+    \item Creación de reservaciones
+    \item Sistema de disponibilidad
+    \item Asignación de mascotas a habitaciones
+    \item Estados de reservación (pendiente, confirmada, completada)
+    \item Cancelación de reservaciones
+\end{itemize}
+
+\textbf{Historias de Usuario:}
+\begin{itemize}
+    \item Como propietario, quiero hacer una reservación para mi mascota
+    \item Como propietario, quiero ver mis reservaciones activas
+    \item Como admin, quiero confirmar reservaciones
+\end{itemize}
+
+\subsection{Sprint 5: Panel Administrativo y Servicios (Semanas 11-12)}
+
+\textbf{Objetivo:} Implementar funcionalidades administrativas y servicios adicionales.
+
+\begin{itemize}
+    \item Dashboard administrativo
+    \item Gestión de empleados
+    \item Catálogo de servicios
+    \item Sistema de citas para servicios
+    \item Módulo de pagos
+    \item Reportes básicos
+\end{itemize}
+
+\textbf{Historias de Usuario:}
+\begin{itemize}
+    \item Como admin, quiero ver todas las reservaciones del hotel
+    \item Como admin, quiero gestionar servicios adicionales
+    \item Como admin, quiero registrar pagos
+\end{itemize}
+
+\subsection{Sprint 6: Testing, Optimización y Deployment (Semanas 13-14)}
+
+\textbf{Objetivo:} Asegurar la calidad del sistema y prepararlo para producción.
+
+\begin{itemize}
+    \item Testing exhaustivo de todas las funcionalidades
+    \item Corrección de bugs identificados
+    \item Optimización de performance (queries, carga de imágenes)
+    \item Documentación técnica completa
+    \item Documentación de usuario
+    \item Deployment a producción
+    \item Capacitación al cliente
+\end{itemize}
+
+\subsection{Diagrama de Gantt}
+
+\begin{center}
+\small
+\begin{longtable}{|p{3.5cm}|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Actividad} & \multicolumn{14}{c|}{\textbf{Semanas}} \\
+\cline{2-15}
+& 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+\endfirsthead
+
+\multicolumn{15}{c}%
+{\tablename\ \thetable\ -- \textit{Continuación de la página anterior}} \\
+\hline
+\textbf{Actividad} & \multicolumn{14}{c|}{\textbf{Semanas}} \\
+\cline{2-15}
+& 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 \\
+\hline
+\endhead
+
+\hline \multicolumn{15}{r}{\textit{Continúa en la siguiente página}} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+Sprint 0 & X & X & & & & & & & & & & & & \\
+\hline
+Sprint 1 & & & X & X & & & & & & & & & & \\
+\hline
+Sprint 2 & & & & & X & X & & & & & & & & \\
+\hline
+Sprint 3 & & & & & & & X & X & & & & & & \\
+\hline
+Sprint 4 & & & & & & & & & X & X & & & & \\
+\hline
+Sprint 5 & & & & & & & & & & & X & X & & \\
+\hline
+Sprint 6 & & & & & & & & & & & & & X & X \\
+\hline
+\end{longtable}
+\end{center}

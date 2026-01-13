@@ -3,7 +3,7 @@
 
 %-------------------------------------- COMIENZA descripción del caso de uso.
 
-\begin{UseCase}{CU14}{Ver Documento}{
+\begin{UseCase}{CU06}{Ver Documento}{
     Permite al Propietario consultar la lista de documentos registrados de su mascota y visualizar o descargar el archivo digital correspondiente (PDF, imagen, etc.).
 }
     \UCitem{Versión}{\color{Gray}1.0}
@@ -35,8 +35,14 @@
 %--------------------------------------
 % Trayectoria Principal
 %--------------------------------------
-\begin{UCtrayectoria}{Principal}
-    \UCpaso[\UCactor] Accede a la sección de "Documentos" dentro del perfil de la mascota.     \UCpaso Solicita al servidor la lista de documentos asociados a la mascota.     \UCpaso El sistema busca los registros y muestra una lista con: Nombre del documento, Tipo y Fecha de subida.     \UCpaso[\UCactor] Selecciona un documento de la lista haciendo clic en su nombre o en el botón \IUbutton{Ver/Descargar}.     \UCpaso El sistema verifica que el usuario tenga permisos sobre el archivo.     \UCpaso El sistema verifica que el archivo físico exista en la ruta de almacenamiento.     \UCpaso El sistema envía el archivo al navegador para su visualización o descarga.
+\begin{UCtrayectoria}
+    \UCpaso[\UCactor] Accede a la sección de "Documentos" dentro del perfil de la mascota.     
+    \UCpaso Solicita al servidor la lista de documentos asociados a la mascota.     
+    \UCpaso El sistema busca los registros y muestra una lista con: Nombre del documento, Tipo y Fecha de subida.     
+    \UCpaso[\UCactor] Selecciona un documento de la lista haciendo clic en su nombre o en el botón \IUbutton{Ver/Descargar}.     
+    \UCpaso El sistema verifica que el usuario tenga permisos sobre el archivo.     
+    \UCpaso El sistema verifica que el archivo físico exista en la ruta de almacenamiento.     
+    \UCpaso El sistema envía el archivo al navegador para su visualización o descarga.
 \end{UCtrayectoria}
 
 %--------------------------------------

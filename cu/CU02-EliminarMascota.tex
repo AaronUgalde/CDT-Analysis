@@ -1,6 +1,6 @@
 %-------------------------------------- COMIENZA descripción del caso de uso.
 
-\begin{UseCase}{CU-XX}{Eliminar Mascota}{
+\begin{UseCase}{CU02}{Eliminar Mascota}{
 	Permite al Propietario eliminar de forma permanente el registro de una de sus mascotas del sistema, por ejemplo, en caso de un registro erróneo o duplicado.
 }
 	\UCitem{Versión}{\color{Gray}1.0}
@@ -38,7 +38,7 @@
 %--------------------------------------
 % Trayectoria Principal
 %--------------------------------------
-\begin{UCtrayectoria}{Principal}
+\begin{UCtrayectoria}
 	\UCpaso[\UCactor] Localiza la mascota que desea borrar en la \IUref{IU-PetList}{Lista de Mascotas}. \label{CU02-LocatePet}
 	\UCpaso[\UCactor] Oprime el botón \IUbutton{Eliminar} (icono de bote de basura) correspondiente al registro de la mascota.
 	\UCpaso Muestra el mensaje de confirmación {\bf MSG1-}``¿Estás seguro de eliminar esta mascota?''.

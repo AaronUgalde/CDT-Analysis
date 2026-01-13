@@ -1,0 +1,91 @@
+%=========================================================
+\chapter{Requerimientos de usuario}
+\label{cap:reqUsr}
+
+    En este capitulo se presentan los requerimientos de usuario
+
+
+%---------------------------------------------------------
+\section{Requerimientos de usuario}
+
+\begin{longtable}{|l|p{3cm}|p{7cm}|c|c|}
+\caption{Requerimientos funcionales del sistema de gestión de hotel de perros.}
+\label{tbl:reqFunc}\\
+\hline
+ID & Nombre & Descripción & Prioridad & Estado \\
+\hline
+\endfirsthead
+
+\hline
+ID & Nombre & Descripción & Prioridad & Estado \\
+\hline
+\endhead
+
+\hline
+\multicolumn{5}{r}{\footnotesize Continúa en la siguiente página} \\
+\endfoot
+
+\hline
+\endlastfoot
+
+		\FRitem{RU1}{Gestión de Empleados}{El usuario requiere llevar un registro actualizado de todos los empleados del hotel, incluyendo sus datos personales, información laboral (puesto, salario, fecha de contratación), datos de contacto y estado (activo/inactivo). El sistema debe permitir crear, modificar, consultar y dar de baja empleados.}{1}{\DONE}
+		
+		\FRitem{RU2}{Gestión de Propietarios}{El usuario requiere llevar un registro completo de los propietarios de mascotas, incluyendo datos personales, múltiples teléfonos de contacto, direcciones y su historial de reservaciones. El sistema debe facilitar la búsqueda rápida y actualización de información de contacto.}{1}{\DONE}
+		
+		\FRitem{RU3}{Gestión de Mascotas}{El usuario requiere mantener un registro detallado de cada mascota hospedada, incluyendo datos de identificación (nombre, especie, raza, color, sexo, fecha de nacimiento), historial médico completo (vacunaciones, desparasitaciones, enfermedades, alergias), documentos asociados y fotografías.}{1}{\DONE}
+		
+		\FRitem{RU4}{Sistema de Reservaciones}{El usuario requiere gestionar las reservaciones de hospedaje con un calendario visual interactivo que muestre la disponibilidad de habitaciones, permita crear nuevas reservas, asignar habitaciones, controlar check-in/check-out y llevar el seguimiento del estado de cada reservación.}{1}{\DONE}
+		
+		\FRitem{RU5}{Control de Habitaciones}{El usuario requiere llevar un registro actualizado de todas las habitaciones disponibles en el hotel, su capacidad, tipo, características especiales, estado de mantenimiento y disponibilidad para reservaciones.}{1}{\DONE}
+		
+		\FRitem{RU6}{Gestión de Servicios Adicionales}{El usuario requiere ofrecer y gestionar servicios complementarios al hospedaje tales como atención veterinaria, peluquería canina, entrenamiento y otros servicios especializados, con control de horarios, empleados asignados y tarifas.}{2}{\DONE}
+		
+		\FRitem{RU7}{Programación de Citas}{El usuario requiere un sistema de agendamiento para servicios especializados que permita programar citas, asignar empleados calificados, evitar conflictos de horario y llevar seguimiento del estado de cada cita (pendiente, realizada, cancelada).}{2}{\DONE}
+		
+		\FRitem{RU8}{Registro de Vacunaciones}{El usuario requiere mantener un historial completo y actualizado de todas las vacunas aplicadas a cada mascota, incluyendo tipo de vacuna, fecha de aplicación, fecha de próxima dosis y observaciones del veterinario.}{1}{\DONE}
+		
+		\FRitem{RU9}{Gestión de Documentos}{El usuario requiere almacenar, visualizar y gestionar documentos digitales importantes de cada mascota como certificados veterinarios, cartillas de vacunación, resultados de análisis y otros documentos oficiales en formatos PDF e imagen.}{2}{\DONE}
+		
+		\FRitem{RU10}{Control de Pagos}{El usuario requiere llevar un registro detallado de todos los pagos realizados por los clientes, métodos de pago utilizados, montos, fechas y asociarlos con las reservaciones o servicios correspondientes para control financiero.}{1}{\TODO}
+		
+		\FRitem{RU11}{Sistema de Autenticación}{El usuario requiere un sistema seguro de inicio de sesión que identifique a cada empleado y controle el acceso a las diferentes funcionalidades del sistema según su rol.}{1}{\DONE}
+		
+		\FRitem{RU12}{Control de Acceso por Roles}{El usuario requiere que el sistema restrinja las operaciones que cada empleado puede realizar según su puesto.}{1}{\DONE}
+		
+		\FRitem{RU13}{Historial de Hospedajes}{El usuario requiere consultar el historial completo de hospedajes de cada mascota para conocer fechas anteriores, habitaciones utilizadas, servicios contratados y cualquier incidente o nota relevante registrada.}{2}{\TODO}
+		
+		\FRitem{RU14}{Asignación de Empleados a Servicios}{El usuario requiere asignar empleados específicos a cada cita o servicio programado, considerando su especialización y disponibilidad, para garantizar la calidad del servicio.}{2}{\DONE}
+		
+		\FRitem{RU15}{Búsqueda y Filtros Avanzados}{El usuario requiere herramientas de búsqueda rápida y filtros para localizar fácilmente mascotas, propietarios, empleados y reservaciones usando criterios múltiples como nombre, fecha o estado.}{2}{\TODO}
+		
+		\FRitem{RU16}{Notificaciones de Vencimientos}{El usuario requiere recibir alertas automáticas sobre vacunas próximas a vencer, reservaciones próximas, pagos pendientes y otras fechas importantes.}{3}{\TODO}
+		
+		\FRitem{RU17}{Reportes de Ocupación}{El usuario requiere generar reportes periódicos sobre la ocupación del hotel, ingresos por período, servicios más solicitados y otros indicadores clave.}{3}{\TODO}
+		
+		\FRitem{RU18}{Gestión de Fotografías}{El usuario requiere almacenar y visualizar múltiples fotografías de cada mascota para su identificación visual y seguimiento durante el hospedaje.}{2}{\DONE}
+		
+		\FRitem{RU19}{Registro de Observaciones}{El usuario requiere documentar observaciones diarias sobre el comportamiento, alimentación, salud y cualquier incidente relevante de cada mascota durante su estancia.}{2}{\TODO}
+		
+		\FRitem{RU20}{Calendario Interactivo}{El usuario requiere una vista de calendario visual e interactiva que muestre todas las reservaciones, disponibilidad de habitaciones y citas de servicios.}{1}{\DONE}
+		
+		\FRitem{RU21}{Validación de Datos}{El usuario requiere que el sistema valide automáticamente la información ingresada para prevenir errores e inconsistencias.}{1}{\DONE}
+		
+		\FRitem{RU22}{Interfaz Responsiva}{El usuario requiere que el sistema sea accesible desde distintos dispositivos manteniendo funcionalidad y usabilidad.}{2}{\TODO}
+		
+		\FRitem{RU23}{Copia de Seguridad Automática}{El usuario requiere que el sistema realice respaldos automáticos periódicos de toda la información.}{1}{\TODO}
+		
+		\FRitem{RU24}{Auditoría de Cambios}{El usuario requiere llevar un registro de las modificaciones importantes realizadas en el sistema.}{3}{\TODO}
+		
+		\FRitem{RU25}{Exportación de Datos}{El usuario requiere exportar información del sistema en formatos estándar para análisis externo o respaldo.}{3}{\TODO}
+        
+        \FRitem{RU26}{Manejo de Habitaciones}{El usuario requiere administrar de forma detallada las habitaciones del hotel, incluyendo su alta, modificación y baja, así como la gestión de su capacidad, tipo, características especiales, estado de mantenimiento y disponibilidad para reservaciones.}{1}{\TODO}
+
+        \FRitem{RU27}{Perfil de Empleado}{El usuario requiere que cada empleado cuente con un perfil individual que muestre su información personal, puesto, rol asignado, horarios, servicios que puede realizar y su historial de actividades dentro del sistema.}{2}{\TODO}
+
+        \FRitem{RU28}{Manejo de Catálogos}{El usuario requiere gestionar los catálogos del sistema, tales como razas, tipos de servicios, tipos de habitaciones, estados, roles y otros datos parametrizables, permitiendo su creación, modificación y eliminación para mantener la flexibilidad del sistema.}{2}{\TODO}
+
+		
+	\end{longtable}
+
+{\footnotesize\em Para leer correctamente esta tabla vea la leyenda en la Tabla~\ref{tbl:leyendaRF}.}
+
