@@ -1,0 +1,365 @@
+%=========================================================
+\chapter{Modelo del Negocio}	
+\label{cap:modeloNegocio}
+
+	En este capítulo se modela la {\em Arquitectura del negocio} la cual está conformada por la Ontología del negocio ({\em Términos} y {\em Hechos del negocio}), Arquitectura de procesos y las {\em Reglas del negocio}. Primero se especifica brevemente el {\em Contexto} en el que los términos tienen significado.
+	
+	En las secciones \ref{sec:terminosDeNegocio} y \ref{sec:hechosDeNegocio} se presentan los Términos del negocio a manera de Glosario y por último se presentan los Hechos del negocio a manera de relaciones entre términos del negocio.
+
+%----------------------------------------------------------
+\section{Contexto}
+
+	El Sistema de Gestión para Hotel de Perros es una plataforma integral diseñada para administrar establecimientos de hospedaje de mascotas. El sistema permite gestionar el ciclo completo de reservaciones, desde el registro inicial de propietarios y mascotas, hasta el check-in, la asignación de servicios adicionales, y el check-out con facturación.
+	
+	Los {\bf propietarios} registran sus mascotas en el sistema con información detallada incluyendo datos físicos, historial médico (vacunas, desparasitaciones, enfermedades, alergias) y documentación relevante. A través de la plataforma, los propietarios pueden crear y gestionar {\bf reservaciones} para el hospedaje de sus mascotas, seleccionar habitaciones disponibles y contratar servicios adicionales como veterinaria, peluquería o entrenamiento.
+	
+	El personal del hotel, conformado por {\bf administradores} y {\bf empleados} especializados, utiliza el sistema para gestionar la disponibilidad de habitaciones, asignar servicios, llevar control de citas, y mantener actualizado el historial de cada mascota durante su estancia. El sistema proporciona calendarios interactivos, control de pagos, y reportes que facilitan la operación diaria del establecimiento.
+	
+	La arquitectura está diseñada en capas (repositorio, servicio, controlador) con autenticación JWT y control de acceso basado en roles, garantizando que cada usuario solo acceda a la información autorizada según su perfil.
+	
+%---------------------------------------------------------
+\section{Términos del Negocio}
+\label{sec:terminosDeNegocio}
+
+\begin{description}
+	% ===== ENTIDADES PRINCIPALES =====
+	
+	\item[\hypertarget{tMascota}{Mascota:}] Animal doméstico registrado en el sistema que puede hospedarse en el hotel. Incluye información completa como especie, raza, color, peso, edad, y características físicas particulares. Cada mascota pertenece a un único \hyperlink{tPropietario}{Propietario}.
+	
+	\item[\hypertarget{tPropietario}{Propietario:}] Persona física o moral que posee una o más \hyperlink{tMascota}{mascotas} y es responsable de su cuidado. El propietario crea \hyperlink{tReservacion}{reservaciones}, contrata servicios, y realiza pagos. Puede tener múltiples teléfonos y direcciones registradas.
+	
+	\item[\hypertarget{tReservacion}{Reservación:}] Solicitud de hospedaje para una \hyperlink{tMascota}{mascota} en el hotel durante un periodo específico. Incluye asignación de \hyperlink{tHabitacion}{habitación}, fechas de inicio y fin, monto de hospedaje, y puede tener asociados múltiples \hyperlink{tServicio}{servicios} adicionales.
+	
+	\item[\hypertarget{tHabitacion}{Habitación:}] Espacio físico del hotel donde se hospeda una \hyperlink{tMascota}{mascota}. Tiene capacidad definida, tipo (individual, compartida, suite), y precio por día. Una habitación solo puede estar ocupada por una mascota a la vez en fechas determinadas.
+	
+	\item[\hypertarget{tEmpleado}{Empleado:}] Persona que trabaja en el hotel y puede estar asignada a \hyperlink{tCitaServicio}{citas de servicio}. Incluye veterinarios, peluqueros, entrenadores, y personal administrativo. Cada empleado tiene un tipo de servicio especializado que puede ofrecer.
+	
+	% ===== SERVICIOS Y CITAS =====
+	
+	\item[\hypertarget{tServicio}{Servicio:}] Actividad adicional al hospedaje que puede ser contratada para una \hyperlink{tMascota}{mascota}, como baño, peluquería, paseo, entrenamiento, o consulta veterinaria. Cada servicio tiene un precio base, duración estimada, y tipo definido.
+	
+	\item[\hypertarget{tCitaServicio}{Cita de Servicio:}] Asignación programada de un \hyperlink{tServicio}{servicio} para una \hyperlink{tMascota}{mascota} en una \hyperlink{tReservacion}{reservación} específica. Incluye fecha y hora de inicio y fin, \hyperlink{tEmpleado}{empleado} asignado, y notas del servicio prestado.
+	
+	% ===== INFORMACIÓN MÉDICA =====
+	
+	\item[\hypertarget{tVacuna}{Vacuna:}] Registro de inmunización aplicada a una \hyperlink{tMascota}{mascota}. Incluye nombre de la vacuna, fecha de aplicación, vigencia hasta, veterinario que la aplicó, y notas relevantes. Es fundamental para el control sanitario del hotel.
+	
+	\item[\hypertarget{tDesparasitacion}{Desparasitación:}] Tratamiento antiparasitario aplicado a una \hyperlink{tMascota}{mascota}. Registra producto utilizado, fecha de aplicación, próxima aplicación recomendada, y veterinario que lo administró.
+	
+	\item[\hypertarget{tEnfermedad}{Enfermedad:}] Condición médica diagnosticada en una \hyperlink{tMascota}{mascota}. Incluye fecha de diagnóstico, observaciones del veterinario, y tratamiento prescrito. Permite llevar historial médico completo.
+	
+	\item[\hypertarget{tAlergia}{Alergia:}] Reacción adversa que presenta una \hyperlink{tMascota}{mascota} ante ciertos alimentos, medicamentos o sustancias. Registra nombre del alérgeno, tipo de alergia, y nivel de severidad para precauciones durante la estancia.
+	
+	% ===== DOCUMENTACIÓN Y PAGOS =====
+	
+	\item[\hypertarget{tDocumento}{Documento:}] Archivo digital asociado a una \hyperlink{tMascota}{mascota}, como certificados veterinarios, fotografías, pedigree, o comprobantes de vacunación. Se almacena con tipo de documento, nombre, ruta del archivo, y fecha de carga.
+	
+	\item[\hypertarget{tPago}{Pago:}] Transacción financiera realizada por un \hyperlink{tPropietario}{propietario} para cubrir el costo de una \hyperlink{tReservacion}{reservación}. Incluye monto, método de pago (efectivo, tarjeta, transferencia), fecha, y referencia de comprobante.
+	
+	% ===== CATÁLOGOS =====
+	
+	\item[\hypertarget{tEspecie}{Especie:}] Clasificación taxonómica de una \hyperlink{tMascota}{mascota} (perro, gato, etc.). Catálogo cerrado que determina opciones de \hyperlink{tRaza}{raza} disponibles.
+	
+	\item[\hypertarget{tRaza}{Raza:}] Variedad específica dentro de una \hyperlink{tEspecie}{especie}. Por ejemplo: Labrador, Golden Retriever, Chihuahua para perros. Cada raza pertenece a una especie.
+	
+	\item[\hypertarget{tColor}{Color:}] Tonalidad del pelaje de la \hyperlink{tMascota}{mascota}. Se registra color principal y pueden existir colores secundarios. Ejemplos: negro, café, blanco, dorado, atigrado.
+	
+	\item[\hypertarget{tSexo}{Sexo:}] Género biológico de la \hyperlink{tMascota}{mascota}: macho o hembra. Atributo inmutable usado para estadísticas y separación de áreas si es necesario.
+	
+	\item[\hypertarget{tEstadoReservacion}{Estado de Reservación:}] Etapa del ciclo de vida de una \hyperlink{tReservacion}{reservación}. Estados: Pendiente, Confirmada, En curso, Completada, Cancelada. Sigue un flujo de transición definido.
+	
+	% ===== UBICACIÓN =====
+	
+	\item[\hypertarget{tDireccion}{Dirección:}] Ubicación física de un \hyperlink{tPropietario}{propietario}. Incluye calle, número, colonia, municipio, estado, código postal. Un propietario puede tener múltiples direcciones.
+	
+	\item[\hypertarget{tTelefono}{Teléfono:}] Número de contacto de un \hyperlink{tPropietario}{propietario}. Incluye tipo (móvil, fijo, trabajo), número, y si es el contacto principal. Un propietario puede tener varios teléfonos.
+	
+	% ===== CONTROL Y SEGURIDAD =====
+	
+	\item[\hypertarget{tRol}{Rol:}] Nivel de permisos y acceso en el sistema. Tipos: Usuario (propietario), Administrador. Define qué funcionalidades y datos puede acceder cada usuario.
+	
+	\item[\hypertarget{tUsuario}{Usuario:}] Cuenta de acceso al sistema asociada a un \hyperlink{tPropietario}{propietario}. Incluye email, contraseña encriptada, rol asignado, y token JWT para autenticación segura.
+
+\end{description}
+
+%----------------------------------------------------------
+\section{Modelo del dominio del problema}
+\label{sec:hechosDeNegocio}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\begin{cdtEntidad}{Propietario}{Propietario}
+	\brAttr{propietario\_id}{ID Propietario}{Id}{Identificador único del propietario en el sistema}{Sí}
+	\brAttr{nombre}{Nombre}{Palabra Corta}{Nombre o nombres del propietario}{Sí}
+	\brAttr{apellido\_paterno}{Apellido Paterno}{Palabra Corta}{Primer apellido del propietario}{Sí}
+	\brAttr{apellido\_materno}{Apellido Materno}{Palabra Corta}{Segundo apellido del propietario}{No}
+	\brAttr{email}{Email}{Email}{Correo electrónico único para autenticación y comunicación}{Sí}
+	\brAttr{password\_hash}{Contraseña}{Hash}{Contraseña encriptada con bcrypt para acceso al sistema}{Sí}
+	\brAttr{fecha\_registro}{Fecha Registro}{Fecha}{Fecha en que el propietario se registró en el sistema}{Sí}
+	\brAttr{rol\_id}{Rol}{Id}{Rol asignado (1: Usuario, 2: Administrador)}{Sí}
+	\brAttr{activo}{Activo}{Boolean}{Indica si la cuenta está activa}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelComposition}{Mascota}{Un \hyperlink{Propietario}{Propietario} posee una o más \hyperlink{Mascota}{Mascotas}}
+	\brRel{\brRelComposition}{Direccion}{Un \hyperlink{Propietario}{Propietario} tiene una o más \hyperlink{Direccion}{Direcciones}}
+	\brRel{\brRelComposition}{Telefono}{Un \hyperlink{Propietario}{Propietario} tiene uno o más \hyperlink{Telefono}{Teléfonos}}
+	\brRel{\brRelComposition}{Reservacion}{Un \hyperlink{Propietario}{Propietario} crea una o más \hyperlink{Reservacion}{Reservaciones}}
+\end{cdtEntidad}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\begin{cdtEntidad}{Mascota}{Mascota}
+	\brAttr{mascota\_id}{ID Mascota}{Id}{Identificador único de la mascota}{Sí}
+	\brAttr{propietario\_id}{Propietario}{Id}{Referencia al propietario dueño de la mascota}{Sí}
+	\brAttr{nombre}{Nombre}{Palabra Corta}{Nombre de la mascota}{Sí}
+	\brAttr{especie\_id}{Especie}{Id}{Especie de la mascota (perro, gato, etc.)}{Sí}
+	\brAttr{raza\_id}{Raza}{Id}{Raza específica de la mascota}{No}
+	\brAttr{sexo\_id}{Sexo}{Id}{Sexo de la mascota (macho/hembra)}{Sí}
+	\brAttr{fecha\_nacimiento}{Fecha Nacimiento}{Fecha}{Fecha de nacimiento de la mascota}{Sí}
+	\brAttr{peso\_kg}{Peso (kg)}{Decimal}{Peso de la mascota en kilogramos}{No}
+	\brAttr{altura\_cm}{Altura (cm)}{Decimal}{Altura de la mascota a la cruz en centímetros}{No}
+	\brAttr{color\_principal\_id}{Color Principal}{Id}{Color predominante del pelaje}{No}
+	\brAttr{numero\_chip}{Número Chip}{Número}{Código del microchip de identificación}{No}
+	\brAttr{esterilizado}{Esterilizado}{Boolean}{Indica si la mascota está esterilizada}{No}
+	\brAttr{senas\_particulares}{Señas Particulares}{Texto}{Descripción de características distintivas}{No}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Propietario}{Una \hyperlink{Mascota}{Mascota} pertenece a un \hyperlink{Propietario}{Propietario}}
+	\brRel{\brRelAgregation}{Especie}{Una \hyperlink{Mascota}{Mascota} es de una \hyperlink{Especie}{Especie}}
+	\brRel{\brRelAgregation}{Raza}{Una \hyperlink{Mascota}{Mascota} puede ser de una \hyperlink{Raza}{Raza}}
+	\brRel{\brRelComposition}{Vacuna}{Una \hyperlink{Mascota}{Mascota} tiene cero o más \hyperlink{Vacuna}{Vacunas}}
+	\brRel{\brRelComposition}{Enfermedad}{Una \hyperlink{Mascota}{Mascota} tiene cero o más \hyperlink{Enfermedad}{Enfermedades}}
+	\brRel{\brRelComposition}{Alergia}{Una \hyperlink{Mascota}{Mascota} tiene cero o más \hyperlink{Alergia}{Alergias}}
+	\brRel{\brRelComposition}{Documento}{Una \hyperlink{Mascota}{Mascota} tiene cero o más \hyperlink{Documento}{Documentos}}
+	\brRel{\brRelComposition}{Reservacion}{Una \hyperlink{Mascota}{Mascota} tiene cero o más \hyperlink{Reservacion}{Reservaciones}}
+\end{cdtEntidad}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\begin{cdtEntidad}{Reservacion}{Reservación}
+	\brAttr{reservacion\_id}{ID Reservación}{Id}{Identificador único de la reservación}{Sí}
+	\brAttr{mascota\_id}{Mascota}{Id}{Mascota que será hospedada}{Sí}
+	\brAttr{habitacion\_id}{Habitación}{Id}{Habitación asignada para el hospedaje}{Sí}
+	\brAttr{fecha\_inicio}{Fecha Inicio}{Fecha y Hora}{Fecha y hora de inicio del hospedaje (check-in)}{Sí}
+	\brAttr{fecha\_fin}{Fecha Fin}{Fecha y Hora}{Fecha y hora de fin del hospedaje (check-out)}{Sí}
+	\brAttr{estado\_id}{Estado}{Id}{Estado actual de la reservación}{Sí}
+	\brAttr{monto\_total\_hospedaje}{Monto Hospedaje}{Decimal}{Costo total del hospedaje por días}{Sí}
+	\brAttr{notas\_especiales}{Notas Especiales}{Texto}{Observaciones o requerimientos especiales}{No}
+	\brAttr{fecha\_creacion}{Fecha Creación}{Fecha y Hora}{Fecha en que se creó la reservación}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Mascota}{Una \hyperlink{Reservacion}{Reservación} es para una \hyperlink{Mascota}{Mascota}}
+	\brRel{\brRelAgregation}{Habitacion}{Una \hyperlink{Reservacion}{Reservación} usa una \hyperlink{Habitacion}{Habitación}}
+	\brRel{\brRelAgregation}{EstadoReservacion}{Una \hyperlink{Reservacion}{Reservación} tiene un \hyperlink{EstadoReservacion}{Estado}}
+	\brRel{\brRelComposition}{ReservacionServicio}{Una \hyperlink{Reservacion}{Reservación} puede tener múltiples \hyperlink{ReservacionServicio}{Servicios}}
+	\brRel{\brRelComposition}{CitaServicio}{Una \hyperlink{Reservacion}{Reservación} puede tener múltiples \hyperlink{CitaServicio}{Citas}}
+	\brRel{\brRelComposition}{Pago}{Una \hyperlink{Reservacion}{Reservación} tiene uno o más \hyperlink{Pago}{Pagos}}
+\end{cdtEntidad}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\begin{cdtEntidad}{Habitacion}{Habitación}
+	\brAttr{habitacion\_id}{ID Habitación}{Id}{Identificador único de la habitación}{Sí}
+	\brAttr{numero}{Número}{Cadena}{Número o código de identificación de la habitación}{Sí}
+	\brAttr{tipo\_habitacion\_id}{Tipo Habitación}{Id}{Tipo de habitación (individual, compartida, suite)}{Sí}
+	\brAttr{capacidad}{Capacidad}{Número}{Número máximo de mascotas que puede alojar}{Sí}
+	\brAttr{precio\_por\_dia}{Precio por Día}{Decimal}{Costo diario de hospedaje en esta habitación}{Sí}
+	\brAttr{descripcion}{Descripción}{Texto}{Características y comodidades de la habitación}{No}
+	\brAttr{activa}{Activa}{Boolean}{Indica si la habitación está disponible para reservas}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{TipoHabitacion}{Una \hyperlink{Habitacion}{Habitación} es de un \hyperlink{TipoHabitacion}{Tipo}}
+	\brRel{\brRelComposition}{Reservacion}{Una \hyperlink{Habitacion}{Habitación} puede tener múltiples \hyperlink{Reservacion}{Reservaciones}}
+\end{cdtEntidad}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\subsection{Información Médica y Documentación}
+
+\begin{cdtEntidad}{Vacuna}{Vacunación}
+	\brAttr{vacuna\_id}{ID Vacuna}{Id}{Identificador único del registro de vacunación}{Sí}
+	\brAttr{mascota\_id}{Mascota}{Id}{Mascota a la que se aplicó la vacuna}{Sí}
+	\brAttr{nombre\_vacuna}{Nombre Vacuna}{Cadena}{Nombre de la vacuna aplicada (ej: antirrábica, polivalente)}{Sí}
+	\brAttr{fecha\_aplicacion}{Fecha Aplicación}{Fecha}{Fecha en que se aplicó la vacuna}{Sí}
+	\brAttr{vigencia\_hasta}{Vigencia Hasta}{Fecha}{Fecha hasta la cual la vacuna es efectiva}{No}
+	\brAttr{veterinario}{Veterinario}{Cadena}{Nombre del veterinario que aplicó la vacuna}{No}
+	\brAttr{notas}{Notas}{Texto}{Observaciones adicionales sobre la vacunación}{No}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Mascota}{Una \hyperlink{Vacuna}{Vacuna} es aplicada a una \hyperlink{Mascota}{Mascota}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{Enfermedad}{Enfermedad de Mascota}
+	\brAttr{enfermedad\_mascota\_id}{ID Enfermedad}{Id}{Identificador del registro de enfermedad}{Sí}
+	\brAttr{mascota\_id}{Mascota}{Id}{Mascota que padece la enfermedad}{Sí}
+	\brAttr{enfermedad\_id}{Tipo Enfermedad}{Id}{Catálogo de tipo de enfermedad}{Sí}
+	\brAttr{fecha\_diagnostico}{Fecha Diagnóstico}{Fecha}{Fecha en que se diagnosticó la enfermedad}{No}
+	\brAttr{observaciones}{Observaciones}{Texto}{Detalles del diagnóstico y síntomas}{No}
+	\brAttr{tratamiento}{Tratamiento}{Texto}{Descripción del tratamiento prescrito}{No}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Mascota}{Una \hyperlink{Enfermedad}{Enfermedad} afecta a una \hyperlink{Mascota}{Mascota}}
+	\brRel{\brRelAgregation}{CatalogoEnfermedad}{Una \hyperlink{Enfermedad}{Enfermedad} es de un tipo del \hyperlink{CatalogoEnfermedad}{Catálogo}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{Alergia}{Alergia de Mascota}
+	\brAttr{alergia\_id}{ID Alergia}{Id}{Identificador del registro de alergia}{Sí}
+	\brAttr{mascota\_id}{Mascota}{Id}{Mascota que tiene la alergia}{Sí}
+	\brAttr{nombre}{Nombre}{Cadena}{Nombre del alérgeno (alimento, medicamento, sustancia)}{Sí}
+	\brAttr{tipo}{Tipo}{Cadena}{Tipo de alergia (alimentaria, medicamentosa, ambiental)}{No}
+	\brAttr{severidad}{Severidad}{Cadena}{Nivel de severidad (leve, moderada, severa)}{No}
+	\brAttr{reaccion}{Reacción}{Texto}{Descripción de los síntomas de la reacción alérgica}{No}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Mascota}{Una \hyperlink{Alergia}{Alergia} afecta a una \hyperlink{Mascota}{Mascota}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{Desparasitacion}{Desparasitación}
+	\brAttr{desparasitacion\_id}{ID Desparasitación}{Id}{Identificador del registro de desparasitación}{Sí}
+	\brAttr{mascota\_id}{Mascota}{Id}{Mascota que recibió el tratamiento}{Sí}
+	\brAttr{producto}{Producto}{Cadena}{Nombre del producto antiparasitario utilizado}{Sí}
+	\brAttr{fecha\_aplicacion}{Fecha Aplicación}{Fecha}{Fecha en que se aplicó el tratamiento}{Sí}
+	\brAttr{proxima\_aplicacion}{Próxima Aplicación}{Fecha}{Fecha recomendada para la siguiente aplicación}{No}
+	\brAttr{veterinario}{Veterinario}{Cadena}{Nombre del veterinario que administró el tratamiento}{No}
+	\brAttr{notas}{Notas}{Texto}{Observaciones adicionales}{No}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Mascota}{Una \hyperlink{Desparasitacion}{Desparasitación} es aplicada a una \hyperlink{Mascota}{Mascota}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{Documento}{Documento de Mascota}
+	\brAttr{documento\_id}{ID Documento}{Id}{Identificador único del documento}{Sí}
+	\brAttr{mascota\_id}{Mascota}{Id}{Mascota a la que pertenece el documento}{Sí}
+	\brAttr{tipo\_documento\_id}{Tipo Documento}{Id}{Tipo de documento (certificado, foto, pedigree)}{No}
+	\brAttr{nombre\_archivo}{Nombre Archivo}{Cadena}{Nombre original del archivo subido}{Sí}
+	\brAttr{ruta\_archivo}{Ruta Archivo}{Cadena}{Ruta de almacenamiento del archivo en el servidor}{Sí}
+	\brAttr{fecha\_carga}{Fecha Carga}{Fecha y Hora}{Fecha en que se subió el documento}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Mascota}{Un \hyperlink{Documento}{Documento} pertenece a una \hyperlink{Mascota}{Mascota}}
+\end{cdtEntidad}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\subsection{Servicios y Empleados}
+
+\begin{cdtEntidad}{Servicio}{Servicio}
+	\brAttr{servicio\_id}{ID Servicio}{Id}{Identificador único del servicio}{Sí}
+	\brAttr{nombre}{Nombre}{Cadena}{Nombre del servicio (baño, peluquería, paseo, etc.)}{Sí}
+	\brAttr{tipo\_servicio\_id}{Tipo Servicio}{Id}{Categoría del servicio}{Sí}
+	\brAttr{precio\_base}{Precio Base}{Decimal}{Precio estándar del servicio}{Sí}
+	\brAttr{duracion\_minutos}{Duración (min)}{Número}{Tiempo estimado del servicio en minutos}{No}
+	\brAttr{descripcion}{Descripción}{Texto}{Detalles del servicio ofrecido}{No}
+	\brAttr{activo}{Activo}{Boolean}{Indica si el servicio está disponible}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{TipoServicio}{Un \hyperlink{Servicio}{Servicio} es de un \hyperlink{TipoServicio}{Tipo}}
+	\brRel{\brRelComposition}{ReservacionServicio}{Un \hyperlink{Servicio}{Servicio} puede ser contratado en múltiples \hyperlink{ReservacionServicio}{Reservaciones}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{Empleado}{Empleado}
+	\brAttr{empleado\_id}{ID Empleado}{Id}{Identificador único del empleado}{Sí}
+	\brAttr{nombre}{Nombre}{Palabra Corta}{Nombre del empleado}{Sí}
+	\brAttr{apellido\_paterno}{Apellido Paterno}{Palabra Corta}{Primer apellido del empleado}{Sí}
+	\brAttr{apellido\_materno}{Apellido Materno}{Palabra Corta}{Segundo apellido del empleado}{No}
+	\brAttr{tipo\_servicio\_id}{Tipo Servicio}{Id}{Especialidad del empleado (veterinaria, peluquería, etc.)}{Sí}
+	\brAttr{telefono}{Teléfono}{Teléfono}{Número de contacto del empleado}{No}
+	\brAttr{email}{Email}{Email}{Correo electrónico del empleado}{No}
+	\brAttr{fecha\_contratacion}{Fecha Contratación}{Fecha}{Fecha de ingreso al hotel}{No}
+	\brAttr{activo}{Activo}{Boolean}{Indica si el empleado está en activo}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{TipoServicio}{Un \hyperlink{Empleado}{Empleado} se especializa en un \hyperlink{TipoServicio}{Tipo de Servicio}}
+	\brRel{\brRelComposition}{CitaServicio}{Un \hyperlink{Empleado}{Empleado} atiende múltiples \hyperlink{CitaServicio}{Citas}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{CitaServicio}{Cita de Servicio}
+	\brAttr{cita\_id}{ID Cita}{Id}{Identificador único de la cita}{Sí}
+	\brAttr{reservacion\_id}{Reservación}{Id}{Reservación a la que pertenece la cita}{Sí}
+	\brAttr{servicio\_id}{Servicio}{Id}{Servicio a prestar en la cita}{Sí}
+	\brAttr{empleado\_id}{Empleado}{Id}{Empleado asignado para realizar el servicio}{Sí}
+	\brAttr{fecha\_hora\_inicio}{Fecha Hora Inicio}{Fecha y Hora}{Inicio programado de la cita}{Sí}
+	\brAttr{fecha\_hora\_fin}{Fecha Hora Fin}{Fecha y Hora}{Fin programado de la cita}{Sí}
+	\brAttr{notas}{Notas}{Texto}{Observaciones sobre el servicio prestado}{No}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Reservacion}{Una \hyperlink{CitaServicio}{Cita} pertenece a una \hyperlink{Reservacion}{Reservación}}
+	\brRel{\brRelAgregation}{Servicio}{Una \hyperlink{CitaServicio}{Cita} es para realizar un \hyperlink{Servicio}{Servicio}}
+	\brRel{\brRelAgregation}{Empleado}{Una \hyperlink{CitaServicio}{Cita} es atendida por un \hyperlink{Empleado}{Empleado}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{ReservacionServicio}{Servicio en Reservación}
+	\brAttr{reservacion\_servicio\_id}{ID}{Id}{Identificador de la relación}{Sí}
+	\brAttr{reservacion\_id}{Reservación}{Id}{Reservación que contrata el servicio}{Sí}
+	\brAttr{servicio\_id}{Servicio}{Id}{Servicio contratado}{Sí}
+	\brAttr{cantidad}{Cantidad}{Número}{Número de veces que se contrata el servicio}{Sí}
+	\brAttr{precio\_al\_momento}{Precio al Momento}{Decimal}{Precio vigente al momento de la contratación}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Reservacion}{Pertenece a una \hyperlink{Reservacion}{Reservación}}
+	\brRel{\brRelAgregation}{Servicio}{Contrata un \hyperlink{Servicio}{Servicio}}
+\end{cdtEntidad}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\subsection{Pagos y Facturación}
+
+\begin{cdtEntidad}{Pago}{Pago}
+	\brAttr{pago\_id}{ID Pago}{Id}{Identificador único del pago}{Sí}
+	\brAttr{reservacion\_id}{Reservación}{Id}{Reservación a la que corresponde el pago}{Sí}
+	\brAttr{monto}{Monto}{Decimal}{Cantidad pagada}{Sí}
+	\brAttr{metodo\_pago\_id}{Método Pago}{Id}{Forma de pago (efectivo, tarjeta, transferencia)}{Sí}
+	\brAttr{fecha\_pago}{Fecha Pago}{Fecha y Hora}{Fecha y hora en que se realizó el pago}{Sí}
+	\brAttr{referencia}{Referencia}{Cadena}{Número de referencia o comprobante del pago}{No}
+	\brAttr{notas}{Notas}{Texto}{Observaciones sobre el pago}{No}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Reservacion}{Un \hyperlink{Pago}{Pago} corresponde a una \hyperlink{Reservacion}{Reservación}}
+	\brRel{\brRelAgregation}{MetodoPago}{Un \hyperlink{Pago}{Pago} usa un \hyperlink{MetodoPago}{Método}}
+\end{cdtEntidad}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\subsection{Catálogos del Sistema}
+
+\begin{cdtEntidad}{Especie}{Especie}
+	\brAttr{especie\_id}{ID Especie}{Id}{Identificador único de la especie}{Sí}
+	\brAttr{nombre}{Nombre}{Cadena}{Nombre de la especie (Perro, Gato, etc.)}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelComposition}{Raza}{Una \hyperlink{Especie}{Especie} tiene múltiples \hyperlink{Raza}{Razas}}
+	\brRel{\brRelComposition}{Mascota}{Una \hyperlink{Especie}{Especie} clasifica a múltiples \hyperlink{Mascota}{Mascotas}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{Raza}{Raza}
+	\brAttr{raza\_id}{ID Raza}{Id}{Identificador único de la raza}{Sí}
+	\brAttr{especie\_id}{Especie}{Id}{Especie a la que pertenece la raza}{Sí}
+	\brAttr{nombre}{Nombre}{Cadena}{Nombre de la raza (Labrador, Chihuahua, etc.)}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Especie}{Una \hyperlink{Raza}{Raza} pertenece a una \hyperlink{Especie}{Especie}}
+	\brRel{\brRelComposition}{Mascota}{Una \hyperlink{Raza}{Raza} clasifica a múltiples \hyperlink{Mascota}{Mascotas}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{EstadoReservacion}{Estado de Reservación}
+	\brAttr{estado\_id}{ID Estado}{Id}{Identificador único del estado}{Sí}
+	\brAttr{nombre}{Nombre}{Cadena}{Nombre del estado (Pendiente, Confirmada, etc.)}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelComposition}{Reservacion}{Un \hyperlink{EstadoReservacion}{Estado} clasifica a múltiples \hyperlink{Reservacion}{Reservaciones}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{TipoServicio}{Tipo de Servicio}
+	\brAttr{tipo\_servicio\_id}{ID Tipo}{Id}{Identificador único del tipo}{Sí}
+	\brAttr{nombre}{Nombre}{Cadena}{Nombre del tipo (Veterinaria, Peluquería, etc.)}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelComposition}{Servicio}{Un \hyperlink{TipoServicio}{Tipo} agrupa a múltiples \hyperlink{Servicio}{Servicios}}
+	\brRel{\brRelComposition}{Empleado}{Un \hyperlink{TipoServicio}{Tipo} especializa a múltiples \hyperlink{Empleado}{Empleados}}
+\end{cdtEntidad}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\subsection{Información de Contacto}
+
+\begin{cdtEntidad}{Direccion}{Dirección}
+	\brAttr{direccion\_id}{ID Dirección}{Id}{Identificador único de la dirección}{Sí}
+	\brAttr{propietario\_id}{Propietario}{Id}{Propietario al que pertenece la dirección}{Sí}
+	\brAttr{calle}{Calle}{Cadena}{Nombre de la calle}{Sí}
+	\brAttr{numero\_exterior}{Número Exterior}{Cadena}{Número exterior del domicilio}{Sí}
+	\brAttr{numero\_interior}{Número Interior}{Cadena}{Número interior o departamento}{No}
+	\brAttr{colonia\_id}{Colonia}{Id}{Colonia del domicilio}{Sí}
+	\brAttr{referencia}{Referencia}{Texto}{Referencias para ubicar el domicilio}{No}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Propietario}{Una \hyperlink{Direccion}{Dirección} pertenece a un \hyperlink{Propietario}{Propietario}}
+	\brRel{\brRelAgregation}{Colonia}{Una \hyperlink{Direccion}{Dirección} está en una \hyperlink{Colonia}{Colonia}}
+\end{cdtEntidad}
+
+\begin{cdtEntidad}{Telefono}{Teléfono}
+	\brAttr{telefono\_id}{ID Teléfono}{Id}{Identificador único del teléfono}{Sí}
+	\brAttr{propietario\_id}{Propietario}{Id}{Propietario al que pertenece el teléfono}{Sí}
+	\brAttr{tipo\_telefono\_id}{Tipo}{Id}{Tipo de teléfono (móvil, fijo, trabajo)}{Sí}
+	\brAttr{numero}{Número}{Cadena}{Número telefónico completo}{Sí}
+	\brAttr{es\_principal}{Es Principal}{Boolean}{Indica si es el teléfono de contacto principal}{Sí}
+	\cdtEntityRelSection
+	\brRel{\brRelAgregation}{Propietario}{Un \hyperlink{Telefono}{Teléfono} pertenece a un \hyperlink{Propietario}{Propietario}}
+	\brRel{\brRelAgregation}{TipoTelefono}{Un \hyperlink{Telefono}{Teléfono} es de un \hyperlink{TipoTelefono}{Tipo}}
+\end{cdtEntidad}
+
+%---------------------------------------------------------
+\section{Modelado de Reglas de negocio}
+
+\input{6.1Reglas}
