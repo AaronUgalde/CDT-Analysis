@@ -1,0 +1,109 @@
+% Caso de Uso: Agregar Reservación
+% Sistema: Hotel Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU15}{Agregar Reservación}{
+    Permite al Propietario programar una estadía para su mascota, seleccionando una habitación adecuada, definiendo las fechas de ingreso y salida, y añadiendo servicios adicionales opcionales.
+}
+    \UCitem{Versión}{\color{Gray}1.0}
+    \UCitem{Autor}{\color{Gray}Axel}
+    \UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+    \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+    \UCitem{Propósito}{Asegurar un espacio y servicios para el cuidado de la mascota durante un periodo determinado.}
+    \UCitem{Entradas}{
+        \begin{itemize}
+            \item Selección de Mascota.
+            \item Selección de Habitación.
+            \item Fechas de Inicio y Fin.
+            \item Servicios Adicionales (Opcional).
+            \item Notas especiales (Opcional).
+        \end{itemize}
+    }
+    \UCitem{Origen}{Mouse, Teclado y Selección en Pantalla}
+    \UCitem{Salidas}{Resumen de costos, Mensaje de confirmación, Redirección al detalle de la reservación.}
+    \UCitem{Destino}{Pantalla y Base de Datos}
+    \UCitem{Precondiciones}{
+        \begin{itemize}
+            \item El propietario debe haber iniciado sesión.
+            \item El propietario debe tener al menos una mascota registrada.
+            \item Existen habitaciones activas y configuradas en el sistema.
+        \end{itemize}
+    }
+    \UCitem{Postcondiciones}{
+        \begin{itemize}
+            \item Se crea un registro de reservación con estado "Pendiente" o "Confirmada".
+            \item Se asocian los servicios seleccionados a la reservación.
+            \item Las fechas seleccionadas quedan marcadas como ocupadas para esa habitación.
+        \end{itemize}
+    }
+    \UCitem{Errores}{
+        \begin{itemize}
+            \item \textbf{E1}: Fechas seleccionadas no disponibles (ocupadas).
+            \item \textbf{E2}: La habitación no es compatible con la especie de la mascota.
+            \item \textbf{E3}: Error de validación (fecha fin menor a fecha inicio).
+        \end{itemize}
+    }
+    \UCitem{Tipo}{Primario}
+\end{UseCase}
+
+%--------------------------------------
+% Trayectoria Principal
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+    \UCpaso[\UCactor] Solicita crear una nueva reservación oprimiendo el botón \IUbutton{Nueva Reservación} desde el listado.
+    \UCpaso Muestra el paso 1 del asistente: "Mascota y Habitación".
+    \UCpaso[\UCactor] Selecciona la mascota que hospedará.
+    \UCpaso El sistema filtra y muestra solo las habitaciones compatibles con la especie de la mascota seleccionada (Ej. Solo habitaciones para perros si la mascota es un perro).
+    \UCpaso[\UCactor] Selecciona una habitación disponible y oprime \IUbutton{Siguiente: Fechas}.
+    \UCpaso Muestra el paso 2: "Selecciona las Fechas", inhabilitando en el calendario los días ya ocupados por otras reservaciones.
+    \UCpaso[\UCactor] Selecciona la fecha de inicio y la fecha de fin de la estancia.
+    \UCpaso Calcula y muestra el número de noches y el costo parcial del hospedaje. Oprime \IUbutton{Siguiente: Servicios}.
+    \UCpaso Muestra el paso 3: "Servicios Adicionales" (listado de servicios disponibles con sus precios).
+    \UCpaso[\UCactor] (Opcional) Agrega servicios extra (ej. Baño, Paseo) y ajusta sus cantidades. Oprime \IUbutton{Siguiente: Confirmar}.
+    \UCpaso Muestra el paso 4: "Confirmar Reservación", presentando un resumen detallado (Mascota, Habitación, Fechas, Notas y Desglose de Costos Totales).
+    \UCpaso[\UCactor] Revisa la información y oprime el botón \IUbutton{Crear Reservación}.
+    \UCpaso El sistema registra la reservación y los servicios asociados en la base de datos.
+    \UCpaso Muestra un mensaje de éxito y redirige a la pantalla de detalles de la nueva reservación.
+\end{UCtrayectoria}
+
+%--------------------------------------
+% Trayectorias Alternativas
+%--------------------------------------
+
+% Trayectoria A: Fechas inválidas
+\begin{UCtrayectoriaA}{A}{Rango de fechas inválido}
+    \UCpaso[\UCactor] Selecciona una fecha de fin anterior a la fecha de inicio.
+    \UCpaso El sistema detecta la inconsistencia y muestra el error ``La fecha de fin debe ser posterior a la de inicio''.
+    \UCpaso Mantiene al usuario en el paso 2 hasta que corrija las fechas.
+\end{UCtrayectoriaA}
+
+% Trayectoria B: Sin habitaciones compatibles
+\begin{UCtrayectoriaA}{B}{No hay habitaciones para la especie seleccionada}
+    \UCpaso El usuario selecciona una mascota (ej. un Gato).
+    \UCpaso El sistema verifica el inventario y no encuentra habitaciones configuradas para esa especie.
+    \UCpaso Muestra el mensaje de advertencia ``No hay habitaciones disponibles para [Especie]s''.
+    \UCpaso Impide avanzar al siguiente paso hasta que se seleccione una mascota con habitaciones compatibles.
+\end{UCtrayectoriaA}
+
+% Trayectoria C: Cancelación del proceso
+\begin{UCtrayectoriaA}{C}{El usuario cancela la creación}
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Volver a Reservaciones} o interrumpe el asistente.
+    \UCpaso El sistema descarta los datos capturados temporalmente.
+    \UCpaso Regresa a la pantalla del listado de reservaciones sin guardar cambios.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+% Puntos de extensión
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+    % Cuando:
+    El usuario detecta un error en los datos capturados antes de confirmar.
+}{
+    % Durante la región:
+    Paso 11 (Pantalla de Confirmación).
+}{
+    % Casos de uso a los que extiende:
+    Permite regresar a los pasos anteriores (Botón \IUbutton{Anterior}) para corregir Mascota, Fechas o Servicios.
+}

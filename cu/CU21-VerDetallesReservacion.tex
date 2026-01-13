@@ -1,0 +1,87 @@
+﻿%--------------------------------------
+% Caso de Uso: Ver Detalles de Mi Reservación
+%--------------------------------------
+
+\begin{UseCase}{CU-21}{Ver Detalles de Mi Reservación}{
+	Permitir que un cliente consulte los detalles completos de una reservación activa o histórica asociada a sus mascotas.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+	\UCitem{Propósito}{Proporcionar al cliente acceso a la información completa de su reservación.}
+	\UCitem{Entradas}{Datos de acceso a la reservación.}
+	\UCitem{Origen}{Portal del cliente}
+	\UCitem{Salidas}{Información detallada de la reservación.}
+	\UCitem{Destino}{Pantalla del dispositivo del cliente}
+	\UCitem{Precondiciones}{
+		\begin{itemize}
+			\item El cliente debe tener al menos una reservación registrada en el sistema.
+			\item El cliente debe identificarse correctamente.
+		\end{itemize}
+	}
+	\UCitem{Postcondiciones}{
+		\begin{itemize}
+			\item El cliente visualiza la información completa de su reservación.
+			\item El cliente puede consultar el estado, servicios y costos asociados.
+		\end{itemize}
+	}
+	\UCitem{Errores}{
+		Reservación no encontrada, datos de acceso inválidos, acceso no autorizado.
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		\begin{itemize}
+			\item La información se muestra en modo de solo lectura.
+			\item El cliente puede imprimir o guardar un comprobante.
+			\item El acceso es posible desde dispositivos móviles.
+		\end{itemize}
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Accede al portal del cliente del hotel.
+	\UCpaso[\UCactor] Selecciona la opción para consultar sus reservaciones.
+	\UCpaso El sistema solicita los datos de acceso a la reservación.
+	\UCpaso[\UCactor] Proporciona los datos solicitados.
+	\UCpaso El sistema valida la información proporcionada.
+	\UCpaso El sistema recupera los datos completos de la reservación.
+	\UCpaso El sistema obtiene la información asociada:
+	\UCpaso[ ] Datos del propietario.
+	\UCpaso[ ] Mascotas hospedadas.
+	\UCpaso[ ] Fechas y estado de la reservación.
+	\UCpaso[ ] Habitaciones asignadas.
+	\UCpaso[ ] Servicios adicionales.
+	\UCpaso[ ] Información de pagos.
+	\UCpaso[ ] Observaciones visibles para el cliente.
+	\UCpaso El sistema muestra la vista detallada de la reservación.
+	\UCpaso[\UCactor] Navega entre las secciones de la información mostrada.
+	\UCpaso[\UCactor] Puede imprimir o guardar la información.
+	\UCpaso[\UCactor] Finaliza la consulta.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Datos de acceso inválidos}
+	\UCpaso El sistema informa que los datos proporcionados no son correctos.
+	\UCpaso El flujo regresa a la solicitud de datos de acceso.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Reservación no activa}
+	\UCpaso El sistema muestra la información de la reservación como historial.
+	\UCpaso El cliente puede consultar los datos pero no realizar modificaciones.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El cliente desea actualizar datos de contacto asociados a la reservación.
+}{
+	Del paso 14.
+}{
+	Actualizar Datos de Contacto.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

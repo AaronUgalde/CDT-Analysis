@@ -1,0 +1,104 @@
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU-XX}{Eliminar Mascota}{
+	Permite al Propietario eliminar de forma permanente el registro de una de sus mascotas del sistema, por ejemplo, en caso de un registro erróneo o duplicado.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Analista de Sistemas}
+	\UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+	\UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+	\UCitem{Propósito}{Mantener actualizada la lista de mascotas activas del propietario, eliminando registros que ya no son necesarios.}
+	\UCitem{Entradas}{
+		\begin{itemize}
+			\item Selección de la mascota a eliminar desde la lista.
+			\item Confirmación de la acción de borrado.
+		\end{itemize}
+	}
+	\UCitem{Origen}{Mouse / Pantalla táctil}
+	\UCitem{Salidas}{Mensaje de confirmación, Lista de mascotas actualizada sin el registro eliminado.}
+	\UCitem{Destino}{Pantalla y Base de Datos}
+	\UCitem{Precondiciones}{
+		\begin{itemize}
+			\item El Propietario ha iniciado sesión en el sistema.
+			\item El Propietario se encuentra en la \IUref{IU-PetList}{Lista de Mascotas}.
+			\item Existe al menos una mascota registrada en la lista.
+		\end{itemize}
+	}
+	\UCitem{Postcondiciones}{El registro de la mascota y toda su información asociada son eliminados permanentemente de la base de datos.}
+	\UCitem{Errores}{
+		\begin{itemize}
+			\item \textbf{E1}: La mascota no existe o ya fue eliminada.
+			\item \textbf{E2}: Error de conexión con el servidor.
+			\item \textbf{E3}: El usuario no está autorizado para eliminar la mascota (protección del backend).
+		\end{itemize}
+	}
+	\UCitem{Tipo}{Secundario}
+\end{UseCase}
+
+%--------------------------------------
+% Trayectoria Principal
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+	\UCpaso[\UCactor] Localiza la mascota que desea borrar en la \IUref{IU-PetList}{Lista de Mascotas}. \label{CU02-LocatePet}
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Eliminar} (icono de bote de basura) correspondiente al registro de la mascota.
+	\UCpaso Muestra el mensaje de confirmación {\bf MSG1-}``¿Estás seguro de eliminar esta mascota?''.
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar} para confirmar la eliminación. \Trayref{A}.
+	\UCpaso Solicita al servidor la eliminación del registro a través de una petición `DELETE /api/pets/:id`.
+	\UCpaso El sistema verifica que la mascota pertenece al propietario autenticado con base en la regla \BRref{BR-PetOwnership}{Verificación de Propiedad de Mascota}. \Trayref{B}.
+	\UCpaso El sistema elimina el registro de la mascota y sus datos asociados de la base de datos. \Trayref{C}.
+	\UCpaso Informa que la operación fue exitosa.
+	\UCpaso Actualiza la \IUref{IU-PetList}{Lista de Mascotas}, retirando la mascota eliminada de la vista.
+\end{UCtrayectoria}
+
+%--------------------------------------
+% Trayectorias Alternativas
+%--------------------------------------
+
+% Trayectoria A: Cancelar operación
+\begin{UCtrayectoriaA}{A}{El propietario cancela la eliminación}
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Cancelar} en el cuadro de diálogo de confirmación.
+	\UCpaso Cierra el mensaje de confirmación sin realizar cambios en el sistema.
+	\UCpaso[] El caso de uso finaliza, continuando en la \IUref{IU-PetList}{Lista de Mascotas}.
+\end{UCtrayectoriaA}
+
+% Trayectoria B: No autorizado
+\begin{UCtrayectoriaA}{B}{El Propietario no está autorizado (Error 403)}
+	\UCpaso El sistema determina que la mascota no pertenece al usuario autenticado.
+	\UCpaso Muestra el mensaje de error {\bf MSG-Error} ``No autorizado''.
+	\UCpaso[] Termina el caso de uso.
+\end{UCtrayectoriaA}
+
+% Trayectoria C: Fallo inesperado del sistema
+\begin{UCtrayectoriaA}{C}{Fallo inesperado del sistema (Error 500)}
+	\UCpaso Ocurre un error interno en el servidor al intentar procesar la solicitud de eliminación.
+	\UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Error al eliminar la mascota''.
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+	\UCpaso Mantiene la información en pantalla, permitiendo al usuario reintentar la operación.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+% Puntos de extensión
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	% Cuando:
+	El propietario desea modificar los datos de la mascota en lugar de eliminarla.
+}{
+	% Durante la región:
+	Paso 1 (Localización de la mascota en la lista).
+}{
+	% Casos de uso a los que extiende:
+	\hyperlink{CU-03}{CU-03 Ver todas mis mascotas}.
+}
+\UCExtenssionPoint{
+	% Cuando:
+	El propietario desea consultar los detalles completos de la mascota antes de decidir eliminarla.
+}{
+	% Durante la región:
+	Paso 1 (Localización de la mascota en la lista).
+}{
+	% Casos de uso a los que extiende:
+	\hyperlink{CU-14}{CU-14 Consultar Detalle de Mascota}.
+}
+
+%-------------------------------------- TERMINA descripción del caso de uso.

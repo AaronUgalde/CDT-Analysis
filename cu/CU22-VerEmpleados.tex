@@ -1,0 +1,63 @@
+﻿%--------------------------------------
+% Caso de Uso: Ver Empleados
+%--------------------------------------
+
+\begin{UseCase}{CU-22}{Ver Empleados}{
+	Permitir que el usuario autenticado consulte la lista de empleados registrados en el sistema del Hotel para Perros.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{\hyperlink{Propietario}{Propietario} o \hyperlink{Administrador}{Administrador}}
+	\UCitem{Propósito}{Visualizar la información básica de los empleados del sistema.}
+	\UCitem{Entradas}{Ninguna}
+	\UCitem{Origen}{Pantalla}
+	\UCitem{Salidas}{Lista de empleados mostrada en pantalla.}
+	\UCitem{Destino}{Pantalla de lista de empleados}
+	\UCitem{Precondiciones}{
+		El usuario debe haber iniciado sesión en el sistema.
+	}
+	\UCitem{Postcondiciones}{
+		La información de los empleados es mostrada correctamente al usuario.
+	}
+	\UCitem{Errores}{
+		Sesión no válida, error al recuperar la información.
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		Los usuarios no administradores solo pueden ver información básica de los empleados.
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Accede a la opción \IUbutton{Empleados} desde el menú principal.
+	\UCpaso El sistema solicita la lista de empleados registrados.
+	\UCpaso El sistema recupera la información de los empleados activos.
+	\UCpaso El sistema muestra la lista de empleados en la pantalla.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Sesión no válida}
+	\UCpaso El sistema muestra el mensaje ``La sesión ha expirado''.
+	\UCpaso El sistema solicita al usuario iniciar sesión nuevamente.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Error al recuperar la información}
+	\UCpaso El sistema muestra el mensaje ``No fue posible obtener la lista de empleados''.
+	\UCpaso El caso de uso termina.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El usuario desea consultar el detalle de un empleado.
+}{
+	Del paso 4.
+}{
+	Consultar Empleado.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

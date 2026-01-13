@@ -1,0 +1,93 @@
+﻿%--------------------------------------
+% Caso de Uso: Eliminar Reservación
+%--------------------------------------
+
+\begin{UseCase}{CU-17}{Eliminar Reservación}{
+	Permitir que un usuario autorizado cancele o elimine una reservación existente en el sistema del Hotel para Perros.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{\hyperlink{Administrador}{Administrador}}
+	\UCitem{Propósito}{Cancelar una reservación eliminándola del sistema o cambiando su estado a cancelada.}
+	\UCitem{Entradas}{Reservación seleccionada, motivo de cancelación opcional.}
+	\UCitem{Origen}{Pantalla de detalle de reservación}
+	\UCitem{Salidas}{Reservación cancelada y habitaciones liberadas.}
+	\UCitem{Destino}{Pantalla de reservaciones y base de datos}
+	\UCitem{Precondiciones}{
+		\begin{itemize}
+			\item El usuario debe haber iniciado sesión con permisos adecuados.
+			\item La reservación debe existir en el sistema.
+			\item La reservación debe encontrarse en un estado cancelable.
+		\end{itemize}
+	}
+	\UCitem{Postcondiciones}{
+		\begin{itemize}
+			\item La reservación queda marcada como cancelada.
+			\item Las habitaciones asignadas quedan disponibles.
+			\item Los servicios no realizados se liberan.
+			\item El calendario se actualiza correctamente.
+		\end{itemize}
+	}
+	\UCitem{Errores}{
+		Reservación no encontrada, permisos insuficientes, estado no cancelable, error al actualizar la información.
+	}
+	\UCitem{Tipo}{Caso de uso secundario}
+	\UCitem{Observaciones}{
+		\begin{itemize}
+			\item Las reservaciones en curso no pueden cancelarse.
+			\item Puede aplicarse una política de reembolso según la fecha de cancelación.
+			\item Se registra auditoría de la operación realizada.
+		\end{itemize}
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Selecciona una reservación desde la lista o el calendario.
+	\UCpaso[\UCactor] Accede a la pantalla de detalle de la reservación.
+	\UCpaso[\UCactor] Selecciona la opción para cancelar la reservación.
+	\UCpaso El sistema solicita confirmación y permite ingresar un motivo opcional.
+	\UCpaso[\UCactor] Confirma la cancelación.
+	\UCpaso El sistema verifica los permisos del usuario.
+	\UCpaso El sistema valida que la reservación pueda cancelarse.
+	\UCpaso El sistema inicia la operación de actualización.
+	\UCpaso El sistema marca la reservación como cancelada.
+	\UCpaso El sistema libera las habitaciones asociadas.
+	\UCpaso El sistema cancela los servicios futuros.
+	\UCpaso El sistema registra la operación realizada.
+	\UCpaso El sistema confirma la operación.
+	\UCpaso El sistema muestra un mensaje indicando que la reservación fue cancelada correctamente.
+	\UCpaso El sistema actualiza la lista y el calendario de reservaciones.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Reservación no encontrada}
+	\UCpaso El sistema muestra un mensaje indicando que la reservación no existe.
+	\UCpaso El sistema regresa a la lista de reservaciones.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Permisos insuficientes}
+	\UCpaso El sistema informa que el usuario no tiene permisos para cancelar reservaciones.
+	\UCpaso El caso de uso termina sin realizar cambios.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{C}{Reservación en estado no cancelable}
+	\UCpaso El sistema informa que la reservación no puede cancelarse en su estado actual.
+	\UCpaso El caso de uso termina sin realizar cambios.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El usuario desea aplicar una política de reembolso por cancelación.
+}{
+	Del paso 12.
+}{
+	Procesar Reembolso por Cancelación.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

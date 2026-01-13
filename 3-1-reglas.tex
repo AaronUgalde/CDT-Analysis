@@ -1,154 +1,247 @@
-\begin{BussinesRule}{BR8}{Fecha de Nacimiento correcta.}
-	\BRitem[Tipo:] Regla de integridad referencial o estructural. 
-				% Otras opciones para tipo: 
-				% - Regla de integridad referencial o estructural. 
-				% - Regla de operación, (calcular o determinar un valor.).
-				% - Regla de inferencia de un hecho.
-	\BRitem[Clase:] Habilitadora. 
-				% Otras opciones para clase: Habilitadora, Cronometrada, Ejecutive.
-	\BRitem[Nivel:] Control. % Otras opciones para nivel: Control, Influencia.
-	\BRitem[Descripción:]	Las Fechas de Nacimiento que se registran en el SINACEM para cualquier Persona debe ser mayores al día Primero de Enero del año 1900 y menor a la Fecha Actual.
-	\BRitem[Motivación:] Evitar fraudes al PRONIM por el registro de personas que no han nacido al momento de su registro.
-	\BRitem[Sentencia:] $\forall p \in Persona \Rightarrow 01-Enero-1900~<~p.fechaDeNacimiento~<~fechaActual$.
-	\BRitem[Ejemplo positivo:] Para el día 12 de Octubre del 2013, cumplen la regla: 		
-        \begin{itemize}
-        	\item 11 de Octubre del 2013
-			\item 20 de Diciembre del 2010
-			\item 2 de Enero del 1900
-        \end{itemize}
-	
-	\BRitem[Ejemplo negativo:] Para el día 12 de Octubre del 2013, no cumplen la 
+% =========================================================
+% REGLAS DE NEGOCIO - SISTEMA DE GESTIÓN HOTEL PARA PERROS
+% =========================================================
+
+\begin{BussinesRule}{BR001}{Fecha de Nacimiento válida para Mascota}
+	\BRitem[Tipo:] Regla de integridad referencial o estructural.
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] La fecha de nacimiento de una mascota debe ser posterior al 1 de Enero de 1990 y anterior a la fecha actual. Esto asegura que se registren mascotas reales y evita errores en el cálculo de edad.
+	\BRitem[Motivación:] Prevenir errores en el registro de mascotas con fechas ilógicas y garantizar la integridad de los datos de edad para cálculos de servicios veterinarios y tarifas.
+	\BRitem[Sentencia:] $\forall m \in Mascota \Rightarrow 01\textrm{-}Enero\textrm{-}1990~<~m.fechaNacimiento~<~fechaActual$.
+	\BRitem[Ejemplo positivo:] Para el día 11 de Enero del 2026, cumplen la regla:
 		\begin{itemize}
-        	\item 12 de Octubre del 2013
-			\item 20 de Diciembre del 2014
-			\item 1 de Enero del 1900
-			\item 31 de Diciembre del 1899
-        \end{itemize}
-	
-	\BRitem[Referenciado por:] \hyperlink{CUCE3.2}{CUCE3.2}, \hyperlink{CUCE3.3}{CUCE3.3}.
+			\item 10 de Enero del 2026
+			\item 15 de Marzo del 2020
+			\item 5 de Mayo del 2000
+			\item 2 de Enero del 1990
+		\end{itemize}
+	\BRitem[Ejemplo negativo:] Para el día 11 de Enero del 2026, NO cumplen:
+		\begin{itemize}
+			\item 11 de Enero del 2026 (fecha actual no permitida)
+			\item 20 de Diciembre del 2026 (fecha futura)
+			\item 1 de Enero del 1990 (límite inferior no incluido)
+			\item 31 de Diciembre del 1989
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-PET-001, CUCE-PET-002.
 \end{BussinesRule}
 
-\begin{BussinesRule}{BR129}{Determinar si un Estudiante puede inscribir Seminario.} 
-	\BRitem[Tipo:] Regla de integridad referencial o estructural. 
-				% Otras opciones para tipo: 
-				% - Regla de integridad referencial o estructural. 
-				% - Regla de operación, (calcular o determinar un valor.).
-				% - Regla de inferencia de un hecho.
-	\BRitem[Clase:] Habilitadora. 
-				% Otras opciones para clase: Habilitadora, Cronometrada, Ejecutive.
-	\BRitem[Nivel:] Control. % Otras opciones para nivel: Control, Influencia.
-	\BRitem[Descripción:] Un Estudiante requere del 80\% de créditos para inscribirse a un Seminario y no haber cursado y reprobado otro seminario.
-	\BRitem[Ejemplo positivo:] 
-	
-	\BRitem[Ejemplo negativo:] 
-	
-	\BRitem[Referenciado por:] 
+\begin{BussinesRule}{BR002}{Validación de fechas de Reservación}
+	\BRitem[Tipo:] Regla de integridad referencial o estructural.
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] En toda reservación, la fecha de fin debe ser estrictamente posterior a la fecha de inicio. Además, la fecha de inicio debe ser igual o posterior a la fecha actual.
+	\BRitem[Motivación:] Garantizar la lógica temporal de las reservaciones y evitar conflictos en la asignación de habitaciones.
+	\BRitem[Sentencia:] $\forall r \in Reservacion \Rightarrow fechaActual \leq r.fechaInicio~<~r.fechaFin$.
+	\BRitem[Ejemplo positivo:] Para una reservación creada el 11 de Enero del 2026:
+		\begin{itemize}
+			\item Inicio: 11/01/2026, Fin: 15/01/2026
+			\item Inicio: 20/01/2026, Fin: 25/01/2026
+			\item Inicio: 11/01/2026, Fin: 12/01/2026 (una noche)
+		\end{itemize}
+	\BRitem[Ejemplo negativo:] Para una reservación creada el 11 de Enero del 2026:
+		\begin{itemize}
+			\item Inicio: 15/01/2026, Fin: 10/01/2026 (fin antes de inicio)
+			\item Inicio: 15/01/2026, Fin: 15/01/2026 (misma fecha)
+			\item Inicio: 05/01/2026, Fin: 10/01/2026 (inicio en el pasado)
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-RES-001, CUCE-RES-002.
 \end{BussinesRule}
 
-\begin{BussinesRule}{BR130}{Determinar si un Estudiante puede inscribirse en un Seminario}
+\begin{BussinesRule}{BR003}{Disponibilidad de Habitación}
 	\BRitem[Tipo:] Regla de inferencia de un hecho.
-				% Otras opciones para tipo: 
-				% - Regla de integridad referencial o estructural. 
-				% - Regla de operación, (calcular o determinar un valor.).
-				% - Regla de inferencia de un hecho.
-	\BRitem[Clase:] Habilitadora. 
-				% Otras opciones para clase: Habilitadora, Cronometrada, Ejecutive.
-	\BRitem[Nivel:] Control. % Otras opciones para nivel: Control, Influencia.
-	\BRitem[Descripción:] El Estudiante debe pertenecer a la Carrera del Seminario y debe haber Cupo en el grupo del Seminario.
-	\BRitem[Ejemplo positivo:] 
-	
-	\BRitem[Ejemplo negativo:] 
-	
-	\BRitem[Referenciado por:] 
-\end{BussinesRule}
-
-\begin{BussinesRule}{BR143}{Validar el horario del estudiante}
-	\BRitem[Tipo:] Regla de operación, (calcular o determinar un valor.).
-				% Otras opciones para tipo: 
-				% - Regla de integridad referencial o estructural. 
-				% - Regla de operación, (calcular o determinar un valor.).
-				% - Regla de inferencia de un hecho.
-	\BRitem[Clase:] Habilitadora. 
-				% Otras opciones para clase: Habilitadora, Cronometrada, Ejecutive.
-	\BRitem[Nivel:] Control. % Otras opciones para nivel: Control, Influencia.
-	\BRitem[Descripción:] Las Materias y Seminarios inscritos por el alumno, en un periodo específico, no pueden impartirse en el mismo día de la semana en horas traslapadas.
-	\BRitem[Ejemplo positivo:] 
-	
-	\BRitem[Ejemplo negativo:] 
-	
-	\BRitem[Referenciado por:] 
-\end{BussinesRule}
-
-\begin{BussinesRule}{BR180}{Calcular costos del Estudiante}
-	\BRitem[Tipo:] Regla de operación, (calcular o determinar un valor.).
-				% Otras opciones para tipo: 
-				% - Regla de integridad referencial o estructural. 
-				% - Regla de operación, (calcular o determinar un valor.).
-				% - Regla de inferencia de un hecho.
-	\BRitem[Clase:] Habilitadora. 
-				% Otras opciones para clase: Habilitadora, Cronometrada, Ejecutive.
-	\BRitem[Nivel:] Control. % Otras opciones para nivel: Control, Influencia.
-	\BRitem[Descripción:] Los servicios se cobran de la siguiente forma:
-		\begin{Citemize}
-			\item {\em Estudiantes Regulares:} Se les Cobran todos los servicios al 100\% de su costo.
-			\item {\em Estudiantes becados:} Se les otorga un 80\% de descuento en el costo de todos los servicios (antes del IVA).
-			\item {\em Estudiantes extranjeros:} Se les cobran los servicios al 200\% del costo registrado.
-		\end{Citemize}
-	\BRitem[Sentencia:] $\forall~e~\in~\mathbb{E}\textrm{studiantes}~\land~\forall~s~\in \mathbb{S}\textrm{eminario}~\Rightarrow$
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] Una habitación solo puede ser asignada a una reservación si no existe otra reservación confirmada que tenga traslape de fechas con el periodo solicitado. Se considera traslape cuando hay intersección entre $[fechaInicio_1, fechaFin_1]$ y $[fechaInicio_2, fechaFin_2]$.
+	\BRitem[Motivación:] Evitar doble asignación de habitaciones y garantizar la disponibilidad del espacio para cada mascota.
+	\BRitem[Sentencia:] Sea $R$ el conjunto de reservaciones confirmadas en habitación $h$:
 		\begin{displaymath}
-			Costo(e,s) = \left\{ \begin{array}{ll}
-			s.costo & , si~e.tipo = \textrm{Estudiante regular}\\
-			{s.costo}\over{5} & , si~e.tipo = \textrm{Estudiante becado}\\
-			s.costo \cdot 2 & , si~e.tipo = \textrm{Estudiante extranjero}
+			Disponible(h, f_i, f_f) = \neg\exists r \in R : (r.fechaInicio < f_f) \land (r.fechaFin > f_i)
+		\end{displaymath}
+	\BRitem[Ejemplo positivo:] Habitación disponible cuando:
+		\begin{itemize}
+			\item Nueva reserva: 15-20 Ene, Reservas existentes: 10-14 Ene, 21-25 Ene
+			\item Nueva reserva: 10-15 Mar, No hay reservas en ese periodo
+		\end{itemize}
+	\BRitem[Ejemplo negativo:] Habitación NO disponible cuando:
+		\begin{itemize}
+			\item Nueva: 15-20 Ene, Existe: 18-22 Ene (traslape parcial)
+			\item Nueva: 10-25 Ene, Existe: 15-20 Ene (traslape completo)
+			\item Nueva: 15-20 Ene, Existe: 15-20 Ene (mismas fechas)
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-RES-003, CUCE-HAB-001.
+\end{BussinesRule}
+
+\begin{BussinesRule}{BR004}{Autorización de Reservación por Propietario}
+	\BRitem[Tipo:] Regla de integridad referencial o estructural.
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] Un propietario solo puede crear o modificar reservaciones para mascotas que le pertenecen. Los administradores pueden gestionar reservaciones de cualquier mascota.
+	\BRitem[Motivación:] Garantizar la privacidad y seguridad de la información, evitando accesos no autorizados a reservaciones de terceros.
+	\BRitem[Sentencia:] 
+		\begin{displaymath}
+			Autorizado(p, r) = (p.propietarioId = r.mascota.propietarioId) \lor (p.rol = \textrm{Admin})
+		\end{displaymath}
+	\BRitem[Ejemplo positivo:]
+		\begin{itemize}
+			\item Propietario ID 5 crea reservación para su mascota ID 12
+			\item Admin crea reservación para mascota ID 20 de cualquier propietario
+			\item Propietario ID 3 edita su propia reservación ID 45
+		\end{itemize}
+	\BRitem[Ejemplo negativo:]
+		\begin{itemize}
+			\item Propietario ID 5 intenta crear reservación para mascota ID 18 (de otro propietario)
+			\item Usuario no-admin intenta editar reservación de otro propietario
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-RES-001, CUCE-RES-002, CUCE-RES-004.
+\end{BussinesRule}
+
+\begin{BussinesRule}{BR005}{Peso mínimo y máximo de Mascota}
+	\BRitem[Tipo:] Regla de integridad referencial o estructural.
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] El peso de una mascota debe estar en el rango de 0.1 kg a 200 kg. Este rango cubre desde mascotas pequeñas (como chihuahuas) hasta razas muy grandes.
+	\BRitem[Motivación:] Evitar errores de captura y validar que los datos ingresados sean realistas para calcular tarifas y requerimientos de espacio.
+	\BRitem[Sentencia:] $\forall m \in Mascota \Rightarrow 0.1 \leq m.pesoKg \leq 200$.
+	\BRitem[Ejemplo positivo:]
+		\begin{itemize}
+			\item Chihuahua: 2.5 kg
+			\item Labrador: 30 kg
+			\item Gran Danés: 80 kg
+			\item San Bernardo: 150 kg
+		\end{itemize}
+	\BRitem[Ejemplo negativo:]
+		\begin{itemize}
+			\item 0 kg (peso nulo)
+			\item 0.05 kg (por debajo del mínimo)
+			\item 250 kg (excede límite superior)
+			\item -5 kg (valor negativo)
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-PET-001, CUCE-PET-003.
+\end{BussinesRule}
+
+\begin{BussinesRule}{BR006}{Vigencia de Vacunación}
+	\BRitem[Tipo:] Regla de operación (calcular o determinar un valor).
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Influencia.
+	\BRitem[Descripción:] Una vacuna se considera vigente si su fecha de vigencia es posterior o igual a la fecha actual. Las vacunas con vigencia vencida deben ser señaladas en el historial médico.
+	\BRitem[Motivación:] Alertar a los propietarios sobre vacunas próximas a vencer o vencidas para mantener la salud de las mascotas y cumplir requisitos de hospedaje.
+	\BRitem[Sentencia:] 
+		\begin{displaymath}
+			VacunaVigente(v) = \left\{ \begin{array}{ll}
+			\textrm{Vigente} & , \textrm{si}~v.vigenciaHasta \geq fechaActual\\
+			\textrm{Vencida} & , \textrm{si}~v.vigenciaHasta < fechaActual
 			\end{array} \right.
 		\end{displaymath}
-	\BRitem[Ejemplo positivo:] 
-	
-	\BRitem[Ejemplo negativo:] 
-	
-	\BRitem[Referenciado por:] 
+	\BRitem[Ejemplo positivo:] Para la fecha actual 11/01/2026:
+		\begin{itemize}
+			\item Vacuna antirrábica vigente hasta 15/06/2026 (Vigente)
+			\item Vacuna polivalente vigente hasta 11/01/2026 (Vigente, límite)
+		\end{itemize}
+	\BRitem[Ejemplo negativo:] Para la fecha actual 11/01/2026:
+		\begin{itemize}
+			\item Vacuna antirrábica vigente hasta 10/01/2026 (Vencida)
+			\item Vacuna polivalente vigente hasta 15/12/2025 (Vencida)
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-VAC-001, CUCE-PET-004.
 \end{BussinesRule}
 
-\begin{BussinesRule}{BR45}{Calcular impuestos por seminario}
-	\BRitem[Tipo:] Regla de operación, (calcular o determinar un valor.).
-				% Otras opciones para tipo: 
-				% - Regla de integridad referencial o estructural. 
-				% - Regla de operación, (calcular o determinar un valor.).
-				% - Regla de inferencia de un hecho.
-	\BRitem[Clase:] Habilitadora. 
-				% Otras opciones para clase: Habilitadora, Cronometrada, Ejecutive.
-	\BRitem[Nivel:] Control. % Otras opciones para nivel: Control, Influencia.
-	\BRitem[Descripción:] Los impuestos corresponden al 16\% correspondientes al IVA.
-	\BRitem[Sentencia:] $Impuesto(e, s) = Costo(e, s)\cdot0.16$.
-	\BRitem[Ejemplo positivo:] 
-	
-	\BRitem[Ejemplo negativo:] 
-	
-	\BRitem[Referenciado por:] 
+\begin{BussinesRule}{BR007}{Cálculo de Monto Total de Reservación}
+	\BRitem[Tipo:] Regla de operación (calcular o determinar un valor).
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] El monto total de una reservación se calcula como la suma del costo de hospedaje más el costo de todos los servicios adicionales contratados durante la estancia.
+	\BRitem[Motivación:] Proporcionar transparencia en los costos y facilitar la facturación al cliente.
+	\BRitem[Sentencia:] Sea $S$ el conjunto de servicios en reservación $r$:
+		\begin{displaymath}
+			MontoTotal(r) = r.montoHospedaje + \sum_{s \in S} (s.precioAlMomento \times s.cantidad)
+		\end{displaymath}
+	\BRitem[Ejemplo positivo:]
+		\begin{itemize}
+			\item Hospedaje: \$500, Baño: \$150 $\times$ 1, Paseo: \$80 $\times$ 3 = \$890
+			\item Hospedaje: \$1200, Sin servicios = \$1200
+		\end{itemize}
+	\BRitem[Ejemplo negativo:] Valores que generarían error:
+		\begin{itemize}
+			\item Monto negativo de hospedaje o servicios
+			\item Cantidad de servicio igual a cero
+			\item Sumar servicios de otra reservación
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-RES-005, CUCE-PAG-001.
 \end{BussinesRule}
 
-\begin{BussinesRule}{BR100}{Recibo del Estudiante por inscripción a Seminario.}
-	\BRitem[Tipo:] Regla de operación, (calcular o determinar un valor.).
-				% Otras opciones para tipo: 
-				% - Regla de integridad referencial o estructural. 
-				% - Regla de operación, (calcular o determinar un valor.).
-				% - Regla de inferencia de un hecho.
-	\BRitem[Clase:] Habilitadora. 
-				% Otras opciones para clase: Habilitadora, Cronometrada, Ejecutive.
-	\BRitem[Nivel:] Control. % Otras opciones para nivel: Control, Influencia.
-	\BRitem[Descripción:] El  Recibo del Estudiante debe mostrar el total del costo con el siguiente desglose:
-		\begin{displaymath}\begin{array}{lr}
-			Costo: & \$ XXX.XX\\
-			Descuento~aplicado~(YY\%): & \$ XXX.XX\\
-			Subtotal: & \$ XXX.XX\\
-			IVA~(16\%): & \$ XXX.XX\\\hline
-			Total: & \$ XXX.XX
-		\end{array}\end{displaymath}
-	\BRitem[Sentencia:] $CostoTotal = Costo(e, s) + Impuesto(e, s)$.
-	\BRitem[Ejemplo positivo:] 
-	
-	\BRitem[Ejemplo negativo:] 
-	
-	\BRitem[Referenciado por:] 
+\begin{BussinesRule}{BR008}{Validación de horario de Citas de Servicio}
+	\BRitem[Tipo:] Regla de operación (calcular o determinar un valor).
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] Las citas de servicio (veterinaria, peluquería, entrenamiento) asignadas a un mismo empleado no pueden traslaparse en horario. Dos citas se traslapan si el inicio de una es antes del fin de la otra y viceversa.
+	\BRitem[Motivación:] Optimizar la agenda de empleados y evitar conflictos de disponibilidad para brindar servicios de calidad.
+	\BRitem[Sentencia:] Sea $C$ el conjunto de citas del empleado $e$:
+		\begin{displaymath}
+			\begin{array}{l}
+			NoTraslape(c_1, c_2) = \\
+			\quad (c_1.fechaHoraFin \leq c_2.fechaHoraInicio) \lor (c_2.fechaHoraFin \leq c_1.fechaHoraInicio)
+			\end{array}
+		\end{displaymath}
+	\BRitem[Ejemplo positivo:] Citas que NO traslapan:
+		\begin{itemize}
+			\item Cita 1: 10:00-11:30, Cita 2: 12:00-13:30
+			\item Cita 1: 09:00-10:00, Cita 2: 10:00-11:00 (consecutivas)
+		\end{itemize}
+	\BRitem[Ejemplo negativo:] Citas que SÍ traslapan:
+		\begin{itemize}
+			\item Cita 1: 10:00-12:00, Cita 2: 11:00-13:00
+			\item Cita 1: 09:00-11:00, Cita 2: 10:30-12:00
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-CITA-001, CUCE-EMP-002.
 \end{BussinesRule}
 
+\begin{BussinesRule}{BR009}{Cálculo de días de Hospedaje}
+	\BRitem[Tipo:] Regla de operación (calcular o determinar un valor).
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] El número de días de hospedaje se calcula como la diferencia en días completos entre la fecha de fin y la fecha de inicio de la reservación. Si la estancia es de menos de 24 horas, se cuenta como un día completo.
+	\BRitem[Motivación:] Estandarizar el cálculo de días para la facturación y evitar ambigüedades en cobros.
+	\BRitem[Sentencia:] 
+		\begin{displaymath}
+			DiasHospedaje(r) = \max(1, \lceil (r.fechaFin - r.fechaInicio) / 86400 \rceil)
+		\end{displaymath}
+	\BRitem[Ejemplo positivo:]
+		\begin{itemize}
+			\item Check-in: 15/01 10:00, Check-out: 20/01 10:00 = 5 días
+			\item Check-in: 15/01 14:00, Check-out: 15/01 20:00 = 1 día
+			\item Check-in: 10/02 09:00, Check-out: 12/02 15:00 = 3 días
+		\end{itemize}
+	\BRitem[Ejemplo negativo:] No aplican ejemplos negativos, pero resultados incorrectos serían:
+		\begin{itemize}
+			\item Calcular 0 días para estancia de horas
+			\item No redondear al alza días parciales
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-RES-006, CUCE-PAG-002.
+\end{BussinesRule}
+
+\begin{BussinesRule}{BR010}{Estados válidos de Reservación}
+	\BRitem[Tipo:] Regla de integridad referencial o estructural.
+	\BRitem[Clase:] Habilitadora.
+	\BRitem[Nivel:] Control.
+	\BRitem[Descripción:] Toda reservación debe tener un estado válido del catálogo de estados. Los estados permitidos son: Pendiente, Confirmada, En curso, Completada, Cancelada. Las transiciones entre estados deben seguir un flujo lógico.
+	\BRitem[Motivación:] Mantener control del ciclo de vida de las reservaciones y facilitar reportes y estadísticas.
+	\BRitem[Sentencia:] 
+		\begin{displaymath}
+			\forall r \in Reservacion \Rightarrow r.estadoId \in \{1, 2, 3, 4, 5\}
+		\end{displaymath}
+		Transiciones válidas: Pendiente $\rightarrow$ Confirmada/Cancelada, Confirmada $\rightarrow$ En~curso/Cancelada, En~curso $\rightarrow$ Completada
+	\BRitem[Ejemplo positivo:]
+		\begin{itemize}
+			\item Nueva reserva creada en estado "Pendiente"
+			\item Reserva pasa de "Confirmada" a "En curso" en check-in
+			\item Reserva pasa de "En curso" a "Completada" en check-out
+		\end{itemize}
+	\BRitem[Ejemplo negativo:]
+		\begin{itemize}
+			\item Crear reserva con estado "Completada"
+			\item Pasar de "Pendiente" directamente a "En curso"
+			\item Usar estado inexistente (ID 99)
+		\end{itemize}
+	\BRitem[Referenciado por:] CUCE-RES-007, CUCE-RES-008.
+\end{BussinesRule}

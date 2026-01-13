@@ -1,0 +1,92 @@
+﻿%--------------------------------------
+% Caso de Uso: Agregar Servicio a Reservación
+%--------------------------------------
+
+\begin{UseCase}{CU-18}{Agregar Servicio a Reservación}{
+	Permitir que un usuario autorizado agregue servicios adicionales a una reservación existente.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{\hyperlink{Administrador}{Administrador} o \hyperlink{Empleado}{Empleado}}
+	\UCitem{Propósito}{Añadir servicios complementarios a una reservación activa.}
+	\UCitem{Entradas}{Servicio seleccionado, fecha y hora, empleado asignado, notas opcionales.}
+	\UCitem{Origen}{Pantalla de detalle de reservación}
+	\UCitem{Salidas}{Servicio agregado a la reservación y costos actualizados.}
+	\UCitem{Destino}{Pantalla de detalle de reservación y base de datos}
+	\UCitem{Precondiciones}{
+		\begin{itemize}
+			\item El usuario debe haber iniciado sesión.
+			\item La reservación debe existir y encontrarse en un estado válido.
+			\item El servicio debe existir en el catálogo.
+			\item La fecha y hora del servicio deben estar dentro del período de la reservación.
+		\end{itemize}
+	}
+	\UCitem{Postcondiciones}{
+		\begin{itemize}
+			\item El servicio queda asociado a la reservación.
+			\item El costo total de la reservación se actualiza.
+			\item El servicio queda programado en el calendario.
+			\item El empleado queda asignado al servicio.
+		\end{itemize}
+	}
+	\UCitem{Errores}{
+		Servicio no disponible, conflicto de horarios, empleado no disponible, reservación en estado inválido.
+	}
+	\UCitem{Tipo}{Caso de uso secundario}
+	\UCitem{Observaciones}{
+		\begin{itemize}
+			\item Cada servicio puede requerir un tipo específico de empleado.
+			\item Se valida la disponibilidad del empleado antes de confirmar.
+			\item El costo del servicio puede variar según características de la mascota.
+		\end{itemize}
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Accede a la pantalla de detalle de una reservación.
+	\UCpaso[\UCactor] Selecciona la opción para agregar un servicio.
+	\UCpaso El sistema muestra el catálogo de servicios disponibles.
+	\UCpaso[\UCactor] Selecciona un servicio.
+	\UCpaso El sistema muestra el formulario de configuración del servicio.
+	\UCpaso[\UCactor] Selecciona la mascota que recibirá el servicio.
+	\UCpaso[\UCactor] Indica la fecha y hora del servicio.
+	\UCpaso El sistema valida que la fecha y hora estén dentro del período de la reservación.
+	\UCpaso El sistema verifica la disponibilidad del servicio.
+	\UCpaso[\UCactor] Selecciona un empleado o permite asignación automática.
+	\UCpaso El sistema verifica la disponibilidad del empleado.
+	\UCpaso[\UCactor] Ingresa notas opcionales para el servicio.
+	\UCpaso[\UCactor] Confirma la adición del servicio.
+	\UCpaso El sistema calcula el costo del servicio.
+	\UCpaso El sistema registra el servicio en la reservación.
+	\UCpaso El sistema actualiza el costo total de la reservación.
+	\UCpaso El sistema agenda el servicio en el calendario.
+	\UCpaso El sistema muestra un mensaje indicando que el servicio fue agregado correctamente.
+	\UCpaso El sistema actualiza la pantalla de detalle de la reservación.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Fecha u hora fuera del período de la reservación}
+	\UCpaso El sistema informa que el servicio debe programarse dentro del período de la reservación.
+	\UCpaso El flujo continúa desde la selección de fecha y hora.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Empleado no disponible}
+	\UCpaso El sistema informa que el empleado no se encuentra disponible en la fecha y hora seleccionadas.
+	\UCpaso El usuario puede modificar la fecha, seleccionar otro empleado o cancelar la operación.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El usuario desea agregar varios servicios a la misma reservación.
+}{
+	Del paso 4.
+}{
+	Agregar Múltiples Servicios.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

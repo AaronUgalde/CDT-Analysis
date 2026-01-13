@@ -1,0 +1,82 @@
+% Caso de Uso: Agregar Documento
+% Sistema: Hotel Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU12}{Agregar Documento}{
+    Permite al Propietario subir y asociar un archivo digital (imagen, PDF o documento de texto) al perfil de su mascota, especificando opcionalmente el tipo de documento.
+}
+    \UCitem{Versión}{\color{Gray}1.0}
+    \UCitem{Autor}{\color{Gray}Axel}
+    \UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+    \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+    \UCitem{Propósito}{Almacenar documentación relevante de la mascota (cartilla de vacunación, pedigree, resultados médicos) para su consulta digital centralizada.}
+    \UCitem{Entradas}{
+        \begin{itemize}
+            \item Selección del Tipo de Documento (Opcional).
+            \item Archivo digital (Obligatorio: PDF, DOC, DOCX o Imagen hasta 10MB).
+        \end{itemize}
+    }
+    \UCitem{Origen}{Mouse / Pantalla táctil y Sistema de Archivos Local}
+    \UCitem{Salidas}{Mensaje de confirmación (implícito al redirigir), visualización del documento en el perfil de la mascota.}
+    \UCitem{Destino}{Pantalla}
+    \UCitem{Precondiciones}{
+        \begin{itemize}
+            \item El propietario ha iniciado sesión.
+            \item El propietario ha seleccionado una mascota y se encuentra en su perfil (CU02 Consultar Perfil de Mascota).
+        \end{itemize}
+    }
+    \UCitem{Postcondiciones}{El archivo es almacenado en el servidor y se crea un registro en la base de datos asociado a la mascota.}
+    \UCitem{Errores}{
+        \begin{itemize}
+            \item \textbf{E1}: El formato del archivo no es válido.
+            \item \textbf{E2}: El tamaño del archivo excede el límite permitido.
+            \item \textbf{E3}: Error de conexión al subir el archivo.
+        \end{itemize}
+    }
+    \UCitem{Tipo}{Secundario}
+\end{UseCase}
+
+%--------------------------------------
+% Trayectoria Principal
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Agregar Documento} desde la vista de detalles de la mascota.
+    \UCpaso Muestra la pantalla "Subir Documento" con:
+        \begin{itemize}
+            \item Lista desplegable de Tipos de Documento.
+            \item Área de carga de archivos (Drag \& Drop o selección).
+            \item Botones \IUbutton{Cancelar} y \IUbutton{Subir Documento} (deshabilitado inicialmente).
+        \end{itemize}
+    \UCpaso[\UCactor] Selecciona una opción en la lista "Tipo de Documento" (Ej. Certificado veterinario, Cartilla, etc.) o lo deja "Sin especificar".
+    \UCpaso[\UCactor] Carga un archivo haciendo clic en "Seleccionar archivo" o arrastrándolo al área designada.
+    \UCpaso Muestra el nombre del archivo seleccionado y habilita el botón \IUbutton{Subir Documento}.
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Subir Documento}.
+    \UCpaso Valida que se haya seleccionado un archivo válido.
+    \UCpaso Sube el archivo al servidor y guarda la referencia en la base de datos.
+    \UCpaso Redirige a la pantalla de detalles de la mascota mostrando el nuevo documento en la lista.
+\end{UCtrayectoria}
+
+%--------------------------------------
+% Trayectorias Alternativas
+%--------------------------------------
+
+% Trayectoria A: Cancelar operación
+\begin{UCtrayectoriaA}{A}{El propietario cancela la operación}
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Cancelar} o el enlace "Volver a [Nombre Mascota]".
+    \UCpaso Regresa a la pantalla de detalles de la mascota sin guardar ningún documento.
+\end{UCtrayectoriaA}
+
+% Trayectoria B: Intento de subir sin archivo
+\begin{UCtrayectoriaA}{B}{El usuario intenta subir sin seleccionar archivo}
+    \UCpaso Detecta que la variable del archivo está vacía.
+    \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Por favor selecciona un archivo''.
+    \UCpaso Mantiene al usuario en el formulario para que pueda corregir.
+\end{UCtrayectoriaA}
+
+% Trayectoria C: Error del servidor
+\begin{UCtrayectoriaA}{C}{Fallo en la carga al servidor}
+    \UCpaso Intenta subir el documento pero recibe una respuesta de error del API.
+    \UCpaso Muestra el mensaje de error {\bf MSG-Error} (Ej. ``Error al subir el documento'' o mensaje específico del servidor).
+    \UCpaso Continúa en el paso 2 de la trayectoria principal permitiendo reintentar.
+\end{UCtrayectoriaA}

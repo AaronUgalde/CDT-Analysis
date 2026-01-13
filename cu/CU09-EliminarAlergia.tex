@@ -1,0 +1,94 @@
+% Caso de Uso: Eliminar Alergia
+% Sistema: Hotel Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU09}{Eliminar Alergia}{
+    Permite al Propietario eliminar un registro de alergia asociado a una de sus mascotas cuando este ha sido curado, fue registrado por error o ya no es relevante.
+}
+    \UCitem{Versión}{\color{Gray}1.0}
+    \UCitem{Autor}{\color{Gray}Axel}
+    \UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+    \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+    \UCitem{Propósito}{Mantener el perfil médico de la mascota actualizado, evitando restricciones alimenticias o de cuidados innecesarios.}
+    \UCitem{Entradas}{
+        \begin{itemize}
+            \item Selección de la alergia a eliminar.
+            \item Confirmación de la acción.
+        \end{itemize}
+    }
+    \UCitem{Origen}{Mouse / Pantalla táctil}
+    \UCitem{Salidas}{Mensaje de confirmación, Lista de alergias actualizada.}
+    \UCitem{Destino}{Pantalla y Base de Datos}
+    \UCitem{Precondiciones}{
+        \begin{itemize}
+            \item El propietario ha iniciado sesión.
+            \item El propietario se encuentra en el perfil de la mascota (CU02).
+            \item Existe al menos una alergia registrada para la mascota seleccionada.
+        \end{itemize}
+    }
+    \UCitem{Postcondiciones}{El registro de la alergia es eliminado permanentemente de la base de datos.}
+    \UCitem{Errores}{
+        \begin{itemize}
+            \item \textbf{E1}: La alergia no existe o ya fue eliminada.
+            \item \textbf{E2}: Error de conexión con el servidor.
+            \item \textbf{E3}: Intento de eliminar una alergia de una mascota ajena (No autorizado).
+        \end{itemize}
+    }
+    \UCitem{Tipo}{Secundario}
+\end{UseCase}
+
+%--------------------------------------
+% Trayectoria Principal
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+    \UCpaso[\UCactor] Localiza la alergia que desea borrar en la sección "Alergias" del perfil de la mascota.
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Eliminar} (icono de bote de basura) correspondiente al registro.
+    \UCpaso Muestra el mensaje de confirmación {\bf MSG1-}``¿Está seguro que desea eliminar esta alergia? Esta acción no se puede deshacer.''.
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Sí, eliminar}.
+    \UCpaso Solicita al servidor la eliminación del registro.
+    \UCpaso El sistema verifica que la alergia pertenezca a una mascota del propietario autenticado.
+    \UCpaso El sistema elimina el registro de la base de datos.
+    \UCpaso Muestra el mensaje de éxito {\bf MSG2-}``Alergia eliminada exitosamente''.
+    \UCpaso Actualiza la vista del perfil, retirando la alergia eliminada de la lista.
+\end{UCtrayectoria}
+
+%--------------------------------------
+% Trayectorias Alternativas
+%--------------------------------------
+
+% Trayectoria A: Cancelar operación
+\begin{UCtrayectoriaA}{A}{El propietario cancela la eliminación}
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Cancelar} en el cuadro de diálogo de confirmación.
+    \UCpaso Cierra el mensaje sin realizar cambios en el sistema.
+    \UCpaso Continúa mostrando la lista de alergias sin modificaciones.
+\end{UCtrayectoriaA}
+
+% Trayectoria B: Error de Concurrencia
+\begin{UCtrayectoriaA}{B}{La alergia no se encuentra (Error 404)}
+    \UCpaso El sistema intenta borrar el registro, pero este ya no existe en la base de datos (posiblemente borrado en otra sesión).
+    \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``La alergia no fue encontrada o ya ha sido eliminada''.
+    \UCpaso Actualiza la lista automáticamente para reflejar el estado real.
+\end{UCtrayectoriaA}
+
+% Trayectoria C: Error de Servidor
+\begin{UCtrayectoriaA}{C}{Fallo inesperado del sistema}
+    \UCpaso Ocurre un error interno al intentar procesar la solicitud (Error 500).
+    \UCpaso Muestra el mensaje {\bf MSG-Error} ``Ocurrió un error al procesar su solicitud. Intente más tarde.''.
+    \UCpaso Mantiene la información en pantalla permitiendo reintentar.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+% Puntos de extensión
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+    % Cuando:
+    El propietario desea agregar una nueva alergia en lugar de eliminar.
+}{
+    % Durante la región:
+    Paso 1 (Visualización de la lista).
+}{
+    % Casos de uso a los que extiende:
+    \hyperlink{CU08}{CU08 Agregar Alergia}.
+}

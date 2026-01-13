@@ -1,0 +1,89 @@
+﻿%--------------------------------------
+% Caso de Uso: Pagar Reservación
+%--------------------------------------
+
+\begin{UseCase}{CU-20}{Pagar Reservación}{
+	Permitir que un \hyperlink{Propietario}{Propietario} o \hyperlink{Administrador}{Administrador} registre un pago asociado a una reservación.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{\hyperlink{Propietario}{Propietario} o Recepcionista}
+	\UCitem{Propósito}{Registrar pagos para cubrir total o parcialmente el monto de una reservación.}
+	\UCitem{Entradas}{Monto a pagar, método de pago y referencia opcional.}
+	\UCitem{Origen}{Pantalla de detalle de reservación}
+	\UCitem{Salidas}{Pago registrado, saldo actualizado y comprobante generado.}
+	\UCitem{Destino}{Pantalla de detalle de reservación y base de datos}
+	\UCitem{Precondiciones}{
+		\begin{itemize}
+			\item La reservación debe existir.
+			\item La reservación debe tener saldo pendiente.
+			\item El monto ingresado debe ser válido.
+			\item El método de pago debe estar disponible.
+		\end{itemize}
+	}
+	\UCitem{Postcondiciones}{
+		\begin{itemize}
+			\item El pago queda registrado en el sistema.
+			\item El saldo de la reservación se actualiza.
+			\item Se genera un comprobante de pago.
+			\item El estado de la reservación puede actualizarse según el monto pagado.
+		\end{itemize}
+	}
+	\UCitem{Errores}{
+		Monto inválido, método de pago no disponible, error en la transacción, pago duplicado.
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		\begin{itemize}
+			\item Se permiten pagos parciales o totales.
+			\item Existen distintos métodos de pago.
+			\item Los pagos en línea requieren validación externa.
+		\end{itemize}
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Accede a la pantalla de detalle de una reservación.
+	\UCpaso[\UCactor] Selecciona la opción para registrar un pago.
+	\UCpaso El sistema muestra la información de la reservación y el saldo pendiente.
+	\UCpaso El sistema muestra los métodos de pago disponibles.
+	\UCpaso[\UCactor] Ingresa el monto a pagar.
+	\UCpaso El sistema valida que el monto sea correcto.
+	\UCpaso[\UCactor] Selecciona el método de pago.
+	\UCpaso El sistema procesa el pago según el método seleccionado.
+	\UCpaso[\UCactor] Confirma la operación.
+	\UCpaso El sistema registra el pago.
+	\UCpaso El sistema actualiza el saldo de la reservación.
+	\UCpaso El sistema evalúa si el pago cubre el total de la reservación.
+	\UCpaso El sistema genera el comprobante de pago.
+	\UCpaso El sistema muestra un mensaje indicando que el pago fue registrado correctamente.
+	\UCpaso[\UCactor] Puede imprimir o guardar el comprobante.
+	\UCpaso El sistema actualiza la información mostrada de la reservación.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Monto inválido}
+	\UCpaso El sistema informa que el monto ingresado no es válido.
+	\UCpaso El flujo regresa a la captura del monto.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Pago rechazado}
+	\UCpaso El sistema informa que la transacción no pudo completarse.
+	\UCpaso El flujo regresa a la selección del método de pago.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El usuario desea configurar un esquema de pagos a plazos.
+}{
+	Del paso 5.
+}{
+	Configurar Plan de Pagos.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

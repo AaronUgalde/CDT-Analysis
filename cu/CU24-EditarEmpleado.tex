@@ -1,0 +1,75 @@
+%--------------------------------------
+% Caso de Uso: Editar Empleado
+%--------------------------------------
+
+\begin{UseCase}{CU-23}{Editar Empleado}{
+	Permitir que el Administrador modifique la información de un empleado previamente registrado en el sistema del Hotel para Perros.
+}
+	\UCitem{Versión}{\color{Gray}1.1}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{Administrador}
+	\UCitem{Propósito}{Actualizar los datos personales y laborales de un empleado.}
+	\UCitem{Entradas}{Nombre, email, teléfono, puesto y salario.}
+	\UCitem{Origen}{Teclado}
+	\UCitem{Salidas}{Datos del empleado actualizados y mensaje de confirmación.}
+	\UCitem{Destino}{Pantalla de lista de empleados}
+	\UCitem{Precondiciones}{
+		El Administrador debe haber iniciado sesión y el empleado debe existir en el sistema.
+	}
+	\UCitem{Postcondiciones}{
+		La información del empleado queda actualizada en la base de datos.
+	}
+	\UCitem{Errores}{
+		Empleado no encontrado, datos inválidos, permisos insuficientes.
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		La edición solo puede ser realizada por usuarios con rol de administrador.
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Selecciona la opción \IUbutton{Editar} correspondiente a un empleado en la Pantalla de Lista de Empleados.
+	\UCpaso El sistema muestra la Pantalla de Edición de Empleado con los datos actuales del empleado.
+	\UCpaso[\UCactor] Modifica uno o más campos del formulario.
+	\UCpaso[\UCactor] Presiona el botón \IUbutton{Guardar}.
+	\UCpaso El sistema valida que los datos ingresados sean correctos.
+	\UCpaso El sistema verifica que el empleado exista en el sistema.
+	\UCpaso El sistema actualiza la información del empleado en la base de datos.
+	\UCpaso El sistema muestra el mensaje ``Empleado actualizado correctamente''.
+	\UCpaso El sistema regresa a la Pantalla de Lista de Empleados.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Empleado no encontrado}
+	\UCpaso El sistema muestra el mensaje ``El empleado seleccionado no existe''.
+	\UCpaso Termina el caso de uso.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Datos inválidos}
+	\UCpaso El sistema muestra mensajes indicando los campos que contienen errores.
+	\UCpaso Continúa en el paso 3 de la trayectoria principal.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{C}{Permisos insuficientes}
+	\UCpaso El sistema muestra el mensaje ``No cuenta con permisos para editar empleados''.
+	\UCpaso Termina el caso de uso.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El Administrador desea consultar el historial del empleado.
+}{
+	Del paso 2 al paso 4.
+}{
+	Consultar Empleado.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso
+

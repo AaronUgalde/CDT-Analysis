@@ -1,0 +1,92 @@
+﻿%--------------------------------------
+% Caso de Uso: Eliminar Servicio de Reservación
+%--------------------------------------
+
+\begin{UseCase}{CU-19}{Eliminar Servicio de Reservación}{
+	Permitir que un usuario autorizado elimine o cancele un servicio adicional previamente agregado a una reservación.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{\hyperlink{Administrador}{Administrador} o \hyperlink{Empleado}{Empleado}}
+	\UCitem{Propósito}{Remover un servicio adicional de una reservación, actualizando costos y disponibilidades.}
+	\UCitem{Entradas}{Servicio seleccionado y motivo opcional.}
+	\UCitem{Origen}{Pantalla de detalle de reservación}
+	\UCitem{Salidas}{Servicio cancelado, costo actualizado y disponibilidad liberada.}
+	\UCitem{Destino}{Pantalla de detalle de reservación y base de datos}
+	\UCitem{Precondiciones}{
+		\begin{itemize}
+			\item El usuario debe haber iniciado sesión con permisos adecuados.
+			\item La reservación debe existir.
+			\item El servicio debe estar asociado a la reservación.
+			\item El servicio debe encontrarse en un estado cancelable.
+		\end{itemize}
+	}
+	\UCitem{Postcondiciones}{
+		\begin{itemize}
+			\item El servicio queda cancelado o eliminado.
+			\item El costo total de la reservación se actualiza.
+			\item El empleado asignado queda disponible.
+			\item El horario del servicio se libera en el calendario.
+		\end{itemize}
+	}
+	\UCitem{Errores}{
+		Servicio no encontrado, permisos insuficientes, servicio no cancelable, error al actualizar la información.
+	}
+	\UCitem{Tipo}{Caso de uso secundario}
+	\UCitem{Observaciones}{
+		\begin{itemize}
+			\item Los servicios ya realizados no pueden eliminarse.
+			\item Puede aplicarse un cargo por cancelación si el servicio estaba próximo a realizarse.
+			\item Se notifica al empleado asignado cuando el servicio es cancelado.
+		\end{itemize}
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Accede a la pantalla de detalle de una reservación.
+	\UCpaso[\UCactor] Selecciona un servicio asociado a la reservación.
+	\UCpaso[\UCactor] Selecciona la opción para eliminar el servicio.
+	\UCpaso El sistema solicita confirmación y permite ingresar un motivo opcional.
+	\UCpaso[\UCactor] Confirma la eliminación del servicio.
+	\UCpaso El sistema verifica los permisos del usuario.
+	\UCpaso El sistema valida que el servicio pueda cancelarse.
+	\UCpaso El sistema registra la cancelación del servicio.
+	\UCpaso El sistema libera la disponibilidad del empleado asignado.
+	\UCpaso El sistema actualiza el costo total de la reservación.
+	\UCpaso El sistema libera el horario en el calendario de servicios.
+	\UCpaso El sistema muestra un mensaje indicando que el servicio fue eliminado correctamente.
+	\UCpaso El sistema actualiza la pantalla de detalle de la reservación.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Servicio no encontrado}
+	\UCpaso El sistema informa que el servicio seleccionado no existe.
+	\UCpaso El caso de uso termina sin realizar cambios.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Permisos insuficientes}
+	\UCpaso El sistema informa que el usuario no tiene permisos para eliminar el servicio.
+	\UCpaso El caso de uso termina sin realizar cambios.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{C}{Servicio no cancelable}
+	\UCpaso El sistema informa que el servicio no puede eliminarse en su estado actual.
+	\UCpaso El caso de uso termina sin realizar cambios.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El usuario desea ajustar cargos derivados de la cancelación del servicio.
+}{
+	Del paso 8.
+}{
+	Procesar Ajuste por Cancelación.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

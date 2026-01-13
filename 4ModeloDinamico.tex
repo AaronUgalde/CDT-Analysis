@@ -24,21 +24,72 @@
 \section{Descripción de actores}
 
 %---------------------------------------------------------
-\begin{Usuario}{\hypertarget{getenteOperaciones}{\subsection{Gerente de Operaciones}}}{
-	Es el encargado de todas las operaciones de la empresa y está por encima de los ejecutivos de producción y de ventas principalmente.
+\begin{Usuario}{\hypertarget{Propietario}{\subsection{Propietario}}}{
+	Es el dueño de una o más mascotas que utiliza el sistema para gestionar la información de sus animales y realizar reservaciones de servicios del hotel canino.
 }
     \item[Responsabilidades:] \cdtEmpty
     \begin{itemize}
-		\item Supervisar la operación.
-		\item Plantear y supervisar el logro de las metas de la empresa y su crecimiento económico.
-		\item ...
+		\item Registrar y mantener actualizada la información de sus mascotas (datos personales, historial médico, vacunas, alergias, documentos).
+		\item Crear, consultar, modificar y cancelar reservaciones para hospedaje de sus mascotas.
+		\item Gestionar sus datos personales (información de contacto, direcciones, teléfonos).
+		\item Realizar pagos por los servicios contratados.
+		\item Consultar el historial de servicios y reservaciones de sus mascotas.
     \end{itemize}
 
 	\item[Perfil:] \cdtEmpty
     \begin{itemize}
-		\item Amplia experiencia en el ramo.
-		\item Licenciatura como mínimo.
-		\item ...
+		\item Dueño de una o más mascotas.
+		\item Usuario registrado en el sistema con correo electrónico y contraseña.
+		\item Rol asignado: Cliente (rol\_id = 2).
+		\item Conocimientos básicos de navegación web o uso de aplicaciones móviles.
+    \end{itemize}
+\end{Usuario}
+
+%---------------------------------------------------------
+\begin{Usuario}{\hypertarget{Administrador}{\subsection{Administrador}}}{
+	Es el personal del hotel canino con privilegios administrativos para gestionar el sistema, los empleados, servicios y habitaciones.
+}
+    \item[Responsabilidades:] \cdtEmpty
+    \begin{itemize}
+		\item Gestionar catálogos del sistema (especies, razas, enfermedades, servicios, habitaciones).
+		\item Administrar información de empleados y asignar especialidades.
+		\item Supervisar y gestionar reservaciones de todos los clientes.
+		\item Asignar habitaciones y servicios a las reservaciones.
+		\item Configurar citas de servicios y asignar empleados responsables.
+		\item Generar reportes y consultas del sistema.
+		\item Mantener la integridad y seguridad de la información.
+    \end{itemize}
+
+	\item[Perfil:] \cdtEmpty
+    \begin{itemize}
+		\item Empleado del hotel canino con rol administrativo.
+		\item Usuario registrado con rol: Admin (rol\_id = 1).
+		\item Conocimiento completo del funcionamiento del hotel y sus procesos.
+		\item Capacidad para tomar decisiones sobre asignación de recursos.
+		\item Experiencia en sistemas de gestión y atención al cliente.
+    \end{itemize}
+\end{Usuario}
+
+%---------------------------------------------------------
+\begin{Usuario}{\hypertarget{Empleado}{\subsection{Empleado}}}{
+	Es el personal operativo del hotel que brinda servicios directos a las mascotas (veterinarios, peluqueros, cuidadores, etc.).
+}
+    \item[Responsabilidades:] \cdtEmpty
+    \begin{itemize}
+		\item Ejecutar los servicios asignados en las citas programadas.
+		\item Brindar atención veterinaria, peluquería, entrenamiento u otros servicios especializados.
+		\item Registrar notas y observaciones sobre los servicios brindados.
+		\item Consultar información relevante de las mascotas bajo su cuidado (alergias, enfermedades, historial).
+		\item Reportar incidencias o situaciones especiales al administrador.
+    \end{itemize}
+
+	\item[Perfil:] \cdtEmpty
+    \begin{itemize}
+		\item Personal capacitado en el cuidado y atención de mascotas.
+		\item Especialidad definida: veterinaria, peluquería, entrenamiento, cuidado general.
+		\item Certificaciones o licencias profesionales según la especialidad (ej. médico veterinario).
+		\item Experiencia práctica en el trato con animales.
+		\item Capacidad para seguir protocolos de seguridad e higiene.
     \end{itemize}
 \end{Usuario}
 
@@ -47,7 +98,32 @@ A continuación se detallan los casos de uso.
 %---------------------------------------------------------
 % CASOS DE USO
 
-\input{cu/cu17}
-
+\input{cu/CU01-CrearMascota}
+\input{cu/CU02-EliminarMascota}
+\input{cu/CU03-ConsultarMisMascotas}
+\input{cu/CU04-ConsultarDetalleMascota}
+\input{cu/CU05-AgregarVacuna}
+\input{cu/CU07-AgregarAlergia}
+\input{cu/CU09-EliminarAlergia}
+\input{cu/CU10-AgregarDesparasitacion}
+\input{cu/CU11-EliminarDesparasitacion}
+\input{cu/CU12-AgregarDocumento}
+\input{cu/CU13-EliminarDocumento}
+\input{cu/CU14-VerDocumento}
+\input{cu/CU14-ConsultarDetalleMascota}
+\input{cu/CU15-CrearReservacion}
+\input{cu/CU16-ConsultarReservaciones}
+\input{cu/CU17-EliminarReservacion}
+\input{cu/CU18-AgregarServicioReservacion}
+\input{cu/CU19-EliminarServicioReservacion}
+\input{cu/CU20-PagarReservacion}
+\input{cu/CU21-VerDetallesReservacion}
+\input{cu/CU22-VerEmpleados}
+\input{cu/CU23-AgregarEmpleado}
+\input{cu/CU24-EditarEmpleado}
+\input{cu/CU25-EliminarEmpleado}
+\input{cu/CU27-VerDetalleEmpleado}
+\input{cu/CU31-VerCitasEmpleado}
+\input{cu/cu_agregar_historial_medico}
 
 

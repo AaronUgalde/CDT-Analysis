@@ -1,0 +1,112 @@
+ %-------------------------------------- COMIENZA descripción del caso de uso.
+
+  \begin{UseCase}{CU05}{Agregar Vacuna}{
+      Permite al Propietario registrar una nueva vacuna en el historial médico de una de sus mascotas, especificando el tipo de vacuna, fechas de aplicación
+  y vigencia.
+  }
+      \UCitem{Versión}{\color{Gray}1.0}
+      \UCitem{Autor}{\color{Gray}Jared}
+      \UCitem{Supervisa}{\color{Gray}Ulises velez saldaña}
+      \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+      \UCitem{Propósito}{Mantener un registro completo y actualizado de las vacunaciones de una mascota para asegurar su salud, cumplir con los requisitos
+  del hotel y llevar un control de las fechas de revacunación.}
+      \UCitem{Entradas}{
+          \begin{itemize}
+              \item ID de la mascota (desde la URL).
+              \item ID de la vacuna (opcional, del catálogo).
+              \item Nombre de la vacuna (opcional, si no se selecciona del catálogo).
+              \item Fecha de aplicación.
+              \item Fecha de vigencia.
+              \item Nombre del veterinario.
+              \item Notas adicionales.
+          \end{itemize}
+      }
+      \UCitem{Origen}{Teclado / Mouse}
+      \UCitem{Salidas}{
+          \begin{itemize}
+              \item Mensaje de confirmación del registro.
+              \item Redirección a la pantalla de detalle de la mascota con la lista de vacunas actualizada.
+          \end{itemize}
+      }
+      \UCitem{Destino}{Pantalla y Base de Datos}
+      \UCitem{Precondiciones}{
+          \begin{itemize}
+              \item El Propietario ha iniciado sesión en el sistema.
+              \item El Propietario se encuentra en la \IUref{IU-PetDetail}{Pantalla de Detalle de Mascota}.
+          \end{itemize}
+      }
+      \UCitem{Postcondiciones}{Se crea un nuevo registro en la tabla vacunas mascotas de la base de datos, asociado a la mascota correspondiente.}
+      \UCitem{Errores}{
+          \begin{itemize}
+              \item \textbf{E1}: Datos del formulario inválidos (ej. formato de fecha incorrecto).
+              \item \textbf{E2}: El usuario no está autenticado o la sesión ha expirado.
+              \item \textbf{E3}: La mascota especificada no existe o no pertenece al usuario.
+              \item \textbf{E4}: Error inesperado del servidor al intentar guardar el registro.
+          \end{itemize}
+      }
+      \UCitem{Tipo}{Secundario}
+  \end{UseCase}
+  %--------------------------------------
+  % Trayectoria Principal
+  %--------------------------------------
+  \begin{UCtrayectoria}{Principal}
+      \UCpaso[\UCactor] Desde la \IUref{IU-PetDetail}{Pantalla de Detalle de Mascota}, oprime el botón \IUbutton{Agregar Vacuna}.
+      \UCpaso El sistema despliega la \IUref{IU-AddVaccineForm}{Formulario de Registro de Vacuna}.
+      \UCpaso[\UCactor] Ingresa los datos de la vacunación en los campos correspondientes. \label{CU05-FillForm}
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Guardar Vacuna}. \label{CU05-Submit}
+      \UCpaso El sistema valida que los datos ingresados tengan el formato correcto con base en la regla \BRref{BR-VaccineValidation}{Validación de Datos de Vacunación}. \Trayref{A}.
+      \UCpaso El sistema envía una petición POST /api/pet-vaccinations/:mascotaId al servidor.
+      \UCpaso El sistema verifica que la sesión del usuario sea válida con base en la regla \BRref{BR-AuthCheck}{Verificación de Autenticación}. \Trayref{B}.
+      \UCpaso El sistema confirma que la mascota pertenece al propietario autenticado con base en la regla \BRref{BR-PetOwnership}{Verificación de Propiedad de Mascota}. \Trayref{C}.
+      \UCpaso Registra la nueva vacunación en la base de datos. \Trayref{D}.
+      \UCpaso Muestra el mensaje de éxito {\bf MSG1-}``Vacuna registrada exitosamente''.
+      \UCpaso Redirige al usuario a la \IUref{IU-PetDetail}{Pantalla de Detalle de Mascota}, que ahora muestra la nueva vacuna en el historial.
+  \end{UCtrayectoria}
+  
+  %--------------------------------------
+  % Trayectorias Alternativas
+  %--------------------------------------
+  
+  \begin{UCtrayectoriaA}{A}{Datos inválidos}
+      \UCpaso El sistema detecta que uno o más campos tienen un formato incorrecto (ej. fecha inválida).
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Por favor, corrija los campos marcados.''.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+      \UCpaso[] El sistema permite al usuario corregir los datos en el formulario.
+      \UCpaso Continúa en el paso 5 de la trayectoria principal.
+  \end{UCtrayectoriaA}
+  
+  \begin{UCtrayectoriaA}{B}{Sesión inválida o expirada}
+      \UCpaso El sistema detecta que el token de autenticación es inválido.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``No estás autorizado''.
+      \UCpaso[] Redirige al usuario a la \IUref{IU-Login}{Pantalla de Inicio de Sesión}.
+      \UCpaso[] Termina el caso de uso.
+  \end{UCtrayectoriaA}
+  
+  \begin{UCtrayectoriaA}{C}{Mascota no encontrada o no autorizada}
+      \UCpaso[CU05-\ref{CU05-Submit}] El sistema determina que la mascota no existe o no pertenece al usuario autenticado.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Mascota no encontrada o no pertenece al propietario''.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+      \UCpaso[] Termina el caso de uso.
+  \end{UCtrayectoriaA}
+  
+  \begin{UCtrayectoriaA}{D}{Fallo inesperado del sistema}
+      \UCpaso[CU05-\ref{CU05-Submit}] Ocurre un error interno en el servidor al intentar registrar la vacunación.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Error al agregar la vacuna''.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+      \UCpaso[] El sistema permanece en el formulario, permitiendo al usuario reintentar la operación.
+  \end{UCtrayectoriaA}
+  
+  %--------------------------------------
+  % Puntos de extensión
+  %--------------------------------------
+  \subsection{Puntos de extensión}
+  \UCExtenssionPoint{
+      % Cuando:
+      El Propietario decide cancelar la operación de registro.
+  }{
+      % Durante la región:
+      Pasos 2-4 (Mientras se encuentra en el formulario de registro).
+  }{
+      % Casos de uso a los que extiende:
+      El Propietario oprime el botón \IUbutton{Cancelar} y el sistema regresa a \hyperlink{CU14}{CU14 Consultar Detalle de Mascota}.
+  }    %-------------------------------------- TERMINA descripción del caso de uso.

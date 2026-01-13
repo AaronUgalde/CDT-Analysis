@@ -1,0 +1,63 @@
+﻿%--------------------------------------
+% Caso de Uso: Ver Detalle de Empleado
+%--------------------------------------
+
+\begin{UseCase}{CU-27}{Ver Detalle de Empleado}{
+	Permitir que el usuario autenticado consulte la información detallada de un empleado registrado en el sistema del Hotel para Perros.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{\hyperlink{Propietario}{Propietario} o \hyperlink{Administrador}{Administrador}}
+	\UCitem{Propósito}{Visualizar la información completa de un empleado específico.}
+	\UCitem{Entradas}{Selección de un empleado.}
+	\UCitem{Origen}{Pantalla}
+	\UCitem{Salidas}{Información detallada del empleado mostrada en pantalla.}
+	\UCitem{Destino}{Pantalla de detalle de empleado}
+	\UCitem{Precondiciones}{
+		El usuario debe haber iniciado sesión y el empleado debe existir en el sistema.
+	}
+	\UCitem{Postcondiciones}{
+		La información detallada del empleado es mostrada correctamente.
+	}
+	\UCitem{Errores}{
+		Empleado no encontrado, sesión no válida.
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		Los usuarios no administradores solo pueden visualizar información básica del empleado.
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Selecciona un empleado desde la Pantalla de Lista de Empleados.
+	\UCpaso El sistema solicita la información detallada del empleado.
+	\UCpaso El sistema recupera los datos del empleado seleccionado.
+	\UCpaso El sistema muestra la información detallada del empleado en la pantalla.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Empleado no encontrado}
+	\UCpaso El sistema muestra el mensaje ``El empleado seleccionado no existe''.
+	\UCpaso El caso de uso termina.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Sesión no válida}
+	\UCpaso El sistema muestra el mensaje ``La sesión ha expirado''.
+	\UCpaso El sistema solicita al usuario iniciar sesión nuevamente.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El Administrador desea editar la información del empleado.
+}{
+	Del paso 4.
+}{
+	Editar Empleado.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

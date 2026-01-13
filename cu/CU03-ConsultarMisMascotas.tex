@@ -1,0 +1,114 @@
+
+  %-------------------------------------- COMIENZA descripción del caso de uso.
+
+  \begin{UseCase}{CU03}{Consultar Mis Mascotas}{
+      Permite al Propietario visualizar una lista que resume todas las mascotas que tiene registradas en su perfil, sirviendo como punto de acceso para
+  gestionarlas.
+  }
+      \UCitem{Versión}{\color{Gray}1.0}
+      \UCitem{Autor}{\color{Gray}Jared}
+      \UCitem{Supervisa}{\color{Gray}[Ulises Velez Saldaña]}
+      \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+      \UCitem{Propósito}{Ofrecer al Propietario una vista general y un punto de acceso centralizado a los perfiles de todas sus mascotas registradas para
+  una gestión rápida.}
+      \UCitem{Entradas}{
+          \begin{itemize}
+              \item Token de sesión del Propietario (implícito en la petición).
+          \end{itemize}
+      }
+      \UCitem{Origen}{Navegación del usuario (clic en menú "Mis Mascotas").}
+      \UCitem{Salidas}{
+          \begin{itemize}
+              \item Lista de mascotas del propietario, mostrando nombre, especie y datos básicos.
+              \item Mensaje indicando que no hay mascotas registradas (si aplica).
+          \end{itemize}
+      }
+      \UCitem{Destino}{Pantalla}
+      \UCitem{Precondiciones}{
+          \begin{itemize}
+              \item El Propietario debe haber iniciado sesión en el sistema.
+          \end{itemize}
+      }
+      \UCitem{Postcondiciones}{Ninguna. Este caso de uso es de sólo consulta y no modifica el estado del sistema.}
+      \UCitem{Errores}{
+          \begin{itemize}
+              \item \textbf{E1}: El Propietario no tiene mascotas registradas.
+              \item \textbf{E2}: Usuario no autenticado o sesión expirada.
+              \item \textbf{E3}: Error de conexión con el servidor.
+          \end{itemize}
+      }
+      \UCitem{Tipo}{Primario}
+  \end{UseCase}
+  %--------------------------------------
+  % Trayectoria Principal
+  %--------------------------------------
+  \begin{UCtrayectoria}{Principal}
+      \UCpaso[\UCactor] Selecciona la opción "Mis Mascotas" desde el menú principal de navegación. \label{CU03-Start}
+      \UCpaso El sistema solicita al servidor la lista de mascotas del usuario autenticado a través de una petición GET /api/pets.
+      \UCpaso El sistema verifica la sesión activa del usuario con base en la regla \BRref{BR-AuthCheck}{Verificación de Autenticación}. \Trayref{B}.
+      \UCpaso El sistema consulta la base de datos para obtener todas las mascotas asociadas al propietario\_id del usuario. \Trayref{C}.
+      \UCpaso El sistema verifica si la lista de mascotas obtenida contiene registros. \Trayref{A}.
+      \UCpaso Despliega la \IUref{IU-PetList}{Lista de Mascotas}, mostrando una tarjeta resumen por cada mascota encontrada.
+  \end{UCtrayectoria}
+  
+  %--------------------------------------
+  % Trayectorias Alternativas
+  %--------------------------------------
+  
+  % Trayectoria A: No hay mascotas
+  \begin{UCtrayectoriaA}{A}{El Propietario no tiene mascotas registradas}
+      \UCpaso El sistema determina que no existen mascotas asociadas al perfil del Propietario.
+      \UCpaso Muestra el mensaje {\bf MSG1-}``No tienes mascotas registradas'' y un botón \IUbutton{Agregar Primera Mascota}.
+      \UCpaso El caso de uso finaliza, a la espera de una acción del actor.
+  \end{UCtrayectoriaA}
+  
+  % Trayectoria B: Sesión inválida
+  \begin{UCtrayectoriaA}{B}{Sesión inválida o expirada}
+      \UCpaso El sistema detecta que el token de autenticación es inválido o no existe.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``No estás autorizado''.
+      \UCpaso[] Redirige al usuario a la \IUref{IU-Login}{Pantalla de Inicio de Sesión}.
+      \UCpaso[] Termina el caso de uso.
+  \end{UCtrayectoriaA}
+  
+  % Trayectoria C: Fallo del sistema
+  \begin{UCtrayectoriaA}{C}{Fallo inesperado del sistema}
+      \UCpaso Ocurre un error interno en el servidor al intentar consultar la base de datos.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Error al cargar las mascotas''.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar} o recarga la página.
+      \UCpaso[] Termina el caso de uso.
+  \end{UCtrayectoriaA}
+  
+  %--------------------------------------
+  % Puntos de extensión
+  %--------------------------------------
+  \subsection{Puntos de extensión}
+  \UCExtenssionPoint{
+      % Cuando:
+      El Propietario desea registrar una nueva mascota.
+  }{
+      % Durante la región:
+      Cualquier paso de la trayectoria principal o alternativa A.
+  }{
+      % Casos de uso a los que extiende:
+      \hyperlink{CU-01}{CU-01 Crear Mascota}.
+  }
+  \UCExtenssionPoint{
+      % Cuando:
+      El Propietario desea modificar los datos de una mascota existente desde la lista.
+  }{
+      % Durante la región:
+      Paso 6 (Visualización de la lista de mascotas).
+  }{
+      % Casos de uso a los que extiende:
+      \hyperlink{CU-14}{CU-14 Ver detalles de mascota}.
+  }
+  \UCExtenssionPoint{
+      % Cuando:
+      El Propietario desea eliminar el registro de una mascota desde la lista.
+  }{
+      % Durante la región:
+      Paso 6 (Visualización de la lista de mascotas).
+  }{
+      % Casos de uso a los que extiende:
+      \hyperlink{CU02}{CU02 Eliminar Mascota}.
+  }    %-------------------------------------- TERMINA descripción del caso de uso.

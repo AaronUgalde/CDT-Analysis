@@ -1,0 +1,85 @@
+% Caso de Uso: Ver Documento
+% Sistema: Hotel Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU14}{Ver Documento}{
+    Permite al Propietario consultar la lista de documentos registrados de su mascota y visualizar o descargar el archivo digital correspondiente (PDF, imagen, etc.).
+}
+    \UCitem{Versión}{\color{Gray}1.0}
+    \UCitem{Autor}{\color{Gray}Axel}
+    \UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+    \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+    \UCitem{Propósito}{Acceder a la información médica o legal de la mascota almacenada digitalmente para su revisión o impresión.}
+    \UCitem{Entradas}{Selección del documento a visualizar.}
+    \UCitem{Origen}{Mouse / Pantalla táctil}
+    \UCitem{Salidas}{Lista de documentos, Archivo digital visualizado en navegador o descargado.}
+    \UCitem{Destino}{Pantalla}
+    \UCitem{Precondiciones}{
+        \begin{itemize}
+            \item El propietario ha iniciado sesión.
+            \item El propietario ha seleccionado una mascota para ver sus detalles.
+        \end{itemize}
+    }
+    \UCitem{Postcondiciones}{El sistema presenta el archivo solicitado al usuario.}
+    \UCitem{Errores}{
+        \begin{itemize}
+            \item \textbf{E1}: No se encontraron documentos registrados para la mascota.
+            \item \textbf{E2}: El archivo físico no se encuentra en el servidor (Error 404 físico).
+            \item \textbf{E3}: El usuario no tiene permiso para ver este documento (Error 403).
+        \end{itemize}
+    }
+    \UCitem{Tipo}{Secundario}
+\end{UseCase}
+
+%--------------------------------------
+% Trayectoria Principal
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+    \UCpaso[\UCactor] Accede a la sección de "Documentos" dentro del perfil de la mascota.     \UCpaso Solicita al servidor la lista de documentos asociados a la mascota.     \UCpaso El sistema busca los registros y muestra una lista con: Nombre del documento, Tipo y Fecha de subida.     \UCpaso[\UCactor] Selecciona un documento de la lista haciendo clic en su nombre o en el botón \IUbutton{Ver/Descargar}.     \UCpaso El sistema verifica que el usuario tenga permisos sobre el archivo.     \UCpaso El sistema verifica que el archivo físico exista en la ruta de almacenamiento.     \UCpaso El sistema envía el archivo al navegador para su visualización o descarga.
+\end{UCtrayectoria}
+
+%--------------------------------------
+% Trayectorias Alternativas
+%--------------------------------------
+
+% Trayectoria A: Sin documentos
+\begin{UCtrayectoriaA}{A}{La mascota no tiene documentos registrados}
+    \UCpaso El sistema busca en la base de datos y no encuentra registros para el ID de la mascota.     \UCpaso Muestra el mensaje ``No hay documentos registrados para esta mascota''.     \UCpaso Muestra la opción \IUbutton{Agregar Documento} para invitar al registro.
+\end{UCtrayectoriaA}
+
+% Trayectoria B: Archivo físico perdido
+\begin{UCtrayectoriaA}{B}{Inconsistencia de datos (El archivo no existe en disco)}
+    \UCpaso El sistema localiza el registro en la base de datos, pero al intentar leer el archivo físico (fs.existsSync) falla.     \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Archivo no encontrado en servidor''.     \UCpaso Permanece en la lista de documentos permitiendo seleccionar otro.
+\end{UCtrayectoriaA}
+
+% Trayectoria C: Acceso no autorizado
+\begin{UCtrayectoriaA}{C}{Intento de acceso a documentos ajenos}
+    \UCpaso El sistema detecta que el documento pertenece a un propietario distinto al autenticado.     \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``No autorizado''.     \UCpaso Redirige al usuario a la página principal o lista de sus mascotas.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+% Puntos de extensión
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+    % Cuando:
+    El propietario desea subir un nuevo archivo desde la lista.
+}{
+    % Durante la región:
+    Paso 3 (Visualización de la lista).
+}{
+    % Casos de uso a los que extiende:
+    \hyperlink{CU12}{CU12 Agregar Documento}.
+}
+
+\UCExtenssionPoint{
+    % Cuando:
+    El propietario desea borrar un archivo obsoleto.
+}{
+    % Durante la región:
+    Paso 3 (Visualización de la lista).
+}{
+    % Casos de uso a los que extiende:
+    \hyperlink{CU13}{CU13 Eliminar Documento}.
+}

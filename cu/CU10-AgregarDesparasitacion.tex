@@ -1,0 +1,180 @@
+% Caso de Uso: Agregar Desparasitación
+% Sistema: Hotel Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU08}{Agregar Desparasitación}{
+    Permitir al Propietario registrar un tratamiento de desparasitación realizado a su mascota para mantener un historial médico completo y actualizado.
+}
+    \UCitem{Versión}{\color{Gray}1.0}
+    \UCitem{Autor}{\color{Gray}Equipo Hotel Perros}
+    \UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+    \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+    \UCitem{Propósito}{Registrar información sobre tratamientos de desparasitación aplicados a las mascotas para llevar un control médico adecuado.}
+    \UCitem{Entradas}{Tipo de desparasitación, Producto utilizado, Fecha de aplicación, Próxima fecha programada.}
+    \UCitem{Origen}{Teclado}
+    \UCitem{Salidas}{Confirmación de registro exitoso, comprobante de desparasitación registrada, historial actualizado de la mascota.}
+    \UCitem{Destino}{Pantalla e impresora para comprobante}
+    \UCitem{Precondiciones}{
+        \begin{itemize}
+            \item El propietario debe estar autenticado en el sistema.
+            \item El propietario debe tener al menos una mascota registrada.
+            \item La mascota debe pertenecer al propietario autenticado.
+        \end{itemize}
+    }
+    \UCitem{Postcondiciones}{
+        \begin{itemize}
+            \item La desparasitación queda registrada en el historial médico de la mascota.
+            \item Se actualiza la fecha de próxima desparasitación recomendada.
+            \item El sistema puede enviar recordatorios basándose en la próxima fecha programada.
+        \end{itemize}
+    }
+    \UCitem{Errores}{
+        \begin{itemize}
+            \item MSG1: La mascota no existe o no pertenece al propietario.
+            \item MSG2: Formato de fecha inválido.
+            \item MSG3: La próxima fecha debe ser posterior a la fecha de aplicación.
+            \item MSG4: Campos requeridos faltantes.
+        \end{itemize}
+    }
+    \UCitem{Tipo}{Caso de uso primario}
+    \UCitem{Observaciones}{
+        \begin{itemize}
+            \item El tipo de desparasitación puede ser: interna, externa o ambas.
+            \item Se recomienda registrar el producto comercial utilizado para futuras referencias.
+            \item El sistema puede sugerir la próxima fecha basándose en recomendaciones veterinarias estándar.
+        \end{itemize}
+    }
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+    \UCpaso[\UCactor] Accede al sistema con su correo electrónico y contraseña mediante la \IUref{IU01}{Pantalla de Inicio de Sesión}\label{CU08Login}.
+    \UCpaso[\UCactor] Confirma el acceso presionando el botón \IUbutton{Iniciar Sesión}.
+    \UCpaso Verifica las credenciales del propietario con base en la regla \BRref{BR01}{Autenticar Usuario}.
+    \UCpaso Despliega la \IUref{IU10}{Pantalla Principal del Propietario} con el listado de sus mascotas registradas.
+    \UCpaso[\UCactor] Selecciona la mascota a la que desea agregar el registro de desparasitación \Trayref{A}\label{CU08SeleccionarMascota}.
+    \UCpaso Verifica que la mascota pertenezca al propietario autenticado con base en la regla \BRref{BR10}{Verificar Propiedad de Mascota} \Trayref{B}.
+    \UCpaso Despliega la \IUref{IU25}{Pantalla de Detalle de Mascota} con las opciones del historial médico.
+    \UCpaso[\UCactor] Selecciona la opción ``Agregar Desparasitación'' en el menú de historial médico.
+    \UCpaso Despliega el \IUref{IU26}{Formulario de Registro de Desparasitación}.
+    \UCpaso[\UCactor] Ingresa el tipo de desparasitación (interna, externa o ambas) \Trayref{C}.
+    \UCpaso[\UCactor] Ingresa el nombre del producto utilizado (opcional).
+    \UCpaso[\UCactor] Selecciona la fecha de aplicación del tratamiento \Trayref{D}.
+    \UCpaso[\UCactor] Selecciona la próxima fecha programada para desparasitación (opcional) \Trayref{E}.
+    \UCpaso[\UCactor] Confirma el registro presionando el botón \IUbutton{Guardar Desparasitación}.
+    \UCpaso Valida que todos los campos requeridos estén completos con base en la regla \BRref{BR30}{Validar Datos de Desparasitación} \Trayref{F}.
+    \UCpaso Valida que las fechas ingresadas sean coherentes con base en la regla \BRref{BR31}{Validar Fechas de Desparasitación} \Trayref{G}.
+    \UCpaso Registra la desparasitación en la base de datos asociada a la mascota.
+    \UCpaso Muestra el mensaje ``Desparasitación registrada exitosamente'' mediante la \IUref{IU27}{Pantalla de Confirmación de Registro}.
+    \UCpaso Actualiza el historial médico de la mascota en la \IUref{IU25}{Pantalla de Detalle de Mascota}.
+    \UCpaso Pregunta al propietario si desea imprimir un comprobante del registro.
+    \UCpaso[\UCactor] Indica que desea imprimir el comprobante \Trayref{H}.
+    \UCpaso Genera e imprime el \IUref{IU28}{Comprobante de Desparasitación Registrada} con base en la regla \BRref{BR32}{Formato de Comprobante de Desparasitación}.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{El propietario no tiene mascotas registradas}
+    \UCpaso Muestra el Mensaje {\bf MSG5-}``No tiene mascotas registradas en el sistema. Debe registrar al menos una mascota para continuar.''.
+    \UCpaso Despliega la opción de \IUbutton{Registrar Nueva Mascota}.
+    \UCpaso[\UCactor] Selecciona registrar una nueva mascota o cancelar la operación.
+    \UCpaso Si selecciona registrar, redirige al \UCref{CU02}{Registrar Mascota}.
+    \UCpaso Si cancela, continúa en el paso \ref{CU08Login} del \UCref{CU08}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{La mascota no pertenece al propietario}
+    \UCpaso Muestra el Mensaje {\bf MSG1-}``La mascota seleccionada no existe o no pertenece a su cuenta.''.
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+    \UCpaso Continúa en el paso \ref{CU08SeleccionarMascota} del \UCref{CU08}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{C}{El propietario decide no especificar el tipo}
+    \UCpaso[\UCactor] Deja el campo de tipo vacío o selecciona ``No especificado''.
+    \UCpaso El sistema asigna el valor por defecto ``General''.
+    \UCpaso Continúa con el paso siguiente del \UCref{CU08}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{D}{Fecha de aplicación inválida}
+    \UCpaso El sistema detecta que la fecha ingresada no tiene un formato válido.
+    \UCpaso Muestra el Mensaje {\bf MSG2-}``La fecha de aplicación ingresada no es válida. Por favor use el formato DD/MM/AAAA.''.
+    \UCpaso Resalta el campo de fecha en color rojo.
+    \UCpaso[\UCactor] Corrige la fecha de aplicación.
+    \UCpaso Continúa con el paso siguiente del \UCref{CU08}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{E}{Próxima fecha anterior a la fecha de aplicación}
+    \UCpaso El sistema detecta que la próxima fecha programada es anterior o igual a la fecha de aplicación actual.
+    \UCpaso Muestra el Mensaje {\bf MSG3-}``La próxima fecha de desparasitación debe ser posterior a la fecha de aplicación.''.
+    \UCpaso Resalta los campos de fecha en color rojo.
+    \UCpaso[\UCactor] Corrige la próxima fecha programada.
+    \UCpaso Continúa con el paso siguiente del \UCref{CU08}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{F}{Campos requeridos faltantes}
+    \UCpaso El sistema detecta que faltan campos obligatorios por completar.
+    \UCpaso Muestra el Mensaje {\bf MSG4-}``Debe completar todos los campos requeridos: [{\em lista de campos faltantes}].''.
+    \UCpaso Resalta los campos faltantes en color rojo.
+    \UCpaso[\UCactor] Completa los campos requeridos.
+    \UCpaso Continúa con el paso siguiente del \UCref{CU08}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{G}{Error en validación de fechas}
+    \UCpaso El sistema detecta inconsistencias en las fechas (ejemplo: fecha futura para aplicación).
+    \UCpaso Muestra el Mensaje {\bf MSG6-}``La fecha de aplicación no puede ser una fecha futura.''.
+    \UCpaso[\UCactor] Corrige la fecha de aplicación.
+    \UCpaso Continúa con el paso siguiente del \UCref{CU08}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{H}{El propietario no desea imprimir comprobante}
+    \UCpaso[\UCactor] Indica que no desea imprimir el comprobante.
+    \UCpaso Muestra mensaje ``El comprobante está disponible en el historial de la mascota para consulta posterior.''.
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+    \UCpaso Termina el caso de uso.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+% Puntos de extensión
+\subsection{Puntos de extensión}
+
+\UCExtenssionPoint{
+    % Cuando:
+    Desea consultar el historial completo de desparasitaciones de la mascota.
+}{
+    % Durante la región:
+    Del paso 7 al paso 19.
+}{
+    % Casos de uso a los que extiende:
+    \hyperlink{CU09}{CU09 Consultar Historial de Desparasitaciones}.
+}
+
+\UCExtenssionPoint{
+    % Cuando:
+    Desea editar o eliminar una desparasitación registrada previamente.
+}{
+    % Durante la región:
+    Después del paso 19.
+}{
+    % Casos de uso a los que extiende:
+    \hyperlink{CU10}{CU10 Modificar Desparasitación}, \\
+    \hyperlink{CU11}{CU11 Eliminar Desparasitación}.
+}
+
+\UCExtenssionPoint{
+    % Cuando:
+    Desea configurar recordatorios automáticos para la próxima desparasitación.
+}{
+    % Durante la región:
+    Después del paso 22.
+}{
+    % Casos de uso a los que extiende:
+    \hyperlink{CU45}{CU45 Configurar Recordatorios Médicos}.
+}
+
+%-------------------------------------- TERMINA descripción del caso de uso.

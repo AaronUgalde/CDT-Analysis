@@ -1,0 +1,111 @@
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+  \begin{UseCase}{CU-01}{Crear Mascota}{
+      Permite al Propietario registrar una nueva mascota en el sistema, asociándola a su perfil para la gestión de su información y futuras reservaciones.
+  }
+      \UCitem{Versión}{\color{Gray}1.0}
+      \UCitem{Autor}{\color{Gray}Jared Castillo}
+      \UCitem{Supervisa}{\color{Gray}[Ulises Vélez Saldaña]}
+      \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+      \UCitem{Propósito}{Registrar los datos de una nueva mascota para gestionar su perfil, historial médico y futuras reservaciones.}
+      \UCitem{Entradas}{
+          \begin{itemize}
+              \item \textbf{nombre}
+              \item \textbf{especie\_id}
+              \item \textbf{sexo\_id}
+              \item \textbf{fecha\_nacimiento}
+              \item Datos opcionales: raza\_id, peso\_kg, esterilizado, señas particulares, etc.
+          \end{itemize}
+      }
+      \UCitem{Origen}{Teclado / Mouse}
+      \UCitem{Salidas}{Mensaje de confirmación, Lista de mascotas actualizada.}
+      \UCitem{Destino}{Pantalla y Base de Datos}
+      \UCitem{Precondiciones}{
+          \begin{itemize}
+              \item El Propietario debe haber iniciado sesión en el sistema.
+              \item El Propietario se encuentra en la pantalla de gestión de sus mascotas.
+          \end{itemize}
+      }
+      \UCitem{Postcondiciones}{Se crea un nuevo registro en la tabla mascotas con los datos proporcionados, asociado al propietario\_id del usuario autenticado.}
+      \UCitem{Errores}{
+          \begin{itemize}
+              \item \textbf{E1}: Datos de formulario inválidos o incompletos.
+              \item \textbf{E2}: Usuario no autenticado o sesión expirada.
+              \item \textbf{E3}: Error de conexión con el servidor.
+          \end{itemize}
+      }
+      \UCitem{Tipo}{Primario}
+  \end{UseCase}
+
+  %--------------------------------------
+  % Trayectoria Principal
+  %--------------------------------------
+  \begin{UCtrayectoria}{Principal}
+      \UCpaso[\UCactor] Accede a la \IUref{IU-PetList}{Lista de Mascotas} y oprime el botón \IUbutton{Agregar Mascota}.
+      \UCpaso Despliega la \IUref{IU-PetForm}{Formulario de Mascota}.
+      \UCpaso[\UCactor] Introduce los datos de la mascota en los campos correspondientes. \label{CU-CreatePet-FillForm}
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Crear Mascota}.
+      \UCpaso Verifica que los datos obligatorios (nombre, especie, sexo, fecha de nacimiento) estén completos y tengan el formato correcto con base en la regla \BRref{BR-PetValidation}{Validación de Datos de Mascota}.
+      \UCpaso Solicita al servidor la creación del registro.
+      \UCpaso El sistema verifica que el usuario esté autenticado y tenga permisos.
+      \UCpaso El sistema registra la nueva mascota en la base de datos.
+      \UCpaso Muestra el mensaje de éxito {\bf MSG1-}``Mascota creada exitosamente''.
+      \UCpaso Actualiza la \IUref{IU-PetList}{Lista de Mascotas} para mostrar la nueva mascota.
+  \end{UCtrayectoria}
+  
+  %--------------------------------------
+  % Trayectorias Alternativas
+  %--------------------------------------
+  
+  % Trayectoria A: Datos Inválidos
+  \begin{UCtrayectoriaA}{A}{El Propietario ingresa datos inválidos}
+      \UCpaso El sistema detecta que uno o más campos obligatorios están vacíos o tienen un formato incorrecto.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Por favor completa todos los campos requeridos''.
+      \UCpaso Resalta los campos con errores en el formulario.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+      \UCpaso Continúa en el paso 5 de la trayectoria principal.
+  \end{UCtrayectoriaA}
+  
+  % Trayectoria B: Sesión Expirada
+  \begin{UCtrayectoriaA}{B}{La sesión del Propietario ha expirado}
+      \UCpaso El sistema detecta que el token de autenticación es inválido o ha expirado.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Tu sesión ha expirado. Por favor, inicia sesión de nuevo.''.
+      \UCpaso Redirige al usuario a la \IUref{IU-Login}{Pantalla de Inicio de Sesión}.
+      \UCpaso Termina el caso de uso.
+  \end{UCtrayectoriaA}
+  
+  % Trayectoria C: Fallo del Sistema
+  \begin{UCtrayectoriaA}{C}{Fallo inesperado del sistema}
+      \UCpaso Ocurre un error interno en el servidor al intentar registrar la mascota.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Ocurrió un error al procesar tu solicitud. Por favor, intenta más tarde.''.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+      \UCpaso[] El sistema permanece en el \IUref{IU-PetForm}{Formulario de Mascota}, permitiendo al usuario reintentar la operación.
+  \end{UCtrayectoriaA}
+%--------------------------------------
+% Puntos de extensión
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	% Cuando:
+	El propietario desea ver el perfil completo y agregar más detalles (vacunas, enfermedades, etc.) a la mascota recién creada.
+}{
+	% Durante la región:
+	Paso 10 (Visualización de la lista actualizada).
+}{
+	% Casos de uso a los que extiende:
+	\hyperlink{CU14}{CU14 Consultar Detalle de Mascota}, \hyperlink{CU06}{CU06 Agregar Historial Médico}.
+}
+
+\UCExtenssionPoint{
+	% Cuando:
+	El propietario desea crear una reservación para la mascota recién creada.
+}{
+	% Durante la región:
+	Paso 10 (Visualización de la lista actualizada).
+}{
+	% Casos de uso a los que extiende:
+	\hyperlink{CU15}{CU15 Crear Reservación}.
+}
+
+%-------------------------------------- TERMINA descripción del caso de uso.
+

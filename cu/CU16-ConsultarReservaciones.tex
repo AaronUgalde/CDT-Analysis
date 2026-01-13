@@ -1,0 +1,90 @@
+% Caso de Uso: Consultar Reservaciones
+% Sistema: Hotel Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU16}{Consultar Reservaciones}{
+    Permite al usuario visualizar el listado de las reservaciones registradas en el sistema y acceder al detalle específico de cada una.
+}
+    \UCitem{Versión}{\color{Gray}1.0}
+    \UCitem{Autor}{\color{Gray}Axel}
+    \UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+    \UCitem{Actor}{\hyperlink{Propietario}{Propietario} / \hyperlink{Administrador}{Administrador}}
+    \UCitem{Propósito}{Conocer el estado, fechas y costos de las estancias programadas o pasadas.}
+    \UCitem{Entradas}{Filtros de búsqueda (Opcional: por fecha, estado o mascota).}
+    \UCitem{Origen}{Mouse / Pantalla táctil}
+    \UCitem{Salidas}{Lista de reservaciones con información resumida (Mascota, Habitación, Fechas, Estado).}
+    \UCitem{Destino}{Pantalla}
+    \UCitem{Precondiciones}{
+        \begin{itemize}
+            \item El usuario debe haber iniciado sesión.
+        \end{itemize}
+    }
+    \UCitem{Postcondiciones}{El sistema presenta la información solicitada filtrada según el rol del usuario.}
+    \UCitem{Errores}{
+        \begin{itemize}
+            \item \textbf{E1}: No se encontraron reservaciones registradas.
+            \item \textbf{E2}: Error de conexión al recuperar los datos.
+        \end{itemize}
+    }
+    \UCitem{Tipo}{Primario}
+\end{UseCase}
+
+%--------------------------------------
+% Trayectoria Principal
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+    \UCpaso[\UCactor] Accede al módulo de "Reservaciones" desde el menú principal.
+    \UCpaso El sistema verifica el rol del usuario autenticado.
+    \UCpaso El sistema recupera las reservaciones correspondientes:
+        \begin{itemize}
+            \item Si es \textbf{Administrador}: Recupera todas las reservaciones del sistema.
+            \item Si es \textbf{Propietario}: Recupera únicamente las reservaciones asociadas a su ID de usuario.
+        \end{itemize}
+    \UCpaso Muestra el listado de reservaciones ordenadas (ej. por fecha más próxima), indicando: Nombre de Mascota, Habitación, Fechas de Ingreso/Salida y Estado (Pendiente, Confirmada, Cancelada).
+    \UCpaso[\UCactor] Selecciona una reservación específica haciendo clic en ella o en el botón \IUbutton{Ver Detalle}.
+    \UCpaso El sistema solicita la información completa de la reservación seleccionada (ID).
+    \UCpaso El sistema valida que la reservación pertenezca al usuario o que este sea administrador.
+    \UCpaso Muestra la pantalla de "Detalle de Reservación" con la información desglosada:
+        \begin{itemize}
+            \item Datos generales (Mascota, Habitación, Fechas).
+            \item Desglose financiero (Costo hospedaje, Costo servicios, Total).
+            \item Lista de servicios adicionales contratados.
+            \item Notas especiales.
+        \end{itemize}
+\end{UCtrayectoria}
+
+%--------------------------------------
+% Trayectorias Alternativas
+%--------------------------------------
+
+% Trayectoria A: Sin reservaciones
+\begin{UCtrayectoriaA}{A}{No existen reservaciones registradas}
+    \UCpaso El sistema busca en la base de datos y no encuentra registros asociados al usuario.
+    \UCpaso Muestra el mensaje ``No tienes reservaciones registradas''.
+    \UCpaso Muestra el botón \IUbutton{Nueva Reservación} invitando a crear una.
+\end{UCtrayectoriaA}
+
+% Trayectoria B: Acceso Denegado a Detalle
+\begin{UCtrayectoriaA}{B}{Intento de acceso a reservación ajena (URL directa)}
+    \UCpaso El usuario intenta acceder a una reservación específica mediante URL o historial.
+    \UCpaso El sistema detecta que el ID de la reservación no pertenece al propietario actual (y no es admin).
+    \UCpaso Retorna un error de permisos (403 Forbidden).
+    \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``No autorizado''.
+    \UCpaso Redirige al listado general de reservaciones.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+% Puntos de extensión
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+    % Cuando:
+    El usuario desea cancelar una reservación activa.
+}{
+    % Durante la región:
+    Paso 8 (Visualización del Detalle).
+}{
+    % Casos de uso a los que extiende:
+    \hyperlink{CU17}{CU17 Eliminar Reservación}.
+}

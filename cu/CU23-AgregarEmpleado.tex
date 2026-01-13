@@ -1,0 +1,74 @@
+%--------------------------------------
+% Caso de Uso: Añadir Empleado
+%--------------------------------------
+
+\begin{UseCase}{CU-22}{Añadir Empleado}{
+	Permitir que el Administrador registre un nuevo empleado en el sistema del Hotel para Perros.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{Administrador}
+	\UCitem{Propósito}{Registrar la información personal y laboral de un nuevo empleado.}
+	\UCitem{Entradas}{Nombre, apellido paterno, apellido materno, email, teléfono, puesto, salario y fecha de contratación.}
+	\UCitem{Origen}{Teclado}
+	\UCitem{Salidas}{Empleado registrado y mensaje de confirmación.}
+	\UCitem{Destino}{Pantalla de lista de empleados}
+	\UCitem{Precondiciones}{
+		El Administrador debe haber iniciado sesión.
+	}
+	\UCitem{Postcondiciones}{
+		El nuevo empleado queda registrado en la base de datos con estado activo.
+	}
+	\UCitem{Errores}{
+		Datos inválidos, email duplicado, permisos insuficientes.
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		Solo los usuarios con rol de administrador pueden añadir empleados.
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Selecciona la opción \IUbutton{Nuevo Empleado} en la Pantalla de Lista de Empleados.
+	\UCpaso El sistema muestra la Pantalla de Registro de Empleado con el formulario vacío.
+	\UCpaso[\UCactor] Captura la información del nuevo empleado.
+	\UCpaso[\UCactor] Presiona el botón \IUbutton{Guardar}.
+	\UCpaso El sistema valida que los datos ingresados sean correctos.
+	\UCpaso El sistema verifica que el email no esté previamente registrado.
+	\UCpaso El sistema registra al nuevo empleado en la base de datos.
+	\UCpaso El sistema muestra el mensaje ``Empleado registrado correctamente''.
+	\UCpaso El sistema regresa a la Pantalla de Lista de Empleados.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Datos inválidos}
+	\UCpaso El sistema muestra mensajes indicando los campos que contienen errores.
+	\UCpaso Continúa en el paso 3 de la trayectoria principal.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Email duplicado}
+	\UCpaso El sistema muestra el mensaje ``El email ingresado ya está registrado''.
+	\UCpaso Continúa en el paso 3 de la trayectoria principal.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{C}{Permisos insuficientes}
+	\UCpaso El sistema muestra el mensaje ``No cuenta con permisos para registrar empleados''.
+	\UCpaso Termina el caso de uso.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El Administrador desea asignar al empleado a servicios o citas.
+}{
+	Del paso 7 al paso 9.
+}{
+	Asignar Empleado a Servicio.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

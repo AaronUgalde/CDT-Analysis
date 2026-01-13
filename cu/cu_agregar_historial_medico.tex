@@ -1,0 +1,157 @@
+% Caso de Uso: Agregar Historial Médico a una Mascota (Enfermedades)
+% Sistema de Gestión de Hotel para Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU18}{Agregar Historial Médico a una Mascota}{
+	Permitir al propietario o empleado autorizado registrar enfermedades diagnosticadas a una mascota, 
+	incluyendo fecha de diagnóstico, tratamiento y estado actual, para mantener un historial médico 
+	completo y actualizado.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Sistema Hotel para Perros}
+	\UCitem{Supervisa}{\color{Gray}Administrador del Sistema}
+	\UCitem{Actor}{\hyperlink{Propietario}{Propietario}, \hyperlink{Empleado}{Empleado}}
+	\UCitem{Propósito}{Registrar enfermedades diagnosticadas en las mascotas para mantener un 
+	historial médico completo que permita brindar mejores cuidados durante su estancia.}
+	\UCitem{Entradas}{
+		\begin{itemize}
+			\item Credenciales de autenticación (token de sesión)
+			\item ID de la mascota
+			\item Nombre de la enfermedad
+			\item Fecha de diagnóstico
+			\item Tratamiento aplicado
+			\item Estado actual (activa/curada)
+			\item Observaciones adicionales (opcional)
+		\end{itemize}
+	}
+	\UCitem{Origen}{Interfaz web/móvil, teclado}
+	\UCitem{Salidas}{
+		\begin{itemize}
+			\item Confirmación de registro exitoso
+			\item Datos completos de la enfermedad registrada
+			\item Mensaje de error en caso de fallo
+		\end{itemize}
+	}
+	\UCitem{Destino}{Pantalla, base de datos}
+	\UCitem{Precondiciones}{
+		\begin{itemize}
+			\item El usuario debe estar autenticado en el sistema
+			\item La mascota debe estar registrada en el sistema
+			\item El propietario debe ser el dueño de la mascota, o el empleado debe tener rol autorizado (administrador o veterinario)
+		\end{itemize}
+	}
+	\UCitem{Postcondiciones}{
+		El registro de la enfermedad queda almacenado en la base de datos, asociado a la mascota 
+		correspondiente y visible en su historial médico.
+	}
+	\UCitem{Errores}{
+		\begin{itemize}
+			\item Mascota no encontrada
+			\item Usuario no autorizado para modificar el historial
+			\item Datos inválidos o incompletos
+			\item Fecha de diagnóstico inválida (fecha futura)
+			\item Error de conexión con la base de datos
+		\end{itemize}
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		El sistema permite consultar un catálogo de enfermedades comunes según la especie de la 
+		mascota para facilitar el registro.
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Inicia sesión en el sistema con sus credenciales vía la \IUref{IU01}{Pantalla de Inicio de Sesión} \label{CU18Login}.
+	\UCpaso Valida las credenciales del usuario \Trayref{A}.
+	\UCpaso[\UCactor] Accede al perfil de la mascota vía la \IUref{IU24}{Pantalla de Detalle de Mascota}.
+	\UCpaso Verifica que la mascota exista en el sistema \Trayref{B}.
+	\UCpaso Verifica que el usuario tenga permisos para modificar el historial de la mascota  	con base en la regla \BRref{BR201}{Validar permisos de modificación de historial médico} \Trayref{C}.
+	\UCpaso[\UCactor] Selecciona la opción ``Agregar enfermedad al historial''.
+	\UCpaso Obtiene el catálogo de enfermedades comunes según la especie de la mascota  	mediante la regla \BRref{BR202}{Obtener enfermedades por especie}.
+	\UCpaso Despliega la \IUref{IU26}{Pantalla de Registro de Enfermedad} con los campos: 		\begin{itemize} 			\item Nombre de la enfermedad (selección de catálogo o texto libre) 			\item Fecha de diagnóstico (calendario) 			\item Tratamiento (texto) 			\item Estado actual (activa/curada) 			\item Observaciones (texto opcional) 		\end{itemize}
+	\UCpaso[\UCactor] Completa el formulario con los datos de la enfermedad \label{CU18CompletarDatos}.
+	\UCpaso[\UCactor] Presiona el botón \IUbutton{Guardar}.
+	\UCpaso Valida que todos los campos obligatorios estén completos \Trayref{D}.
+	\UCpaso Valida que la fecha de diagnóstico sea válida con base en la regla 
+	\BRref{BR203}{Validar fecha de diagnóstico} \Trayref{E}.
+	\UCpaso Registra la enfermedad en la base de datos asociada al ID de la mascota.
+	\UCpaso Muestra el mensaje {\bf MSG1-}``Enfermedad registrada exitosamente'' en la 
+	\IUref{IU27}{Pantalla de Confirmación}.
+	\UCpaso Despliega los datos completos de la enfermedad registrada incluyendo: 		\begin{itemize} 			\item ID de registro 			\item Nombre de la enfermedad 			\item Fecha de diagnóstico 			\item Tratamiento 			\item Estado actual 			\item Observaciones 			\item Fecha y hora de registro 		\end{itemize}
+	\UCpaso Pregunta al usuario si desea agregar otra enfermedad al historial \Trayref{F}.
+	\UCpaso[\UCactor] Indica que no desea agregar más enfermedades.
+	\UCpaso Regresa a la \IUref{IU24}{Pantalla de Detalle de Mascota} mostrando el historial  	médico actualizado.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Credenciales inválidas}
+	\UCpaso Muestra el mensaje {\bf MSG2-}``Credenciales incorrectas. Por favor, verifique  	su usuario y contraseña.''.
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+	\UCpaso Continúa en el paso \ref{CU18Login} del \UCref{CU18}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Mascota no encontrada}
+	\UCpaso Muestra el mensaje {\bf MSG3-}``La mascota con ID [{\em ID de mascota}] no  	fue encontrada en el sistema.''.
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+	\UCpaso[] Termina el caso de uso.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{C}{Usuario no autorizado}
+	\UCpaso Muestra el mensaje {\bf MSG4-}``No tiene permisos para modificar el historial médico  	de esta mascota. Solo el propietario o empleados autorizados pueden realizar esta acción.''.
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+	\UCpaso[] Termina el caso de uso.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{D}{Datos incompletos}
+	\UCpaso Identifica los campos obligatorios que están vacíos.
+	\UCpaso Muestra el mensaje {\bf MSG5-}``Por favor complete los siguientes campos obligatorios:  	[{\em lista de campos faltantes}].''.
+	\UCpaso Resalta los campos incompletos en la \IUref{IU26}{Pantalla de Registro de Enfermedad}.
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+	\UCpaso Continúa en el paso \ref{CU18CompletarDatos} del \UCref{CU18}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{E}{Fecha de diagnóstico inválida}
+	\UCpaso Muestra el mensaje {\bf MSG6-}``La fecha de diagnóstico no puede ser una fecha futura.  	Por favor ingrese una fecha válida.''.
+	\UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+	\UCpaso Continúa en el paso \ref{CU18CompletarDatos} del \UCref{CU18}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{F}{Agregar otra enfermedad}
+	\UCpaso[\UCactor] Indica que desea agregar otra enfermedad.
+	\UCpaso Limpia el formulario y continúa en el paso 9 del \UCref{CU18}.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+% Puntos de extensión
+\subsection{Puntos de extensión}
+
+\UCExtenssionPoint{
+	% Cuando:
+	Desea consultar el historial médico completo de la mascota.
+}{
+	% Durante la región:
+	Del paso 3 al paso 18.
+}{
+	% Casos de uso a los que extiende:
+	\hyperlink{CU19}{CU19 Consultar historial médico de mascota}.
+}
+
+\UCExtenssionPoint{
+	% Cuando:
+	Desea modificar o eliminar una enfermedad registrada.
+}{
+	% Durante la región:
+	Del paso 18 al paso 19.
+}{
+	% Casos de uso a los que extiende:
+	\hyperlink{CU20}{CU20 Modificar historial médico de mascota}.
+}
+
+%-------------------------------------- TERMINA descripción del caso de uso.

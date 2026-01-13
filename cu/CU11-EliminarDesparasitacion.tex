@@ -1,0 +1,79 @@
+% Caso de Uso: Eliminar Desparasitación
+% Sistema: Hotel Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU11}{Eliminar Desparasitación}{
+    Permite al Propietario eliminar un registro de desparasitación previamente guardado en el historial de la mascota, en caso de error en la captura o duplicidad de información.
+}
+    \UCitem{Versión}{\color{Gray}1.0}
+    \UCitem{Autor}{\color{Gray}Axel} % Puedes poner aquí "Equipo Hotel Perros" si prefieres
+    \UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+    \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+    \UCitem{Propósito}{Mantener la integridad y veracidad del historial médico de la mascota eliminando registros erróneos.}
+    \UCitem{Entradas}{Selección del registro a eliminar, Confirmación de eliminación.}
+    \UCitem{Origen}{Mouse / Pantalla táctil}
+    \UCitem{Salidas}{Mensaje de confirmación de eliminación, Historial de desparasitaciones actualizado.}
+    \UCitem{Destino}{Pantalla}
+    \UCitem{Precondiciones}{
+        \begin{itemize}
+            \item El propietario ha iniciado sesión.
+            \item El propietario ha seleccionado una mascota.
+            \item Existe al menos un registro de desparasitación en el historial.
+            \item Se está visualizando el historial de desparasitaciones (CU09).
+        \end{itemize}
+    }
+    \UCitem{Postcondiciones}{El registro de desparasitación es eliminado permanentemente de la base de datos y ya no se muestra en el historial.}
+    \UCitem{Errores}{
+        \begin{itemize}
+            \item \textbf{E1}: Error de conexión con la base de datos al intentar borrar.
+        \end{itemize}
+    }
+    \UCitem{Tipo}{Secundario}
+\end{UseCase}
+
+%--------------------------------------
+% Trayectoria Principal
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+    \UCpaso[\UCactor] Identifica el registro erróneo en la tabla de historial de desparasitaciones y oprime el botón \IUbutton{Eliminar} (icono de bote de basura).
+    \UCpaso Muestra el mensaje de confirmación {\bf MSG1-}``¿Está seguro que desea eliminar el registro de desparasitación del día [{\em Fecha del registro}]? Esta acción no se puede deshacer.''.
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Sí, eliminar}.
+    \UCpaso Verifica que el registro pueda ser eliminado (reglas de negocio, e.g., que pertenezca a su mascota).
+    \UCpaso Elimina el registro de la base de datos.
+    \UCpaso Muestra el mensaje {\bf MSG2-}``El registro ha sido eliminado exitosamente.''.
+    \UCpaso Actualiza la vista del historial de desparasitaciones mostrando la lista sin el registro borrado.
+\end{UCtrayectoria}
+
+%--------------------------------------
+% Trayectorias Alternativas
+%--------------------------------------
+
+% Trayectoria A: Cancelar eliminación
+\begin{UCtrayectoriaA}{A}{El propietario cancela la operación}
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Cancelar} en el mensaje de confirmación.
+    \UCpaso Cierra el mensaje de confirmación sin realizar cambios en la base de datos.
+    \UCpaso Continúa en el paso 1 de la trayectoria principal (Visualizando el historial).
+\end{UCtrayectoriaA}
+
+% Trayectoria B: Error del sistema
+\begin{UCtrayectoriaA}{B}{Fallo al eliminar en base de datos}
+    \UCpaso Detecta que hubo un error al intentar borrar el registro en el servidor.
+    \UCpaso Muestra el Mensaje {\bf MSG-Error} ``Ocurrió un error al intentar eliminar el registro. Por favor intente más tarde.''.
+    \UCpaso Continúa en el paso 1 de la trayectoria principal.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+% Puntos de extensión
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+    % Cuando:
+    El propietario desea registrar una nueva desparasitación en lugar de eliminar.
+}{
+    % Durante la región:
+    Paso 1.
+}{
+    % Casos de uso a los que extiende:
+    \hyperlink{CU10}{CU10 Agregar Desparasitación}.
+}

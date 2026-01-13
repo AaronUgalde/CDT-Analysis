@@ -1,0 +1,72 @@
+%--------------------------------------
+% Caso de Uso: Eliminar Empleado
+%--------------------------------------
+
+\begin{UseCase}{CU-25}{Eliminar Empleado}{
+	Permitir que el Administrador elimine un empleado del sistema del Hotel para Perros.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{Administrador}
+	\UCitem{Propósito}{Dar de baja a un empleado del sistema.}
+	\UCitem{Entradas}{Confirmación de eliminación.}
+	\UCitem{Origen}{Pantalla}
+	\UCitem{Salidas}{Empleado eliminado y mensaje de confirmación.}
+	\UCitem{Destino}{Pantalla de lista de empleados}
+	\UCitem{Precondiciones}{
+		El Administrador debe haber iniciado sesión y el empleado debe existir.
+	}
+	\UCitem{Postcondiciones}{
+		El empleado queda eliminado del sistema.
+	}
+	\UCitem{Errores}{
+		Empleado no encontrado, permisos insuficientes.
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		La eliminación corresponde a una baja lógica del empleado.
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Selecciona la opción \IUbutton{Eliminar} correspondiente a un empleado en la Pantalla de Lista de Empleados.
+	\UCpaso El sistema solicita confirmación de la eliminación.
+	\UCpaso[\UCactor] Confirma la eliminación del empleado.
+	\UCpaso El sistema verifica que el empleado exista en el sistema.
+	\UCpaso El sistema da de baja al empleado.
+	\UCpaso El sistema muestra el mensaje ``Empleado eliminado correctamente''.
+	\UCpaso El sistema regresa a la Pantalla de Lista de Empleados.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Empleado no encontrado}
+	\UCpaso El sistema muestra el mensaje ``El empleado seleccionado no existe''.
+	\UCpaso El caso de uso termina.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Permisos insuficientes}
+	\UCpaso El sistema muestra el mensaje ``No cuenta con permisos para eliminar empleados''.
+	\UCpaso El caso de uso termina.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{C}{El Administrador cancela la operación}
+	\UCpaso El Administrador decide no continuar con la eliminación.
+	\UCpaso El sistema regresa a la Pantalla de Lista de Empleados.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El Administrador desea consultar la información del empleado antes de eliminarlo.
+}{
+	Del paso 1 al paso 2.
+}{
+	Consultar Empleado.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso

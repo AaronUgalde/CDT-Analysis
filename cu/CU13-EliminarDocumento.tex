@@ -1,0 +1,84 @@
+% Caso de Uso: Eliminar Documento
+% Sistema: Hotel Perros
+
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+\begin{UseCase}{CU13}{Eliminar Documento}{
+    Permite al Propietario eliminar un documento digital asociado a su mascota cuando este ya no es vigente, fue subido por error o se desea liberar espacio.
+}
+    \UCitem{Versión}{\color{Gray}1.0}
+    \UCitem{Autor}{\color{Gray}Axel}
+    \UCitem{Supervisa}{\color{Gray}[Nombre del Supervisor]}
+    \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+    \UCitem{Propósito}{Mantener actualizado y organizado el repositorio digital de la mascota, eliminando archivos obsoletos o erróneos.}
+    \UCitem{Entradas}{
+        \begin{itemize}
+            \item Selección del documento a eliminar (desde la lista).
+            \item Confirmación de eliminación.
+        \end{itemize}
+    }
+    \UCitem{Origen}{Mouse / Pantalla táctil}
+    \UCitem{Salidas}{Mensaje de confirmación de eliminación exitosa, Lista de documentos actualizada.}
+    \UCitem{Destino}{Pantalla}
+    \UCitem{Precondiciones}{
+        \begin{itemize}
+            \item El propietario ha iniciado sesión.
+            \item El propietario se encuentra visualizando la lista de documentos de una mascota.
+            \item Existe al menos un documento registrado que pertenece a la mascota del propietario.
+        \end{itemize}
+    }
+    \UCitem{Postcondiciones}{
+        \begin{itemize}
+            \item El registro del documento se elimina de la base de datos.
+            \item El archivo físico se elimina del sistema de almacenamiento del servidor.
+        \end{itemize}
+    }
+    \UCitem{Errores}{
+        \begin{itemize}
+            \item \textbf{E1}: El documento no existe o ya fue eliminado (Error 404).
+            \item \textbf{E2}: El usuario no tiene permiso para eliminar este documento (Error 403).
+            \item \textbf{E3}: Error interno al intentar borrar el archivo físico.
+        \end{itemize}
+    }
+    \UCitem{Tipo}{Secundario}
+\end{UseCase}
+
+%--------------------------------------
+% Trayectoria Principal
+%--------------------------------------
+\begin{UCtrayectoria}{Principal}
+    \UCpaso[\UCactor] Identifica el documento que desea borrar en la lista y oprime el botón \IUbutton{Eliminar} (icono de bote de basura o tache).
+    \UCpaso Muestra el mensaje de confirmación {\bf MSG1-}``¿Está seguro que desea eliminar este documento permanentemente?''.
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Sí, eliminar}.
+    \UCpaso Solicita al servidor la eliminación del documento mediante su identificador único.
+    \UCpaso Verifica que el documento exista y pertenezca al propietario autenticado.
+    \UCpaso Elimina el archivo físico del servidor y su registro en la base de datos.
+    \UCpaso Retorna una confirmación de éxito al cliente.
+    \UCpaso Muestra el mensaje {\bf MSG2-}``Documento eliminado exitosamente''.
+    \UCpaso Actualiza la lista de documentos, retirando el elemento eliminado.
+\end{UCtrayectoria}
+
+%--------------------------------------
+% Trayectorias Alternativas
+%--------------------------------------
+
+% Trayectoria A: Cancelar
+\begin{UCtrayectoriaA}{A}{El propietario cancela la eliminación}
+    \UCpaso[\UCactor] Oprime el botón \IUbutton{Cancelar} en el mensaje de confirmación.
+    \UCpaso Cierra el cuadro de diálogo sin realizar ninguna acción en el servidor.
+    \UCpaso Continúa mostrando la lista de documentos original.
+\end{UCtrayectoriaA}
+
+% Trayectoria B: Documento no encontrado (Concurrencia)
+\begin{UCtrayectoriaA}{B}{El documento ya no existe (Error 404)}
+    \UCpaso El servidor intenta eliminar el documento pero no encuentra el registro (quizás fue eliminado desde otra sesión).
+    \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Documento no encontrado''.
+    \UCpaso Actualiza la lista automáticamente para reflejar el estado real (el documento desaparece).
+\end{UCtrayectoriaA}
+
+% Trayectoria C: Error de Permisos
+\begin{UCtrayectoriaA}{C}{Intento de acceso no autorizado (Error 403)}
+    \UCpaso El servidor detecta que el documento no pertenece al usuario actual.
+    \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``No autorizado para realizar esta acción''.
+    \UCpaso Registra el intento de violación de seguridad.
+\end{UCtrayectoriaA}

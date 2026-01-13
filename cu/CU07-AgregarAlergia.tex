@@ -1,0 +1,117 @@
+%-------------------------------------- COMIENZA descripción del caso de uso.
+
+  \begin{UseCase}{CU07}{Agregar Alergia}{
+      Permite al Propietario registrar una nueva alergia en el historial médico de una de sus mascotas, especificando el tipo de alergia y su severidad.
+  }
+      \UCitem{Versión}{\color{Gray}1.0}
+      \UCitem{Autor}{\color{Gray}Jared}
+      \UCitem{Supervisa}{\color{Gray}Ulises velez saldaña}
+      \UCitem{Actor}{\hyperlink{Propietario}{Propietario}}
+      \UCitem{Propósito}{Mantener un registro completo y actualizado de las alergias de una mascota para asegurar su bienestar, proporcionar cuidados
+  adecuados y evitar exposiciones a alérgenos.}
+      \UCitem{Entradas}{
+          \begin{itemize}
+              \item ID de la mascota (desde la URL).
+              \item \textbf{alergia\_id}: number (requerido, del catálogo de alergias).
+              \item \textbf{severidad}: string (opcional, ej. "Leve", "Moderada", "Alta", "Severa").
+          \end{itemize}
+      }
+      \UCitem{Origen}{Teclado / Mouse}
+      \UCitem{Salidas}{
+          \begin{itemize}
+              \item Mensaje de confirmación del registro exitoso.
+              \item Redirección a la pantalla de detalle de la mascota con la lista de alergias actualizada.
+          \end{itemize}
+      }
+      \UCitem{Destino}{Pantalla y Base de Datos}
+      \UCitem{Precondiciones}{
+          \begin{itemize}
+              \item El Propietario ha iniciado sesión en el sistema.
+              \item El Propietario se encuentra en la \IUref{IU-PetDetail}{Pantalla de Detalle de Mascota}.
+          \end{itemize}
+      }
+      \UCitem{Postcondiciones}{Se crea un nuevo registro en la tabla mascotas alergias de la base de datos, asociado a la mascota correspondiente.}
+      \UCitem{Errores}{
+          \begin{itemize}
+              \item \textbf{E1}: Datos del formulario inválidos (ej. ID de alergia no numérico).
+              \item \textbf{E2}: El usuario no está autenticado o la sesión ha expirado.
+              \item \textbf{E3}: La mascota especificada no existe o no pertenece al usuario.
+              \item \textbf{E4}: Error inesperado del servidor al intentar guardar el registro.
+          \end{itemize}
+      }
+      \UCitem{Tipo}{Secundario}
+  \end{UseCase}
+  %--------------------------------------
+  % Trayectoria Principal
+  %--------------------------------------
+  \begin{UCtrayectoria}{Principal}
+      \UCpaso[\UCactor] Desde la \IUref{IU-PetDetail}{Pantalla de Detalle de Mascota}, oprime el botón \IUbutton{Agregar Alergia}.
+      \UCpaso El sistema despliega la \IUref{IU-AddAllergyForm}{Formulario de Registro de Alergia}.
+      \UCpaso[\UCactor] Selecciona la alergia del catálogo y, opcionalmente, la severidad. \label{CU07-FillForm}
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Guardar Alergia}. \label{CU07-Submit}
+      \UCpaso El sistema valida que los datos ingresados sean correctos y que la alergia\_id sea un número entero con base en la regla \BRref{BR-AllergyValidation}{Validación de Datos de Alergia}. \Trayref{A}.
+      \UCpaso El sistema envía una petición POST /api/alergias/:mascotaId al servidor con los datos de la alergia.
+      \UCpaso El sistema verifica que la sesión del usuario sea válida con base en la regla \BRref{BR-AuthCheck}{Verificación de Autenticación}. \Trayref{B}.
+      \UCpaso El sistema confirma que la mascota pertenece al propietario autenticado con base en la regla \BRref{BR-PetOwnership}{Verificación de Propiedad de Mascota}. \Trayref{C}.
+      \UCpaso Registra la nueva alergia en la base de datos, asociándola a la mascota. \Trayref{D}.
+      \UCpaso Muestra el mensaje de éxito {\bf MSG1-}``Alergia agregada exitosamente''.
+      \UCpaso Redirige al usuario a la \IUref{IU-PetDetail}{Pantalla de Detalle de Mascota}, que ahora muestra la nueva alergia en la sección correspondiente.
+  \end{UCtrayectoria}
+  
+  %--------------------------------------
+  % Trayectorias Alternativas
+  %--------------------------------------
+  
+  \begin{UCtrayectoriaA}{A}{Datos inválidos}
+      \UCpaso El sistema detecta que el ID de la alergia es inválido o el campo está vacío.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Por favor selecciona una alergia''.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+      \UCpaso[] El sistema permite al usuario corregir los datos en el formulario.
+      \UCpaso Continúa en el paso \ref{CU07-FillForm} de la trayectoria principal.
+  \end{UCtrayectoriaA}
+  
+  \begin{UCtrayectoriaA}{B}{Sesión inválida o expirada}
+      \UCpaso El sistema detecta que el token de autenticación es inválido.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``No estás autorizado''.
+      \UCpaso[] Redirige al usuario a la \IUref{IU-Login}{Pantalla de Inicio de Sesión}.
+      \UCpaso[] Termina el caso de uso.
+  \end{UCtrayectoriaA}
+  
+  \begin{UCtrayectoriaA}{C}{Mascota no encontrada o no autorizada}
+      \UCpaso El sistema determina que la mascota no existe o no pertenece al usuario autenticado.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Mascota no encontrada o no pertenece al propietario''.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+      \UCpaso[] Termina el caso de uso.
+  \end{UCtrayectoriaA}
+  
+  \begin{UCtrayectoriaA}{D}{Fallo inesperado del sistema}
+      \UCpaso Ocurre un error interno en el servidor al intentar registrar la alergia.
+      \UCpaso Muestra el mensaje de error {\bf MSG-Error} ``Error al agregar la alergia''.
+      \UCpaso[\UCactor] Oprime el botón \IUbutton{Aceptar}.
+      \UCpaso[] El sistema permanece en el formulario, permitiendo al usuario reintentar la operación.
+  \end{UCtrayectoriaA}
+  
+  %--------------------------------------
+  % Puntos de extensión
+  %--------------------------------------
+  \subsection{Puntos de extensión}
+  \UCExtenssionPoint{
+      % Cuando:
+      El Propietario decide cancelar la operación de registro de la alergia.
+  }{
+      % Durante la región:
+      Pasos 2-4 (Mientras se encuentra en el formulario de registro).
+  }{
+      % Casos de uso a los que extiende:
+      El Propietario oprime el botón \IUbutton{Cancelar} y el sistema regresa a \hyperlink{CU14}{CU14 Consultar Detalle de Mascota}.
+  }
+  \UCExtenssionPoint{
+      % Cuando:
+      El Propietario necesita agregar otra información médica (ej. vacuna o enfermedad) en lugar de una alergia, o después de agregarla.
+  }{
+      % Durante la región:
+      Pasos 2-11 (Desde el formulario o tras la redirección a la pantalla de detalle).
+  }{
+      % Casos de uso a los que extiende:
+      \hyperlink{CU05}{CU05 Agregar Vacuna}
+  }    %-------------------------------------- TERMINA descripción del caso de uso.

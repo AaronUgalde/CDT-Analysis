@@ -1,0 +1,71 @@
+﻿%--------------------------------------
+% Caso de Uso: Ver Citas del Empleado
+%--------------------------------------
+
+\begin{UseCase}{CU-31}{Ver Citas del Empleado}{
+	Permitir que el usuario autenticado consulte las citas y servicios asignados a un empleado específico.
+}
+	\UCitem{Versión}{\color{Gray}1.0}
+	\UCitem{Autor}{\color{Gray}Equipo de Desarrollo}
+	\UCitem{Supervisa}{\color{Gray}Coordinador del Sistema}
+	\UCitem{Actor}{\hyperlink{Propietario}{Propietario} o \hyperlink{Administrador}{Administrador}}
+	\UCitem{Propósito}{Visualizar las citas y servicios atendidos por un empleado.}
+	\UCitem{Entradas}{Selección de un empleado.}
+	\UCitem{Origen}{Pantalla}
+	\UCitem{Salidas}{Listado de citas y servicios del empleado.}
+	\UCitem{Destino}{Pantalla de citas del empleado}
+	\UCitem{Precondiciones}{
+		El usuario debe haber iniciado sesión y el empleado debe existir en el sistema.
+	}
+	\UCitem{Postcondiciones}{
+		Las citas del empleado son mostradas correctamente en pantalla.
+	}
+	\UCitem{Errores}{
+		Empleado no encontrado, sesión no válida, error al obtener las citas.
+	}
+	\UCitem{Tipo}{Caso de uso primario}
+	\UCitem{Observaciones}{
+		El listado se muestra ordenado por fecha, de la más reciente a la más antigua.
+	}
+\end{UseCase}
+
+%--------------------------------------
+\begin{UCtrayectoria}
+	\UCpaso[\UCactor] Selecciona un empleado desde la Pantalla de Lista de Empleados.
+	\UCpaso El sistema muestra la Pantalla de Detalle de Empleado.
+	\UCpaso[\UCactor] Selecciona la opción para ver las citas del empleado.
+	\UCpaso El sistema solicita las citas asociadas al empleado.
+	\UCpaso El sistema recupera las citas y servicios del empleado.
+	\UCpaso El sistema muestra el listado de citas del empleado en pantalla.
+\end{UCtrayectoria}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{A}{Empleado no encontrado}
+	\UCpaso El sistema muestra el mensaje ``El empleado seleccionado no existe''.
+	\UCpaso El caso de uso termina.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{B}{Sesión no válida}
+	\UCpaso El sistema muestra el mensaje ``La sesión ha expirado''.
+	\UCpaso El sistema solicita al usuario iniciar sesión nuevamente.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\begin{UCtrayectoriaA}{C}{No existen citas registradas}
+	\UCpaso El sistema muestra un mensaje indicando que el empleado no tiene citas registradas.
+	\UCpaso El caso de uso termina.
+\end{UCtrayectoriaA}
+
+%--------------------------------------
+\subsection{Puntos de extensión}
+\UCExtenssionPoint{
+	El usuario desea consultar el detalle de una cita.
+}{
+	Del paso 6.
+}{
+	Ver Detalle de Cita.
+}
+
+%--------------------------------------
+% Fin del Caso de Uso
