@@ -17,11 +17,11 @@
 
 \subsection{Comandos}
 \begin{itemize}
-    \item \IUbutton{Reservar}: Inicia el flujo para crear una nueva reservación. Si el usuario no está autenticado, lo redirige a la \IUref{IU-02}{Pantalla de Login}. Si ya está autenticado, lo lleva al formulario de reservación \IUref{IU-14}{Formulario de Reservación}.
+    \item \IUbutton{Reservar}: Inicia el flujo para crear una nueva reservación. Si el usuario no está autenticado, lo redirige a la \IUref{IU-02}{Pantalla de Login}. Si ya está autenticado, lo lleva al formulario de reservación \IUref{IU-13}{Formulario de Reservación}.
     \item \IUbutton{Más}: Proporciona información adicional sobre el servicio o funcionalidades, posiblemente redirigiendo a una página interna o sección de la misma.
     \item \IUbutton{Contacto}: Redirige al usuario a la sección de contacto dentro de la página o a una pantalla dedicada para resolver dudas.
     \item \IUbutton{Iniciar sesión}: Redirige a la \IUref{IU-02}{Pantalla de Login} para que el usuario acceda a su cuenta. (Disponible en el Header).
-    \item \IUbutton{Unirse}: Redirige a la \IUref{IU-03}{Pantalla de Registro Simplificado} para que nuevos usuarios creen una cuenta. (Disponible en el Header).
+    \item \IUbutton{Unirse}: Redirige a la \IUref{IU-03}{Pantalla de Registro Completo} para que nuevos usuarios creen una cuenta. (Disponible en el Header).
 \end{itemize}
 
 \subsection{Mensajes}
@@ -63,93 +63,44 @@
 \end{itemize}
 
 %--------------------------------------
-\section{IU-03 Pantalla de Registro de Usuario}
+\section{IU-03 Pantalla de Registro Completo de Propietario}
 
 \subsection{Objetivo}
-    Permitir a nuevos usuarios crear una cuenta de propietario básica en el sistema, proporcionando su información personal esencial y credenciales de acceso (correo y contraseña).
+    Permitir a un nuevo usuario realizar un registro completo y detallado, incluyendo su información personal, múltiples contactos telefónicos y direcciones de estancia, para crear un perfil de propietario exhaustivo en una sola operación.
 
 \subsection{Diseño}
-    Esta pantalla \IUref{IU-03}{Pantalla de Registro de Usuario} (ver figura~\ref{IU-03}) aparece cuando un usuario no registrado accede a la ruta `/register`, normalmente a través de un enlace en la página de inicio o de login. Presenta un formulario de registro que solicita datos personales (nombre, apellidos), correo electrónico y una contraseña, la cual debe ser confirmada. Incluye enlaces para navegar hacia la pantalla de inicio de sesión o al formulario de registro completo.
+    Esta pantalla \IUref{IU-03}{Pantalla de Registro Completo de Propietario} (ver figura~\ref{IU-03}) aparece cuando un usuario navega a la ruta `/register`. Presenta un formulario de "Registro Completo" organizado en tres secciones principales: "Información Personal" para los datos de la cuenta y credenciales, "Teléfonos de Contacto" donde se pueden agregar dinámicamente varios números, y "Direcciones Durante el Hospedaje" para registrar las ubicaciones del propietario durante la estancia de su mascota.
 
-\IUfig[.5]{UI03}{IU-03}{Pantalla de Registro de Usuario.}
-\IUfig[.5]{UI03-2}{IU-03}{Pantalla de Registro de Usuario.}
+\IUfig[.5]{IU04}{IU-03}{Pantalla de Registro Completo de Propietario.}
+
 \subsection{Salidas}
     Ninguna.
 
 \subsection{Entradas}
 \begin{itemize}
-    \item Correo Electrónico
-    \item Nombre
-    \item Primer Apellido
-    \item Segundo Apellido (opcional)
-    \item Contraseña
-    \item Confirmar Contraseña
+    \item \textbf{Información Personal:} Correo Electrónico, Contraseña, Confirmar Contraseña, Nombre, Apellidos.
+    \item \textbf{Teléfonos (por cada uno):} Número, Tipo de Teléfono, Nombre de Contacto, Relación, si es Principal, Notas.
+    \item \textbf{Direcciones (por cada una):} Tipo de Domicilio, Código Postal, Estado, Municipio, Colonia, Calle, Números, Fechas de Estancia, si es Predeterminada, Notas.
 \end{itemize}
 
 \subsection{Comandos}
 \begin{itemize}
-    \item \IUbutton{Crear Cuenta}: Valida que los datos ingresados sean correctos (contraseñas coinciden, campos requeridos llenos). Si la validación es exitosa, envía la información al servidor para crear una nueva cuenta de propietario, inicia la sesión del nuevo usuario y lo redirige a la página de inicio (`/`).
-    \item \IUbutton{Iniciar Sesión}: Redirige al usuario a la \IUref{IU-02}{Pantalla de Login}.
-    \item \IUbutton{Ir a Registro Completo}: Redirige al usuario al \IUref{IU-04}{Formulario de Registro Completo} para un registro con más detalles.
-    \item \IUbutton{Ojo/Ojo Tachado}: Alterna la visibilidad del texto en los campos de contraseña y confirmación de contraseña.
+    \item \IUbutton{Registrarse}: Valida la completitud y corrección de todos los datos ingresados en las tres secciones. Si la validación es exitosa, envía toda la información al servidor para crear la cuenta de propietario. En caso de éxito, muestra una alerta y redirige a la pantalla de login.
+    \item \IUbutton{Cancelar}: Descarta todos los datos ingresados y redirige al usuario a la pantalla de login.
+    \item \IUbutton{+ Agregar} (en Teléfonos/Direcciones): Añade un nuevo bloque de campos para que el usuario pueda registrar un teléfono o una dirección adicional.
+    \item \IUbutton{Eliminar} (Icono de bote de basura): Elimina el bloque de teléfono o dirección correspondiente.
 \end{itemize}
 
 \subsection{Mensajes}
 \begin{itemize}
-    \item Las contraseñas no coinciden: Se muestra si el contenido de los campos "Contraseña" y "Confirmar Contraseña" no es idéntico.
-    \item La contraseña debe tener al menos 6 caracteres: Se muestra si la contraseña no cumple con la longitud mínima requerida.
-    \item Nombre y primer apellido son requeridos: Se muestra si los campos de nombre o primer apellido están vacíos.
-    \item Correo electrónico ya registrado: Se muestra si el servidor rechaza el registro porque el correo ya existe en la base de datos.
-    \item Error al registrar usuario: Mensaje genérico en caso de un fallo inesperado del servidor durante el proceso de registro.
+    \item Por favor completa todos los campos obligatorios.
+    \item Las contraseñas no coinciden.
+    \item La contraseña debe tener al menos 6 caracteres.
+    \item Debe agregar al menos un teléfono.
+    \item ¡Registro exitoso! Ahora puedes iniciar sesión.
+    \item Error al registrar. Por favor intenta de nuevo.
+    \item No se encontró información para el código postal ingresado.
 \end{itemize}
-
-%--------------------------------------
-\section{IU-04 Pantalla de Perfil de Propietario}
-
-    3 \subsection{Objetivo}
-    4     Permitir a un nuevo usuario realizar un registro completo y detallado, incluyendo su información personal, múltiples contactos telefónicos y
-      direcciones de estancia, para crear un perfil de propietario exhaustivo en una sola operación.
-
-    6 \subsection{Diseño}
-    7     Esta pantalla \IUref{IU-04}{Pantalla de Perfil de Propietario} (ver figura~\ref{IU-04}) aparece cuando un usuario navega a la ruta
-      `/register-complete`. Aunque el nombre del caso de uso es "perfil de propietario", esta interfaz funciona como un formulario de "Registro Completo".
-      Está organizada en tres secciones principales: "Información Personal" para los datos de la cuenta y credenciales, "Teléfonos de Contacto" donde se
-      pueden agregar dinámicamente varios números, y "Direcciones Durante el Hospedaje" para registrar las ubicaciones del propietario durante la estancia d
-      su mascota.
-
-    9 \IUfig[.5]{IU04}{IU-04}{Pantalla de Perfil de Propietario (Registro Completo).}
-
-   11 \subsection{Salidas}
-   12     Ninguna.
-
-   14 \subsection{Entradas}
-   15 \begin{itemize}
-   16     \item \textbf{Información Personal:} Correo Electrónico, Contraseña, Confirmar Contraseña, Nombre, Apellidos.
-   17     \item \textbf{Teléfonos (por cada uno):} Número, Tipo de Teléfono, Nombre de Contacto, Relación, si es Principal, Notas.
-   18     \item \textbf{Direcciones (por cada una):} Tipo de Domicilio, Código Postal, Estado, Municipio, Colonia, Calle, Números, Fechas de Estancia, si es
-      Predeterminada, Notas.
-   19 \end{itemize}
-
-   21 \subsection{Comandos}
-   22 \begin{itemize}
-   23     \item \IUbutton{Registrarse}: Valida la completitud y corrección de todos los datos ingresados en las tres secciones. Si la validación es exitosa,
-      envía toda la información al servidor para crear la cuenta de propietario. En caso de éxito, muestra una alerta y redirige a la pantalla de login.
-   24     \item \IUbutton{Cancelar}: Descarta todos los datos ingresados y redirige al usuario a la pantalla de login.
-   25     \item \IUbutton{+ Agregar} (en Teléfonos/Direcciones): Añade un nuevo bloque de campos para que el usuario pueda registrar un teléfono o una direc
-      ón adicional.
-   26     \item \IUbutton{Eliminar} (Icono de bote de basura): Elimina el bloque de teléfono o dirección correspondiente.
-   27 \end{itemize}
-
-   29 \subsection{Mensajes}
-   30 \begin{itemize}
-   31     \item Por favor completa todos los campos obligatorios.
-   32     \item Las contraseñas no coinciden.
-   33     \item La contraseña debe tener al menos 6 caracteres.
-   34     \item Debe agregar al menos un teléfono.
-   35     \item ¡Registro exitoso! Ahora puedes iniciar sesión.
-   36     \item Error al registrar. Por favor intenta de nuevo.
-   37     \item No se encontró información para el código postal ingresado.
-   38 \end{itemize}
 
 %--------------------------------------
 \section{IU-05 Pantalla de Consulta de Mascotas}

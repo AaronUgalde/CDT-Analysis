@@ -89,3 +89,104 @@ ID & Nombre & Descripción & Prioridad & Estado \\
 
 {\footnotesize\em Para leer correctamente esta tabla vea la leyenda en la Tabla~\ref{tbl:leyendaRF}.}
 
+
+
+%=========================================================
+\section{Requerimientos No Funcionales}
+\label{sec:reqNoFunc}
+
+En esta sección se presentan los requerimientos no funcionales del sistema, que especifican propiedades de calidad, restricciones y atributos que el sistema debe cumplir para garantizar su correcto funcionamiento, seguridad, rendimiento y mantenibilidad.
+
+\begin{NFRequerimientos}
+	\NFRitem{RNF1}{Seguridad}{
+		El sistema debe garantizar que únicamente usuarios autenticados y autorizados puedan acceder a las funcionalidades del sistema mediante mecanismos robustos de autenticación y control de acceso basado en roles.
+	}{
+		Implementar autenticación mediante contraseñas encriptadas con bcrypt, control de acceso basado en roles (RBAC), sesiones con tokens JWT que expiren tras 7 días de inactividad, validación de permisos en cada operación sensible, y uso de HTTPS para comunicaciones.
+	}{Crítica}
+	
+	\NFRitem{RNF2}{Rendimiento}{
+		El sistema debe responder de forma ágil y eficiente ante las solicitudes del usuario, ejecutando operaciones en tiempos aceptables para no afectar la experiencia de usuario.
+	}{
+		Optimizar consultas a base de datos mediante índices apropiados, implementar caché para datos frecuentemente consultados, minimizar procesamiento innecesario en el cliente, establecer timeouts adecuados. Tiempo objetivo: consultas $<$ 1 segundo, operaciones de registro $<$ 2 segundos.
+	}{Alta}
+	
+	\NFRitem{RNF3}{Escalabilidad}{
+		El sistema debe permitir el crecimiento en volumen de datos y número de usuarios sin afectar su estabilidad ni requerir rediseños arquitectónicos mayores. Debe estar diseñado de forma modular y desacoplada.
+	}{
+		Utilizar arquitectura en capas claramente separadas (presentación, lógica de negocio, acceso a datos), aplicar principios SOLID para facilitar extensión, diseñar módulos independientes con interfaces bien definidas, implementar API RESTful stateless para permitir escalamiento horizontal.
+	}{Alta}
+	
+	\NFRitem{RNF4}{Usabilidad}{
+		El sistema debe proporcionar una interfaz clara, intuitiva y fácil de utilizar donde los usuarios puedan completar sus tareas de manera sencilla, con retroalimentación clara y prevención de errores.
+	}{
+		Diseñar interfaz consistente en todas las pantallas, implementar validación en tiempo real de formularios, proporcionar mensajes de error claros y específicos en español, usar retroalimentación visual para todas las acciones del usuario (loading states, confirmaciones), aplicar principios de diseño UX modernos.
+	}{Alta}
+	
+	\NFRitem{RNF5}{Disponibilidad}{
+		El sistema debe estar disponible y funcionar correctamente durante su horario operativo, manejando fallos de forma controlada y evitando la pérdida de información.
+	}{
+		Implementar manejo robusto de excepciones en todas las capas, registrar errores en logs para análisis posterior, realizar respaldos automáticos periódicos de datos críticos, diseñar mecanismos de recuperación ante fallos, establecer monitoreo del estado del sistema.
+	}{Alta}
+	
+	\NFRitem{RNF6}{Mantenibilidad}{
+		El sistema debe facilitar la comprensión, modificación y evolución del código por parte del equipo de desarrollo mediante código claro, estructurado y siguiendo buenas prácticas de programación.
+	}{
+		Aplicar convenciones de nomenclatura consistentes (camelCase para variables/métodos, PascalCase para clases/componentes), documentar código y funciones complejas mediante comentarios descriptivos, estructurar el proyecto de forma lógica y modular, seguir estándares de codificación establecidos (ESLint, Prettier), realizar revisiones de código en equipo.
+	}{Media}
+	
+	\NFRitem{RNF7}{Compatibilidad}{
+		El sistema debe funcionar correctamente en distintos entornos de ejecución, navegadores web modernos y sistemas operativos, sin requerir configuraciones especiales del usuario final.
+	}{
+		Utilizar tecnologías web estándar (HTML5, CSS3, JavaScript ES6+), probar funcionamiento en navegadores principales (Chrome, Firefox, Safari, Edge versiones recientes), diseñar para diferentes resoluciones de pantalla (responsive design), facilitar despliegue en diferentes entornos (desarrollo, staging, producción) mediante variables de configuración.
+	}{Media}
+	
+	\NFRitem{RNF8}{Integridad de Datos}{
+		El sistema debe garantizar que la información almacenada sea correcta, consistente y coherente, validando los datos antes de ser almacenados y manteniéndolos íntegros durante todo su ciclo de vida.
+	}{
+		Implementar validación de datos en múltiples capas (cliente y servidor), establecer restricciones de integridad en base de datos (claves foráneas, valores únicos, NOT NULL, CHECK constraints), validar tipos y formatos de datos, implementar transacciones ACID para operaciones críticas, proporcionar mensajes claros de error de validación al usuario.
+	}{Crítica}
+	
+	\NFRitem{RNF9}{Respaldo y Recuperación}{
+		El sistema debe contar con mecanismos automatizados de respaldo de información y procedimientos documentados para recuperación ante desastres o pérdida de datos.
+	}{
+		Implementar respaldos automáticos diarios de la base de datos completa, mantener respaldos incrementales cada 6 horas, almacenar respaldos en ubicación separada del servidor principal, documentar procedimientos de restauración, probar periódicamente la recuperación de respaldos.
+	}{Alta}
+	
+	\NFRitem{RNF10}{Auditabilidad}{
+		El sistema debe mantener un registro de las operaciones críticas realizadas, identificando quién realizó cada acción, cuándo y sobre qué datos, para fines de auditoría y rastreo de problemas.
+	}{
+		Registrar en logs todas las operaciones de creación, modificación y eliminación de datos sensibles, incluir timestamp, usuario responsable y datos modificados en cada registro, implementar sistema de logs centralizado con niveles de severidad (ERROR, WARN, INFO), permitir consulta y filtrado de logs por administradores.
+	}{Media}
+	
+	\NFRitem{RNF11}{Privacidad}{
+		El sistema debe proteger la información personal de los usuarios y cumplir con regulaciones de protección de datos aplicables, limitando el acceso a información sensible solo a usuarios autorizados.
+	}{
+		Encriptar contraseñas usando algoritmos fuertes (bcrypt con salt), no almacenar información de tarjetas de crédito en el sistema, implementar políticas de privacidad claras, permitir a propietarios consultar y modificar únicamente sus propios datos, limitar acceso de empleados a información estrictamente necesaria para su rol.
+	}{Crítica}
+	
+	\NFRitem{RNF12}{Confiabilidad}{
+		El sistema debe operar de manera predecible y consistente, minimizando errores, comportamientos inesperados y caídas del sistema durante su operación normal.
+	}{
+		Implementar pruebas unitarias para componentes críticos, realizar pruebas de integración entre módulos, validar todas las entradas de usuario antes de procesarlas, manejar casos excepcionales de forma explícita (conexiones de red fallidas, datos faltantes), implementar circuit breakers para servicios externos.
+	}{Alta}
+	
+	\NFRitem{RNF13}{Portabilidad}{
+		El sistema debe poder ser desplegado en diferentes entornos de hosting y proveedores cloud sin requerir modificaciones significativas en el código fuente.
+	}{
+		Utilizar contenedores Docker para empaquetar la aplicación con todas sus dependencias, externalizar configuración mediante variables de ambiente (.env), documentar requerimientos de infraestructura (versiones de Node.js, PostgreSQL), evitar dependencias de servicios propietarios de proveedores específicos.
+	}{Media}
+	
+	\NFRitem{RNF14}{Documentación}{
+		El sistema debe estar acompañado de documentación técnica completa y actualizada que facilite su instalación, configuración, uso y mantenimiento por parte de desarrolladores y administradores.
+	}{
+		Mantener archivo README.md con instrucciones de instalación y ejecución, documentar API REST con descripción de endpoints, parámetros y respuestas, incluir ejemplos de uso de funcionalidades principales, documentar modelo de base de datos con diagrama ER y descripción de tablas, mantener changelog con registro de cambios por versión.
+	}{Media}
+	
+	\NFRitem{RNF15}{Internacionalización}{
+		El sistema debe estar preparado para soportar múltiples idiomas en el futuro, separando textos de la interfaz de usuario del código de la aplicación.
+	}{
+		Externalizar todos los textos mostrados al usuario en archivos de configuración separados (archivos de traducción), utilizar biblioteca de i18n (internacionalización) compatible con React, codificar cadenas de texto en UTF-8 para soportar caracteres especiales, diseñar interfaz considerando expansión/contracción de textos en diferentes idiomas.
+	}{Baja}
+\end{NFRequerimientos}
+
+{\footnotesize\em Los requerimientos no funcionales complementan los funcionales estableciendo propiedades de calidad que el sistema debe cumplir.}

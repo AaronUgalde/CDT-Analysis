@@ -2,19 +2,96 @@
 \chapter{Modelo de la interacción}	
 \label{cap:modInteraccion}
 
-	Este capítulo describe ...
+En este capítulo se describe el diseño de la interacción del Sistema de Gestión para Hotel de Perros. Se presenta el modelo de navegación que ilustra las relaciones y flujos entre las diferentes pantallas del sistema, así como las especificaciones detalladas de cada interfaz de usuario, incluyendo su propósito, elementos, comportamiento y los mensajes del sistema.
+
+El diseño de la interacción es fundamental para garantizar una experiencia de usuario coherente, intuitiva y eficiente, facilitando el cumplimiento de los objetivos de los usuarios y minimizando la curva de aprendizaje del sistema.
+
+\section{Generalidades del Diseño de Interacción}
+
+El diseño de las interfaces del Sistema de Gestión para Hotel de Perros sigue los siguientes principios fundamentales:
+
+\subsection{Consistencia Visual y Funcional}
+Todas las pantallas mantienen una estructura visual coherente mediante el uso de:
+\begin{itemize}
+    \item \textbf{Sistema de diseño unificado:} Implementado con Tailwind CSS v4, garantizando consistencia en colores, tipografía, espaciados y componentes.
+    \item \textbf{Componentes reutilizables:} Botones, formularios, tarjetas y modales siguen patrones consistentes en toda la aplicación.
+    \item \textbf{Iconografía semántica:} Uso de la biblioteca Lucide React para iconos claros y comprensibles.
+    \item \textbf{Header persistente:} Barra de navegación superior presente en todas las pantallas autenticadas.
+\end{itemize}
+
+\subsection{Retroalimentación al Usuario}
+El sistema proporciona retroalimentación constante mediante:
+\begin{itemize}
+    \item \textbf{Estados de carga:} Indicadores visuales durante operaciones asíncronas (spinners, skeleton screens).
+    \item \textbf{Mensajes de confirmación:} Notificaciones de éxito tras completar acciones importantes.
+    \item \textbf{Mensajes de error descriptivos:} Explicaciones claras sobre problemas y cómo resolverlos.
+    \item \textbf{Validación en tiempo real:} Feedback inmediato en formularios sobre errores de formato o campos faltantes.
+    \item \textbf{Efectos hover:} Cambios visuales al posicionar el cursor sobre elementos interactivos.
+\end{itemize}
+
+
+\subsection{Prevención y Manejo de Errores}
+El diseño incluye mecanismos para prevenir y manejar errores:
+\begin{itemize}
+    \item \textbf{Validación preventiva:} Campos de formulario con restricciones de formato y tipo de dato.
+    \item \textbf{Confirmaciones para acciones destructivas:} Diálogos de confirmación antes de eliminar registros.
+    \item \textbf{Deshabilitación de botones:} Botones inactivos hasta que se cumplan las condiciones necesarias.
+    \item \textbf{Mensajes contextuales:} Ayudas y sugerencias cerca de campos que requieren formato específico.
+\end{itemize}
+
+
+\subsection{Diseño Responsive}
+Las interfaces se adaptan a diferentes tamaños de pantalla:
+\begin{itemize}
+    \item \textbf{Mobile-first approach:} Diseño optimizado primero para dispositivos móviles.
+    \item \textbf{Breakpoints adaptativos:} Layouts que se reorganizan según el espacio disponible.
+    \item \textbf{Navegación contextual:} Menús que se ajustan según el dispositivo (drawer en móvil, sidebar en desktop).
+\end{itemize}
+
+
+\subsection{Accesibilidad}
+El sistema considera principios de accesibilidad web (WCAG 2.1):
+\begin{itemize}
+    \item \textbf{Contraste suficiente:} Texto legible con relación de contraste adecuada.
+    \item \textbf{Navegación por teclado:} Todos los elementos interactivos accesibles vía teclado.
+    \item \textbf{Etiquetas semánticas:} HTML semántico para lectores de pantalla.
+    \item \textbf{Textos alternativos:} Descripciones en imágenes e iconos importantes.
+\end{itemize}
+
 
 \section{Modelo de navegación}
 
-	La navegación entre pantallas se muestra en la figura~\ref{fig:mapa}. en el se explica ...\\
+El modelo de navegación representa la estructura de flujos entre las diferentes pantallas del sistema. La Figura~\ref{fig:mapa} muestra el mapa de navegación completo, donde se pueden identificar los siguientes flujos principales:
 
 \begin{figure}[htbp]
 	\begin{center}
-		\includegraphics[width=.7\textwidth]{images/mapa}
-		\caption{mapa}
+		\includegraphics[width=.9\textwidth]{images/mapa}
+		\caption{Mapa de Navegación del Sistema}
 		\label{fig:mapa}
 	\end{center}
 \end{figure}
 
+
+
 \input{iu/UI.tex}
 
+\section{Conclusiones del Modelo de Interacción}
+
+El diseño de interacción del Sistema de Gestión para Hotel de Perros ha sido desarrollado considerando los siguientes aspectos fundamentales:
+
+\subsection{Experiencia de Usuario Centrada}
+Las interfaces han sido diseñadas priorizando la experiencia del usuario final, con flujos de navegación intuitivos, retroalimentación constante y prevención de errores. El sistema guía al usuario a través de procesos complejos mediante asistentes paso a paso (wizards) y validaciones en tiempo real.
+
+\subsection{Consistencia y Predictibilidad}
+La aplicación de un sistema de diseño unificado garantiza que los usuarios puedan predecir el comportamiento de la interfaz basándose en su experiencia previa con otras secciones del sistema. Los botones, formularios y mensajes mantienen comportamientos consistentes en toda la aplicación.
+
+\subsection{Accesibilidad e Inclusión}
+El diseño responsive y las consideraciones de accesibilidad aseguran que el sistema pueda ser utilizado por el mayor número posible de usuarios, independientemente de su dispositivo o capacidades.
+
+\subsection{Eficiencia Operativa}
+Las interfaces optimizan los flujos de trabajo más frecuentes, reduciendo el número de clics necesarios para completar tareas comunes y proporcionando atajos de navegación para usuarios experimentados.
+
+\subsection{Escalabilidad del Diseño}
+La modularidad del diseño permite la incorporación futura de nuevas funcionalidades sin comprometer la coherencia visual ni la usabilidad del sistema existente.
+
+El modelo de interacción presentado en este capítulo establece las bases para una implementación que cumple con los estándares modernos de diseño de interfaces web, garantizando una experiencia de usuario satisfactoria y productiva.
